@@ -1,0 +1,5 @@
+train: C:/projetos/ads/dataset/images/train
+val: C:/projetos/ads/dataset/images/val
+
+nc: 1
+names: ["close_button"]

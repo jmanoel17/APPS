@@ -1,0 +1,2868 @@
+
+========================================
+[INIT] Iniciando 192.168.1.41:5555 em 2026-02-08 22:05:53
+========================================
+[22:05:59] Conectando ao dispositivo: 192.168.1.41:5555
+[22:06:01] Conectado com sucesso!
+[22:06:03] Aplicativo iniciado com sucesso.
+[22:06:05] [INFO] Elemento de pontos não encontrado.
+[22:06:06] [INFO] Clicando na descrição 'Points'
+[22:06:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:06:14] [INFO] Iniciando processo de saque...
+[22:06:14] [LOG] Navegando para tela de saque...
+[22:06:19] [PROCESSANDO] Tentativa de saque 1/10
+[22:06:19] [LOG] Preenchendo email: joaogomes183@yahoo.com
+[22:06:21] [INFO] Clicando na descrição 'Confirm Email FaucetPay'
+[22:06:27] [LOG] Clicando em Send...
+[22:06:27] [INFO] Clicando na descrição 'Send'
+[22:06:38] [SUCESSO] Saque realizado (provável).
+[22:06:38] [INFO] Reiniciando app após tentativa de saque...
+[22:06:40] [INFO] Nenhuma descrição encontrada em ['Points', 'Login/Register']
+[22:06:40] [AVISO] Falha ao encontrar botão Points/Login (1/10)
+[22:06:44] [INFO] Clicando na descrição 'Points'
+[22:06:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:06:53] [INFO] Clicando na descrição 'Points'
+[22:06:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:01] [INFO] Clicando na descrição 'Points'
+[22:07:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:10] [INFO] Clicando na descrição 'Points'
+[22:07:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:18] [INFO] Clicando na descrição 'Points'
+[22:07:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:28] [INFO] Clicando na descrição 'Points'
+[22:07:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:37] [INFO] Clicando na descrição 'Points'
+[22:07:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:46] [INFO] Clicando na descrição 'Points'
+[22:07:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:07:56] [INFO] Clicando na descrição 'Points'
+[22:07:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:09] [INFO] Clicando na descrição 'Points'
+[22:08:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:17] [INFO] Clicando na descrição 'Points'
+[22:08:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:25] [INFO] Clicando na descrição 'Points'
+[22:08:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:34] [INFO] Clicando na descrição 'Points'
+[22:08:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:42] [INFO] Clicando na descrição 'Points'
+[22:08:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:08:51] [INFO] Clicando na descrição 'Points'
+[22:08:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:01] [INFO] Clicando na descrição 'Points'
+[22:09:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:10] [INFO] Clicando na descrição 'Points'
+[22:09:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:20] [INFO] Clicando na descrição 'Points'
+[22:09:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:30] [INFO] Clicando na descrição 'Points'
+[22:09:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:40] [INFO] Elemento de pontos não encontrado.
+[22:09:40] [INFO] Clicando na descrição 'Login/Register'
+[22:09:40] Erro durante a execução: ('Unknown RPC error: -32001 androidx.test.uiautomator.StaleObjectException', ({'mask': 64, 'childOrSibling': [], 'childOrSiblingSelector': [], 'description': 'Login/Register'},), 'androidx.test.uiautomator.StaleObjectException\n\tat androidx.test.uiautomator.UiObject2.getAccessibilityNodeInfo(UiObject2.java:1018)\n\tat androidx.test.uiautomator.UiObject2.isScrollable(UiObject2.java:482)\n\tat com.wetest.uia2.stub.ObjInfo.<init>(ObjInfo.java:78)\n\tat com.wetest.uia2.stub.ObjInfo.getObjInfo(ObjInfo.java:44)\n\tat com.wetest.uia2.stub.AutomatorServiceImpl.objInfo(AutomatorServiceImpl.java:844)\n\tat java.lang.reflect.Method.invoke(Native Method)\n\tat com.googlecode.jsonrpc4j.JsonRpcBasicServer.invoke(JsonRpcBasicServer.java:467)\n\tat com.googlecode.jsonrpc4j.JsonRpcBasicServer.handleObject(JsonRpcBasicServer.java:352)\n\tat com.googlecode.jsonrpc4j.JsonRpcBasicServer.handleJsonNodeRequest(JsonRpcBasicServer.java:283)\n\tat com.googlecode.jsonrpc4j.JsonRpcBasicServer.handleRequest(JsonRpcBasicServer.java:251)\n\tat com.wetest.uia2.stub.AutomatorHttpServer.serve(AutomatorHttpServer.java:101)\n\tat fi.iki.elonen.NanoHTTPD.serve(NanoHTTPD.java:2244)\n\tat fi.iki.elonen.NanoHTTPD$HTTPSession.execute(NanoHTTPD.java:945)\n\tat fi.iki.elonen.NanoHTTPD$ClientHandler.run(NanoHTTPD.java:192)\n\tat java.lang.Thread.run(Thread.java:764)\n')
+[22:09:40] Tentando reconectar ao dispositivo...
+[22:09:40] Conectando ao dispositivo: 192.168.1.41:5555
+[22:09:41] Conectado com sucesso!
+[22:09:43] Aplicativo iniciado com sucesso.
+[22:09:45] [INFO] Clicando na descrição 'Points'
+[22:09:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:09:53] [INFO] Clicando na descrição 'Points'
+[22:09:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:01] [INFO] Clicando na descrição 'Points'
+[22:10:03] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:09] [INFO] Clicando na descrição 'Points'
+[22:10:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:17] [INFO] Clicando na descrição 'Points'
+[22:10:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:25] [INFO] Clicando na descrição 'Points'
+[22:10:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:33] [INFO] Clicando na descrição 'Points'
+[22:10:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:41] [INFO] Clicando na descrição 'Points'
+[22:10:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:50] [INFO] Clicando na descrição 'Points'
+[22:10:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:10:58] [INFO] Clicando na descrição 'Points'
+[22:11:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:09] [INFO] Clicando na descrição 'Points'
+[22:11:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:17] [INFO] Clicando na descrição 'Points'
+[22:11:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:25] [INFO] Clicando na descrição 'Points'
+[22:11:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:32] [INFO] Clicando na descrição 'Points'
+[22:11:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:40] [INFO] Clicando na descrição 'Points'
+[22:11:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:11:48] [INFO] Clicando na descrição 'Points'
+[22:11:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:06] [INFO] Clicando na descrição 'Points'
+[22:12:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:14] [INFO] Clicando na descrição 'Points'
+[22:12:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:23] [INFO] Clicando na descrição 'Points'
+[22:12:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:31] [INFO] Clicando na descrição 'Points'
+[22:12:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:42] [INFO] Clicando na descrição 'Points'
+[22:12:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:50] [INFO] Clicando na descrição 'Points'
+[22:12:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:12:57] [INFO] Clicando na descrição 'Points'
+[22:12:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:13:05] [INFO] Clicando na descrição 'Points'
+[22:13:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:13:14] [INFO] Clicando na descrição 'Points'
+[22:13:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:13:21] Abrindo configurações de ID de publicidade...
+[22:13:23] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:13:26] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:13:28] Contador de resets: 0
+[22:13:33] Aplicativo iniciado com sucesso.
+[22:13:35] [INFO] Clicando na descrição 'Points'
+[22:13:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:13:43] [INFO] Clicando na descrição 'Points'
+[22:13:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:13:52] [INFO] Clicando na descrição 'Points'
+[22:13:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:00] [INFO] Clicando na descrição 'Points'
+[22:14:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:10] [INFO] Clicando na descrição 'Points'
+[22:14:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:19] [INFO] Clicando na descrição 'Points'
+[22:14:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:28] [INFO] Clicando na descrição 'Points'
+[22:14:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:37] [INFO] Clicando na descrição 'Points'
+[22:14:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:47] [INFO] Clicando na descrição 'Points'
+[22:14:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:14:55] [INFO] Clicando na descrição 'Points'
+[22:14:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:15:07] [INFO] Clicando na descrição 'Points'
+[22:15:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:15:14] Contador de resets: 1
+[22:15:18] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:15:24] [LOG] Ciclo 1/30... (T: 9s)
+[22:15:24] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:15:26] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:15:27] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:15:28] Aplicativo iniciado com sucesso.
+[22:15:30] [INFO] Clicando na descrição 'Points'
+[22:15:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:15:36] Contador de resets: 2
+[22:15:41] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:15:46] [LOG] Ciclo 1/30... (T: 9s)
+[22:15:52] [AVISO] Nenhum objeto detectado pela API.
+[22:15:52] [LOG] Ciclo 2/30... (T: 15s)
+[22:15:52] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:15:55] [LOG] Ciclo 3/30... (T: 18s)
+[22:15:57] [LOG] Ciclo 4/30... (T: 21s)
+[22:15:58] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:16:00] Aplicativo iniciado com sucesso.
+[22:16:04] [INFO] Clicando na descrição 'Points'
+[22:16:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:16:11] Contador de resets: 3
+[22:16:15] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:16:21] [LOG] Ciclo 1/30... (T: 9s)
+[22:16:21] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:16:22] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:16:23] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:16:25] Aplicativo iniciado com sucesso.
+[22:16:26] [INFO] Clicando na descrição 'Points'
+[22:16:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:16:33] [INFO] Clicando na descrição 'Points'
+[22:16:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:16:51] [INFO] Clicando na descrição 'Points'
+[22:16:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:16:57] Contador de resets: 4
+[22:17:02] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:17:07] [LOG] Ciclo 1/30... (T: 9s)
+[22:17:07] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:17:08] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:17:09] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:17:11] Aplicativo iniciado com sucesso.
+[22:17:12] [INFO] Clicando na descrição 'Points'
+[22:17:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:17:19] Contador de resets: 5
+[22:17:23] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:17:28] [LOG] Ciclo 1/30... (T: 9s)
+[22:17:34] [AVISO] Nenhum objeto detectado pela API.
+[22:17:34] [LOG] Ciclo 2/30... (T: 14s)
+[22:17:34] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:17:36] [LOG] Ciclo 3/30... (T: 17s)
+[22:17:38] [LOG] Ciclo 4/30... (T: 18s)
+[22:17:48] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:17:49] [LOG] Voltou para MainActivity após 30s. Sucesso.
+[22:17:50] Aplicativo iniciado com sucesso.
+[22:17:52] [INFO] Clicando na descrição 'Points'
+[22:17:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:17:59] Contador de resets: 6
+[22:18:03] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:18:08] [LOG] Ciclo 1/30... (T: 9s)
+[22:18:08] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:18:10] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:18:11] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:18:13] Aplicativo iniciado com sucesso.
+[22:18:15] [INFO] Clicando na descrição 'Points'
+[22:18:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:18:21] Contador de resets: 7
+[22:18:26] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:18:31] [LOG] Ciclo 1/30... (T: 9s)
+[22:18:37] [AVISO] Nenhum objeto detectado pela API.
+[22:18:37] [LOG] Ciclo 2/30... (T: 15s)
+[22:18:37] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:18:40] [LOG] Ciclo 3/30... (T: 18s)
+[22:18:42] [LOG] Ciclo 4/30... (T: 20s)
+[22:18:46] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:18:46] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:18:48] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:18:48] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[22:18:50] Aplicativo iniciado com sucesso.
+[22:18:51] [INFO] Clicando na descrição 'Points'
+[22:18:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:18:58] Contador de resets: 8
+[22:19:02] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:19:08] [LOG] Ciclo 1/30... (T: 9s)
+[22:19:08] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:19:10] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:19:11] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:19:12] Aplicativo iniciado com sucesso.
+[22:19:14] [INFO] Clicando na descrição 'Points'
+[22:19:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:19:21] Contador de resets: 9
+[22:19:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:19:30] [LOG] Ciclo 1/30... (T: 9s)
+[22:19:37] [AVISO] Nenhum objeto detectado pela API.
+[22:19:37] [LOG] Ciclo 2/30... (T: 16s)
+[22:19:37] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:19:40] [LOG] Ciclo 3/30... (T: 19s)
+[22:19:52] [LOG] Ciclo 4/30... (T: 31s)
+[22:19:52] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:19:55] Aplicativo iniciado com sucesso.
+[22:19:57] [INFO] Clicando na descrição 'Points'
+[22:19:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:20:03] Contador de resets: 10
+[22:20:08] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:20:13] [LOG] Ciclo 1/30... (T: 9s)
+[22:20:13] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:20:15] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:20:16] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:20:18] Aplicativo iniciado com sucesso.
+[22:20:20] [INFO] Clicando na descrição 'Points'
+[22:20:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:20:26] Contador de resets: 11
+[22:20:31] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:20:36] [LOG] Ciclo 1/30... (T: 9s)
+[22:20:42] [AVISO] Nenhum objeto detectado pela API.
+[22:20:43] [LOG] Ciclo 2/30... (T: 16s)
+[22:20:43] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:20:46] [LOG] Ciclo 3/30... (T: 19s)
+[22:20:48] [LOG] Ciclo 4/30... (T: 21s)
+[22:20:52] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:20:52] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:20:53] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:20:54] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[22:20:55] Aplicativo iniciado com sucesso.
+[22:20:57] [INFO] Clicando na descrição 'Points'
+[22:20:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:21:04] Contador de resets: 12
+[22:21:09] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:21:14] [LOG] Ciclo 1/30... (T: 9s)
+[22:21:14] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:21:16] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:21:17] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:21:19] Aplicativo iniciado com sucesso.
+[22:21:20] [INFO] Clicando na descrição 'Points'
+[22:21:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:21:27] Contador de resets: 13
+[22:21:32] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:21:38] [LOG] Ciclo 1/30... (T: 10s)
+[22:21:46] [AVISO] Nenhum objeto detectado pela API.
+[22:21:47] [LOG] Ciclo 2/30... (T: 19s)
+[22:21:48] [LOG] Ciclo 3/30... (T: 21s)
+[22:21:50] [LOG] Ciclo 4/30... (T: 23s)
+[22:21:57] [AVISO] Nenhum objeto detectado pela API.
+[22:21:57] [LOG] Ciclo 5/30... (T: 29s)
+[22:21:58] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[22:21:59] [LOG] Ciclo 6/30... (T: 31s)
+[22:22:10] [LOG] Botão com texto vazio encontrado. Clicando...
+[22:22:10] [LOG] Ciclo 7/30... (T: 43s)
+[22:22:15] [AVISO] Nenhum objeto detectado pela API.
+[22:22:15] [LOG] Voltou para MainActivity após 47s. Sucesso.
+[22:22:17] Aplicativo iniciado com sucesso.
+[22:22:18] [INFO] Clicando na descrição 'Points'
+[22:22:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:22:25] Contador de resets: 14
+[22:22:30] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:22:35] [LOG] Ciclo 1/30... (T: 9s)
+[22:22:35] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:22:37] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:22:38] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:22:39] Aplicativo iniciado com sucesso.
+[22:22:41] [INFO] Clicando na descrição 'Points'
+[22:22:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:22:48] Contador de resets: 15
+[22:22:52] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:22:57] [LOG] Ciclo 1/30... (T: 9s)
+[22:22:57] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:22:59] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:23:00] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:23:02] Aplicativo iniciado com sucesso.
+[22:23:14] [INFO] Clicando na descrição 'Points'
+[22:23:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:23:21] Contador de resets: 16
+[22:23:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:23:31] [LOG] Ciclo 1/30... (T: 9s)
+[22:23:31] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:23:33] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:23:34] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:23:35] Aplicativo iniciado com sucesso.
+[22:23:37] [INFO] Clicando na descrição 'Points'
+[22:23:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:23:44] Contador de resets: 17
+[22:23:48] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:23:53] [LOG] Ciclo 1/30... (T: 9s)
+[22:24:00] [AVISO] Nenhum objeto detectado pela API.
+[22:24:00] [LOG] Ciclo 2/30... (T: 16s)
+[22:24:00] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:24:03] [LOG] Ciclo 3/30... (T: 19s)
+[22:24:05] [LOG] Ciclo 4/30... (T: 20s)
+[22:24:09] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:24:09] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.75
+[22:24:10] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:24:11] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[22:24:12] Aplicativo iniciado com sucesso.
+[22:24:14] [INFO] Clicando na descrição 'Points'
+[22:24:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:24:21] Contador de resets: 18
+[22:24:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:24:31] [LOG] Ciclo 1/30... (T: 10s)
+[22:24:32] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[22:24:33] [LOG] Ciclo 2/30... (T: 12s)
+[22:24:34] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[22:24:35] [LOG] Ciclo 3/30... (T: 13s)
+[22:24:35] [LOG] Botão com texto vazio encontrado. Clicando...
+[22:24:36] [LOG] Ciclo 4/30... (T: 14s)
+[22:24:40] [AVISO] Nenhum objeto detectado pela API.
+[22:24:40] [LOG] Voltou para MainActivity após 19s. Sucesso.
+[22:24:42] Aplicativo iniciado com sucesso.
+[22:24:44] [INFO] Clicando na descrição 'Points'
+[22:24:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:24:52] [INFO] Clicando na descrição 'Points'
+[22:24:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:24:59] [INFO] Clicando na descrição 'Points'
+[22:25:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:25:08] [INFO] Clicando na descrição 'Points'
+[22:25:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:25:16] [INFO] Clicando na descrição 'Points'
+[22:25:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:25:25] [INFO] Clicando na descrição 'Points'
+[22:25:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:25:33] [INFO] Clicando na descrição 'Points'
+[22:25:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:25:53] [INFO] Clicando na descrição 'Points'
+[22:25:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:02] [INFO] Clicando na descrição 'Points'
+[22:26:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:12] [INFO] Clicando na descrição 'Points'
+[22:26:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:25] [INFO] Clicando na descrição 'Points'
+[22:26:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:33] [INFO] Clicando na descrição 'Points'
+[22:26:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:41] [INFO] Clicando na descrição 'Points'
+[22:26:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:50] [INFO] Clicando na descrição 'Points'
+[22:26:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:26:59] [INFO] Clicando na descrição 'Points'
+[22:27:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:08] [INFO] Clicando na descrição 'Points'
+[22:27:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:17] [INFO] Clicando na descrição 'Points'
+[22:27:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:26] [INFO] Clicando na descrição 'Points'
+[22:27:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:36] [INFO] Clicando na descrição 'Points'
+[22:27:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:46] [INFO] Clicando na descrição 'Points'
+[22:27:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:27:58] [INFO] Clicando na descrição 'Points'
+[22:28:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:28:07] [INFO] Clicando na descrição 'Points'
+[22:28:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:28:15] [INFO] Clicando na descrição 'Points'
+[22:28:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:28:23] [INFO] Clicando na descrição 'Points'
+[22:28:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:28:32] [INFO] Clicando na descrição 'Points'
+[22:28:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:28:40] Abrindo configurações de ID de publicidade...
+[22:28:42] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:28:44] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:28:46] Contador de resets: 19
+[22:28:52] Aplicativo iniciado com sucesso.
+[22:29:04] [INFO] Clicando na descrição 'Points'
+[22:29:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:29:12] [INFO] Clicando na descrição 'Points'
+[22:29:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:29:21] [INFO] Clicando na descrição 'Points'
+[22:29:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:29:29] [INFO] Clicando na descrição 'Points'
+[22:29:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:29:37] [INFO] Clicando na descrição 'Points'
+[22:29:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:29:56] [INFO] Clicando na descrição 'Points'
+[22:29:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:05] [INFO] Clicando na descrição 'Points'
+[22:30:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:15] [INFO] Clicando na descrição 'Points'
+[22:30:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:24] [INFO] Clicando na descrição 'Points'
+[22:30:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:34] [INFO] Clicando na descrição 'Points'
+[22:30:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:46] [INFO] Clicando na descrição 'Points'
+[22:30:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:30:54] [INFO] Clicando na descrição 'Points'
+[22:30:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:03] [INFO] Clicando na descrição 'Points'
+[22:31:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:11] [INFO] Clicando na descrição 'Points'
+[22:31:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:20] [INFO] Clicando na descrição 'Points'
+[22:31:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:29] [INFO] Clicando na descrição 'Points'
+[22:31:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:38] [INFO] Clicando na descrição 'Points'
+[22:31:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:31:47] [INFO] Clicando na descrição 'Points'
+[22:31:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:06] [INFO] Clicando na descrição 'Points'
+[22:32:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:16] [INFO] Clicando na descrição 'Points'
+[22:32:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:28] [INFO] Clicando na descrição 'Points'
+[22:32:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:37] [INFO] Clicando na descrição 'Points'
+[22:32:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:45] [INFO] Clicando na descrição 'Points'
+[22:32:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:32:54] [INFO] Clicando na descrição 'Points'
+[22:32:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:33:02] [INFO] Clicando na descrição 'Points'
+[22:33:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:33:09] Abrindo configurações de ID de publicidade...
+[22:33:12] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:33:14] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:33:16] Contador de resets: 20
+[22:33:22] Aplicativo iniciado com sucesso.
+[22:33:24] [INFO] Clicando na descrição 'Points'
+[22:33:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:33:32] [INFO] Clicando na descrição 'Points'
+[22:33:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:33:40] [INFO] Clicando na descrição 'Points'
+[22:33:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:33:49] [INFO] Clicando na descrição 'Points'
+[22:33:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:33:58] [INFO] Clicando na descrição 'Points'
+[22:33:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:07] [INFO] Clicando na descrição 'Points'
+[22:34:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:16] [INFO] Clicando na descrição 'Points'
+[22:34:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:25] [INFO] Clicando na descrição 'Points'
+[22:34:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:34] [INFO] Clicando na descrição 'Points'
+[22:34:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:44] [INFO] Clicando na descrição 'Points'
+[22:34:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:34:57] [INFO] Clicando na descrição 'Points'
+[22:34:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:05] [INFO] Clicando na descrição 'Points'
+[22:35:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:13] [INFO] Clicando na descrição 'Points'
+[22:35:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:22] [INFO] Clicando na descrição 'Points'
+[22:35:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:30] [INFO] Clicando na descrição 'Points'
+[22:35:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:39] [INFO] Clicando na descrição 'Points'
+[22:35:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:48] [INFO] Clicando na descrição 'Points'
+[22:35:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:35:57] [INFO] Clicando na descrição 'Points'
+[22:35:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:36:07] [INFO] Clicando na descrição 'Points'
+[22:36:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:36:16] [INFO] Clicando na descrição 'Points'
+[22:36:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:36:29] [INFO] Clicando na descrição 'Points'
+[22:36:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:36:47] [INFO] Clicando na descrição 'Points'
+[22:36:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:36:56] [INFO] Clicando na descrição 'Points'
+[22:36:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:37:04] [INFO] Clicando na descrição 'Points'
+[22:37:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:37:13] [INFO] Clicando na descrição 'Points'
+[22:37:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:37:20] Abrindo configurações de ID de publicidade...
+[22:37:22] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:37:25] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:37:27] Contador de resets: 21
+[22:37:33] Aplicativo iniciado com sucesso.
+[22:37:35] [INFO] Clicando na descrição 'Points'
+[22:37:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:37:43] [INFO] Clicando na descrição 'Points'
+[22:37:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:37:52] [INFO] Clicando na descrição 'Points'
+[22:37:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:00] [INFO] Clicando na descrição 'Points'
+[22:38:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:09] [INFO] Clicando na descrição 'Points'
+[22:38:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:18] [INFO] Clicando na descrição 'Points'
+[22:38:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:28] [INFO] Clicando na descrição 'Points'
+[22:38:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:36] [INFO] Clicando na descrição 'Points'
+[22:38:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:46] [INFO] Clicando na descrição 'Points'
+[22:38:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:38:56] [INFO] Clicando na descrição 'Points'
+[22:38:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:09] [INFO] Clicando na descrição 'Points'
+[22:39:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:17] [INFO] Clicando na descrição 'Points'
+[22:39:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:25] [INFO] Clicando na descrição 'Points'
+[22:39:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:34] [INFO] Clicando na descrição 'Points'
+[22:39:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:42] [INFO] Clicando na descrição 'Points'
+[22:39:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:39:51] [INFO] Clicando na descrição 'Points'
+[22:39:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:00] [INFO] Clicando na descrição 'Points'
+[22:40:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:09] [INFO] Clicando na descrição 'Points'
+[22:40:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:19] [INFO] Clicando na descrição 'Points'
+[22:40:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:29] [INFO] Clicando na descrição 'Points'
+[22:40:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:42] [INFO] Clicando na descrição 'Points'
+[22:40:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:50] [INFO] Clicando na descrição 'Points'
+[22:40:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:40:58] [INFO] Clicando na descrição 'Points'
+[22:41:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:41:07] [INFO] Clicando na descrição 'Points'
+[22:41:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:41:26] [INFO] Clicando na descrição 'Points'
+[22:41:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:41:33] Abrindo configurações de ID de publicidade...
+[22:41:35] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:41:37] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:41:40] Contador de resets: 22
+[22:41:45] Aplicativo iniciado com sucesso.
+[22:41:47] [INFO] Clicando na descrição 'Points'
+[22:41:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:41:55] [INFO] Clicando na descrição 'Points'
+[22:41:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:42:03] [INFO] Clicando na descrição 'Points'
+[22:42:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:42:10] Contador de resets: 23
+[22:42:14] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:42:19] [LOG] Ciclo 1/30... (T: 9s)
+[22:42:25] [AVISO] Nenhum objeto detectado pela API.
+[22:42:26] [LOG] Ciclo 2/30... (T: 15s)
+[22:42:26] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:42:29] [LOG] Ciclo 3/30... (T: 18s)
+[22:42:30] [LOG] Ciclo 4/30... (T: 20s)
+[22:42:34] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:42:35] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:42:36] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:42:37] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[22:42:38] Aplicativo iniciado com sucesso.
+[22:42:40] [INFO] Clicando na descrição 'Points'
+[22:42:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:42:47] [INFO] Clicando na descrição 'Points'
+[22:42:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:42:54] Contador de resets: 24
+[22:42:58] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:43:03] [LOG] Ciclo 1/30... (T: 9s)
+[22:43:10] [AVISO] Nenhum objeto detectado pela API.
+[22:43:10] [LOG] Ciclo 2/30... (T: 16s)
+[22:43:10] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:43:13] [LOG] Ciclo 3/30... (T: 19s)
+[22:43:14] [LOG] Ciclo 4/30... (T: 20s)
+[22:43:19] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:43:19] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:43:20] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:43:21] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[22:43:22] Aplicativo iniciado com sucesso.
+[22:43:24] [INFO] Clicando na descrição 'Points'
+[22:43:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:43:31] [INFO] Clicando na descrição 'Points'
+[22:43:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:43:38] Contador de resets: 25
+[22:43:42] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:43:47] [LOG] Ciclo 1/30... (T: 9s)
+[22:43:53] [AVISO] Nenhum objeto detectado pela API.
+[22:43:54] [LOG] Ciclo 2/30... (T: 15s)
+[22:43:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:43:57] [LOG] Ciclo 3/30... (T: 18s)
+[22:43:58] [LOG] Ciclo 4/30... (T: 19s)
+[22:44:02] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:44:02] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:44:04] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:44:04] [LOG] Voltou para MainActivity após 25s. Sucesso.
+[22:44:06] Aplicativo iniciado com sucesso.
+[22:44:07] [INFO] Clicando na descrição 'Points'
+[22:44:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:44:14] [INFO] Clicando na descrição 'Points'
+[22:44:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:44:21] Contador de resets: 26
+[22:44:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:44:31] [LOG] Ciclo 1/30... (T: 10s)
+[22:44:37] [AVISO] Nenhum objeto detectado pela API.
+[22:44:37] [LOG] Ciclo 2/30... (T: 16s)
+[22:44:37] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:44:40] [LOG] Ciclo 3/30... (T: 18s)
+[22:44:41] [LOG] Ciclo 4/30... (T: 19s)
+[22:44:42] [AVISO] Nenhum objeto detectado pela API.
+[22:44:42] [LOG] Ciclo 5/30... (T: 21s)
+[22:44:43] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:44:44] [LOG] Voltou para MainActivity após 22s. Sucesso.
+[22:44:45] Aplicativo iniciado com sucesso.
+[22:44:46] [INFO] Clicando na descrição 'Points'
+[22:44:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:44:53] [INFO] Clicando na descrição 'Points'
+[22:44:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:45:00] Contador de resets: 27
+[22:45:04] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:45:10] [LOG] Ciclo 1/30... (T: 10s)
+[22:45:26] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:45:26] [INFO] [1/1] Clicando em (981, 187) - Confiança: 0.82
+[22:45:27] [AVISO] Todos os pontos foram clicados, mas a tela parece não ter mudado.
+[22:45:28] [LOG] Ciclo 2/30... (T: 27s)
+[22:45:29] [LOG] Ciclo 3/30... (T: 28s)
+[22:45:30] [LOG] Ciclo 4/30... (T: 29s)
+[22:45:33] [AVISO] Nenhum objeto detectado pela API.
+[22:45:34] [LOG] Ciclo 5/30... (T: 33s)
+[22:45:34] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:45:36] Aplicativo iniciado com sucesso.
+[22:45:38] [INFO] Clicando na descrição 'Points'
+[22:45:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:45:44] Contador de resets: 28
+[22:45:49] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:45:54] [LOG] Ciclo 1/30... (T: 9s)
+[22:45:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:45:56] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:45:56] [LOG] Voltou para MainActivity após 11s. Sucesso.
+[22:45:58] Aplicativo iniciado com sucesso.
+[22:45:59] [INFO] Clicando na descrição 'Points'
+[22:46:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:46:06] [INFO] Clicando na descrição 'Points'
+[22:46:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:46:12] Contador de resets: 29
+[22:46:17] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:46:22] [LOG] Ciclo 1/30... (T: 9s)
+[22:46:27] [AVISO] Nenhum objeto detectado pela API.
+[22:46:27] [LOG] Ciclo 2/30... (T: 14s)
+[22:46:27] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:46:29] [LOG] Ciclo 3/30... (T: 17s)
+[22:46:41] [LOG] Ciclo 4/30... (T: 28s)
+[22:46:41] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:46:43] Aplicativo iniciado com sucesso.
+[22:46:45] [INFO] Clicando na descrição 'Points'
+[22:46:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:46:51] Contador de resets: 30
+[22:46:56] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:47:01] [LOG] Ciclo 1/30... (T: 9s)
+[22:47:01] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:47:03] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:47:04] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:47:04] [ALERTA] 1 apps não autorizados serão removidos.
+[22:47:04]  - Desinstalando: com.android.xwkeyboard
+[22:47:04] [INFO] Remoção concluída.
+[22:47:06] Aplicativo iniciado com sucesso.
+[22:47:18] [INFO] Clicando na descrição 'Points'
+[22:47:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:47:24] Contador de resets: 31
+[22:47:28] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:47:33] [LOG] Ciclo 1/30... (T: 9s)
+[22:47:33] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:47:36] Aplicativo iniciado com sucesso.
+[22:47:37] [INFO] Clicando na descrição 'Points'
+[22:47:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:47:44] Contador de resets: 32
+[22:47:48] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:47:54] [LOG] Ciclo 1/30... (T: 10s)
+[22:47:59] [AVISO] Nenhum objeto detectado pela API.
+[22:47:59] [LOG] Ciclo 2/30... (T: 14s)
+[22:47:59] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:48:01] [LOG] Ciclo 3/30... (T: 17s)
+[22:48:02] [LOG] Ciclo 4/30... (T: 18s)
+[22:48:03] [AVISO] Nenhum objeto detectado pela API.
+[22:48:03] [LOG] Ciclo 5/30... (T: 19s)
+[22:48:15] [LOG] Ciclo 6/30... (T: 31s)
+[22:48:15] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:48:17] Aplicativo iniciado com sucesso.
+[22:48:19] [INFO] Clicando na descrição 'Points'
+[22:48:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:48:25] Contador de resets: 33
+[22:48:30] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:48:35] [LOG] Ciclo 1/30... (T: 9s)
+[22:48:35] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:48:36] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:48:37] [LOG] Voltou para MainActivity após 11s. Sucesso.
+[22:48:38] Aplicativo iniciado com sucesso.
+[22:48:41] [INFO] Clicando na descrição 'Points'
+[22:48:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:48:48] Contador de resets: 34
+[22:48:52] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:48:58] [LOG] Ciclo 1/30... (T: 10s)
+[22:49:03] [AVISO] Nenhum objeto detectado pela API.
+[22:49:03] [LOG] Ciclo 2/30... (T: 15s)
+[22:49:03] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:49:06] [LOG] Ciclo 3/30... (T: 17s)
+[22:49:07] [LOG] Ciclo 4/30... (T: 18s)
+[22:49:08] [AVISO] Nenhum objeto detectado pela API.
+[22:49:08] [LOG] Ciclo 5/30... (T: 20s)
+[22:49:09] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:49:09] [LOG] Voltou para MainActivity após 21s. Sucesso.
+[22:49:11] Aplicativo iniciado com sucesso.
+[22:49:12] [INFO] Clicando na descrição 'Points'
+[22:49:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:49:18] Contador de resets: 35
+[22:49:23] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:49:28] [LOG] Ciclo 1/30... (T: 9s)
+[22:49:28] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:49:30] Aplicativo iniciado com sucesso.
+[22:49:32] [INFO] Clicando na descrição 'Points'
+[22:49:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:49:39] Contador de resets: 36
+[22:49:43] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:49:49] [LOG] Ciclo 1/30... (T: 10s)
+[22:49:54] [AVISO] Nenhum objeto detectado pela API.
+[22:49:54] [LOG] Ciclo 2/30... (T: 15s)
+[22:49:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:49:56] [LOG] Ciclo 3/30... (T: 17s)
+[22:49:57] [LOG] Ciclo 4/30... (T: 18s)
+[22:49:59] [AVISO] Nenhum objeto detectado pela API.
+[22:49:59] [LOG] Ciclo 5/30... (T: 19s)
+[22:50:00] [LOG] Ciclo 6/30... (T: 20s)
+[22:50:00] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:50:03] Aplicativo iniciado com sucesso.
+[22:50:04] [INFO] Clicando na descrição 'Points'
+[22:50:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:50:11] Contador de resets: 37
+[22:50:15] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:50:20] [LOG] Ciclo 1/30... (T: 9s)
+[22:50:20] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:50:23] Aplicativo iniciado com sucesso.
+[22:50:25] [INFO] Clicando na descrição 'Points'
+[22:50:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:50:31] Contador de resets: 38
+[22:50:36] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:50:41] [LOG] Ciclo 1/30... (T: 9s)
+[22:50:47] [AVISO] Nenhum objeto detectado pela API.
+[22:50:47] [LOG] Ciclo 2/30... (T: 15s)
+[22:50:47] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:50:50] [LOG] Ciclo 3/30... (T: 18s)
+[22:50:51] [LOG] Ciclo 4/30... (T: 19s)
+[22:50:55] [AVISO] Nenhum objeto detectado pela API.
+[22:50:55] [LOG] Ciclo 5/30... (T: 23s)
+[22:50:55] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:50:58] Aplicativo iniciado com sucesso.
+[22:51:00] [INFO] Clicando na descrição 'Points'
+[22:51:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:51:06] Contador de resets: 39
+[22:51:11] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:51:16] [LOG] Ciclo 1/30... (T: 9s)
+[22:51:16] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:51:18] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:51:18] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:51:20] Aplicativo iniciado com sucesso.
+[22:51:22] [INFO] Clicando na descrição 'Points'
+[22:51:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:51:28] Contador de resets: 40
+[22:51:33] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:51:38] [LOG] Ciclo 1/30... (T: 9s)
+[22:51:44] [AVISO] Nenhum objeto detectado pela API.
+[22:51:45] [LOG] Ciclo 2/30... (T: 16s)
+[22:51:45] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:51:47] [LOG] Ciclo 3/30... (T: 18s)
+[22:51:49] [LOG] Ciclo 4/30... (T: 20s)
+[22:51:52] [AVISO] Nenhum objeto detectado pela API.
+[22:51:53] [LOG] Ciclo 5/30... (T: 24s)
+[22:51:53] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:51:56] Aplicativo iniciado com sucesso.
+[22:51:57] [INFO] Clicando na descrição 'Points'
+[22:51:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:52:04] Contador de resets: 41
+[22:52:08] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:52:14] [LOG] Ciclo 1/30... (T: 9s)
+[22:52:14] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:52:15] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:52:16] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:52:18] Aplicativo iniciado com sucesso.
+[22:52:19] [INFO] Clicando na descrição 'Points'
+[22:52:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:52:26] Contador de resets: 42
+[22:52:30] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:52:37] [LOG] Ciclo 1/30... (T: 10s)
+[22:52:37] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[22:52:38] [LOG] Ciclo 2/30... (T: 12s)
+[22:52:39] [LOG] Botão com texto vazio encontrado. Clicando...
+[22:52:39] [LOG] Ciclo 3/30... (T: 13s)
+[22:52:42] [LOG] Voltou para MainActivity após 15s. Sucesso.
+[22:52:43] Aplicativo iniciado com sucesso.
+[22:52:45] [INFO] Clicando na descrição 'Points'
+[22:52:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:52:52] [INFO] Clicando na descrição 'Points'
+[22:52:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:53:00] [INFO] Clicando na descrição 'Points'
+[22:53:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:53:42] [INFO] Clicando na descrição 'Points'
+[22:53:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:53:51] [INFO] Clicando na descrição 'Points'
+[22:53:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:53:59] [INFO] Clicando na descrição 'Points'
+[22:54:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:08] [INFO] Clicando na descrição 'Points'
+[22:54:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:17] [INFO] Clicando na descrição 'Points'
+[22:54:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:27] [INFO] Clicando na descrição 'Points'
+[22:54:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:36] [INFO] Clicando na descrição 'Points'
+[22:54:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:47] [INFO] Clicando na descrição 'Points'
+[22:54:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:54:55] [INFO] Clicando na descrição 'Points'
+[22:54:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:03] [INFO] Clicando na descrição 'Points'
+[22:55:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:10] [INFO] Clicando na descrição 'Points'
+[22:55:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:18] [INFO] Clicando na descrição 'Points'
+[22:55:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:26] [INFO] Clicando na descrição 'Points'
+[22:55:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:34] [INFO] Clicando na descrição 'Points'
+[22:55:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:55:52] [INFO] Clicando na descrição 'Points'
+[22:55:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:00] [INFO] Clicando na descrição 'Points'
+[22:56:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:08] [INFO] Clicando na descrição 'Points'
+[22:56:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:20] [INFO] Clicando na descrição 'Points'
+[22:56:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:28] [INFO] Clicando na descrição 'Points'
+[22:56:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:36] [INFO] Clicando na descrição 'Points'
+[22:56:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:44] [INFO] Clicando na descrição 'Points'
+[22:56:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:56:53] [INFO] Clicando na descrição 'Points'
+[22:56:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[22:57:00] Abrindo configurações de ID de publicidade...
+[22:57:02] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[22:57:05] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[22:57:07] Contador de resets: 43
+[22:57:12] Aplicativo iniciado com sucesso.
+[22:57:14] [INFO] Clicando na descrição 'Points'
+[22:57:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:57:32] [INFO] Clicando na descrição 'Points'
+[22:57:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:57:39] Contador de resets: 44
+[22:57:43] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:57:48] [LOG] Ciclo 1/30... (T: 9s)
+[22:57:48] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:58:00] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:58:01] [LOG] Voltou para MainActivity após 22s. Sucesso.
+[22:58:03] Aplicativo iniciado com sucesso.
+[22:58:05] [INFO] Clicando na descrição 'Points'
+[22:58:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:58:11] Contador de resets: 45
+[22:58:15] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:58:21] [LOG] Ciclo 1/30... (T: 9s)
+[22:58:26] [AVISO] Nenhum objeto detectado pela API.
+[22:58:27] [LOG] Ciclo 2/30... (T: 15s)
+[22:58:27] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:58:30] [LOG] Ciclo 3/30... (T: 18s)
+[22:58:31] [LOG] Ciclo 4/30... (T: 20s)
+[22:58:35] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[22:58:35] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[22:58:37] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[22:58:37] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[22:58:39] Aplicativo iniciado com sucesso.
+[22:58:41] [INFO] Clicando na descrição 'Points'
+[22:58:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:58:47] Contador de resets: 46
+[22:58:51] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:58:57] [LOG] Ciclo 1/30... (T: 9s)
+[22:58:57] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:58:58] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[22:58:59] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[22:59:01] Aplicativo iniciado com sucesso.
+[22:59:03] [INFO] Clicando na descrição 'Points'
+[22:59:03] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:59:09] Contador de resets: 47
+[22:59:13] [LOG] Possível anúncio detectado. Aguardando 5s...
+[22:59:19] [LOG] Ciclo 1/30... (T: 9s)
+[22:59:25] [AVISO] Nenhum objeto detectado pela API.
+[22:59:25] [LOG] Ciclo 2/30... (T: 15s)
+[22:59:25] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:59:27] [LOG] Ciclo 3/30... (T: 18s)
+[22:59:29] [LOG] Ciclo 4/30... (T: 19s)
+[22:59:32] [AVISO] Nenhum objeto detectado pela API.
+[22:59:33] [LOG] Ciclo 5/30... (T: 23s)
+[22:59:33] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[22:59:36] Aplicativo iniciado com sucesso.
+[22:59:48] [INFO] Clicando na descrição 'Points'
+[22:59:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[22:59:54] Contador de resets: 48
+[22:59:59] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:00:04] [LOG] Ciclo 1/30... (T: 9s)
+[23:00:04] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:00:05] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:00:06] [LOG] Voltou para MainActivity após 11s. Sucesso.
+[23:00:08] Aplicativo iniciado com sucesso.
+[23:00:09] [INFO] Clicando na descrição 'Points'
+[23:00:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:00:15] Contador de resets: 49
+[23:00:20] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:00:25] [LOG] Ciclo 1/30... (T: 9s)
+[23:00:30] [AVISO] Nenhum objeto detectado pela API.
+[23:00:30] [LOG] Ciclo 2/30... (T: 14s)
+[23:00:30] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:00:33] [LOG] Ciclo 3/30... (T: 17s)
+[23:00:34] [LOG] Ciclo 4/30... (T: 18s)
+[23:00:35] [AVISO] Nenhum objeto detectado pela API.
+[23:00:35] [LOG] Ciclo 5/30... (T: 19s)
+[23:00:36] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:00:37] [LOG] Voltou para MainActivity após 21s. Sucesso.
+[23:00:46] [CLEANUP] Executando auto-limpeza periódica...
+[23:00:47] [CLEANUP] Memória limpa. Aguardando 2s antes de continuar...
+[23:00:51] Aplicativo iniciado com sucesso.
+[23:00:54] [INFO] Clicando na descrição 'Points'
+[23:00:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:01:01] [INFO] Clicando na descrição 'Points'
+[23:01:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:01:07] Contador de resets: 50
+[23:01:11] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:01:17] [LOG] Ciclo 1/30... (T: 9s)
+[23:01:22] [AVISO] Nenhum objeto detectado pela API.
+[23:01:22] [LOG] Ciclo 2/30... (T: 14s)
+[23:01:22] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:01:35] [LOG] Ciclo 3/30... (T: 27s)
+[23:01:35] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:01:37] Aplicativo iniciado com sucesso.
+[23:01:39] [INFO] Clicando na descrição 'Points'
+[23:01:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:01:46] Contador de resets: 51
+[23:01:50] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:01:55] [LOG] Ciclo 1/30... (T: 9s)
+[23:01:55] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:01:57] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:01:58] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:01:59] Aplicativo iniciado com sucesso.
+[23:02:01] [INFO] Clicando na descrição 'Points'
+[23:02:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:02:07] Contador de resets: 52
+[23:02:12] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:02:17] [LOG] Ciclo 1/30... (T: 9s)
+[23:02:27] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:02:27] [LOG] Ciclo 2/30... (T: 20s)
+[23:02:29] [LOG] Ciclo 3/30... (T: 21s)
+[23:02:30] [LOG] Ciclo 4/30... (T: 22s)
+[23:02:34] [AVISO] Nenhum objeto detectado pela API.
+[23:02:35] [LOG] Ciclo 5/30... (T: 27s)
+[23:02:35] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:02:48] Aplicativo iniciado com sucesso.
+[23:02:50] [INFO] Clicando na descrição 'Points'
+[23:02:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:02:56] Contador de resets: 53
+[23:03:01] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:03:06] [LOG] Ciclo 1/30... (T: 9s)
+[23:03:06] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:03:09] Aplicativo iniciado com sucesso.
+[23:03:11] [INFO] Clicando na descrição 'Points'
+[23:03:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:03:17] Contador de resets: 54
+[23:03:22] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:03:28] [LOG] Ciclo 1/30... (T: 10s)
+[23:03:34] [AVISO] Nenhum objeto detectado pela API.
+[23:03:35] [LOG] Ciclo 2/30... (T: 17s)
+[23:03:35] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:03:38] [LOG] Ciclo 3/30... (T: 20s)
+[23:03:39] [LOG] Ciclo 4/30... (T: 21s)
+[23:03:43] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:03:43] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:03:45] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:03:45] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:03:47] Aplicativo iniciado com sucesso.
+[23:03:48] [INFO] Clicando na descrição 'Points'
+[23:03:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:03:55] Contador de resets: 55
+[23:03:59] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:04:04] [LOG] Ciclo 1/30... (T: 9s)
+[23:04:05] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:04:07] Aplicativo iniciado com sucesso.
+[23:04:09] [INFO] Clicando na descrição 'Points'
+[23:04:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:04:15] Contador de resets: 56
+[23:04:20] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:04:25] [LOG] Ciclo 1/30... (T: 9s)
+[23:04:31] [AVISO] Nenhum objeto detectado pela API.
+[23:04:31] [LOG] Ciclo 2/30... (T: 15s)
+[23:04:31] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:04:34] [LOG] Ciclo 3/30... (T: 18s)
+[23:04:35] [LOG] Ciclo 4/30... (T: 19s)
+[23:04:50] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:04:50] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:04:51] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:04:52] [LOG] Voltou para MainActivity após 36s. Sucesso.
+[23:04:53] Aplicativo iniciado com sucesso.
+[23:04:55] [INFO] Clicando na descrição 'Points'
+[23:05:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:05:12] Contador de resets: 57
+[23:05:16] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:05:21] [LOG] Ciclo 1/30... (T: 9s)
+[23:05:21] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:05:23] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:05:24] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:05:26] Aplicativo iniciado com sucesso.
+[23:05:28] [INFO] Clicando na descrição 'Points'
+[23:05:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:05:34] Contador de resets: 58
+[23:05:39] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:05:45] [LOG] Ciclo 1/30... (T: 10s)
+[23:05:52] [AVISO] Nenhum objeto detectado pela API.
+[23:05:53] [LOG] Ciclo 2/30... (T: 18s)
+[23:05:53] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:05:54] [LOG] Ciclo 3/30... (T: 19s)
+[23:05:55] [LOG] Voltou para MainActivity após 20s. Sucesso.
+[23:05:57] Aplicativo iniciado com sucesso.
+[23:05:58] [INFO] Clicando na descrição 'Points'
+[23:05:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:06:05] Contador de resets: 59
+[23:06:09] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:06:14] [LOG] Ciclo 1/30... (T: 9s)
+[23:06:15] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:06:17] Aplicativo iniciado com sucesso.
+[23:06:19] [INFO] Clicando na descrição 'Points'
+[23:06:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:06:25] Contador de resets: 60
+[23:06:29] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:06:34] [LOG] Ciclo 1/30... (T: 9s)
+[23:06:34] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:06:37] Aplicativo iniciado com sucesso.
+[23:06:38] [INFO] Clicando na descrição 'Points'
+[23:06:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:06:45] Contador de resets: 61
+[23:06:49] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:06:54] [LOG] Ciclo 1/30... (T: 9s)
+[23:06:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:06:57] Aplicativo iniciado com sucesso.
+[23:07:09] [INFO] Clicando na descrição 'Points'
+[23:07:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:07:15] Contador de resets: 62
+[23:07:20] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:07:25] [LOG] Ciclo 1/30... (T: 9s)
+[23:07:25] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:07:27] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:07:27] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:07:29] Aplicativo iniciado com sucesso.
+[23:07:30] [INFO] Clicando na descrição 'Points'
+[23:07:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:07:37] Contador de resets: 63
+[23:07:41] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:07:47] [LOG] Ciclo 1/30... (T: 10s)
+[23:07:52] [AVISO] Nenhum objeto detectado pela API.
+[23:07:52] [LOG] Ciclo 2/30... (T: 15s)
+[23:07:52] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:07:55] [LOG] Ciclo 3/30... (T: 18s)
+[23:07:56] [LOG] Ciclo 4/30... (T: 19s)
+[23:07:57] [AVISO] Nenhum objeto detectado pela API.
+[23:07:58] [LOG] Ciclo 5/30... (T: 20s)
+[23:07:58] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:07:59] [LOG] Voltou para MainActivity após 22s. Sucesso.
+[23:08:00] Aplicativo iniciado com sucesso.
+[23:08:01] [INFO] Clicando na descrição 'Points'
+[23:08:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:08:08] Contador de resets: 64
+[23:08:12] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:08:17] [LOG] Ciclo 1/30... (T: 9s)
+[23:08:18] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:08:20] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:08:21] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:08:22] Aplicativo iniciado com sucesso.
+[23:08:24] [INFO] Clicando na descrição 'Points'
+[23:08:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:08:30] Contador de resets: 65
+[23:08:34] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:08:41] [LOG] Ciclo 1/30... (T: 10s)
+[23:08:41] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:08:42] [LOG] Ciclo 2/30... (T: 11s)
+[23:08:42] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:08:43] [LOG] Ciclo 3/30... (T: 12s)
+[23:08:55] [LOG] Voltou para MainActivity após 24s. Sucesso.
+[23:08:56] Aplicativo iniciado com sucesso.
+[23:08:58] [INFO] Clicando na descrição 'Points'
+[23:08:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:05] [INFO] Clicando na descrição 'Points'
+[23:09:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:13] [INFO] Clicando na descrição 'Points'
+[23:09:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:21] [INFO] Clicando na descrição 'Points'
+[23:09:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:30] [INFO] Clicando na descrição 'Points'
+[23:09:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:38] [INFO] Clicando na descrição 'Points'
+[23:09:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:47] [INFO] Clicando na descrição 'Points'
+[23:09:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:09:55] [INFO] Clicando na descrição 'Points'
+[23:09:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:05] [INFO] Clicando na descrição 'Points'
+[23:10:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:14] [INFO] Clicando na descrição 'Points'
+[23:10:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:27] [INFO] Clicando na descrição 'Points'
+[23:10:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:36] [INFO] Clicando na descrição 'Points'
+[23:10:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:44] [INFO] Clicando na descrição 'Points'
+[23:10:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:10:52] [INFO] Clicando na descrição 'Points'
+[23:10:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:01] [INFO] Clicando na descrição 'Points'
+[23:11:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:10] [INFO] Clicando na descrição 'Points'
+[23:11:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:19] [INFO] Clicando na descrição 'Points'
+[23:11:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:29] [INFO] Clicando na descrição 'Points'
+[23:11:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:49] [INFO] Clicando na descrição 'Points'
+[23:11:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:11:59] [INFO] Clicando na descrição 'Points'
+[23:12:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:12:11] [INFO] Clicando na descrição 'Points'
+[23:12:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:12:20] [INFO] Clicando na descrição 'Points'
+[23:12:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:12:29] [INFO] Clicando na descrição 'Points'
+[23:12:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:12:37] [INFO] Clicando na descrição 'Points'
+[23:12:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:12:46] [INFO] Clicando na descrição 'Points'
+[23:12:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[23:12:53] Abrindo configurações de ID de publicidade...
+[23:12:55] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:12:58] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:13:00] Contador de resets: 66
+[23:13:05] Aplicativo iniciado com sucesso.
+[23:13:08] [INFO] Clicando na descrição 'Points'
+[23:13:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:15] [INFO] Clicando na descrição 'Points'
+[23:13:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:24] [INFO] Clicando na descrição 'Points'
+[23:13:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:32] [INFO] Clicando na descrição 'Points'
+[23:13:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:40] [INFO] Clicando na descrição 'Points'
+[23:13:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:49] [INFO] Clicando na descrição 'Points'
+[23:13:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:13:58] [INFO] Clicando na descrição 'Points'
+[23:13:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:07] [INFO] Clicando na descrição 'Points'
+[23:14:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:16] [INFO] Clicando na descrição 'Points'
+[23:14:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:26] [INFO] Clicando na descrição 'Points'
+[23:14:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:39] [INFO] Clicando na descrição 'Points'
+[23:14:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:47] [INFO] Clicando na descrição 'Points'
+[23:14:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:14:56] [INFO] Clicando na descrição 'Points'
+[23:14:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:04] [INFO] Clicando na descrição 'Points'
+[23:15:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:12] [INFO] Clicando na descrição 'Points'
+[23:15:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:21] [INFO] Clicando na descrição 'Points'
+[23:15:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:30] [INFO] Clicando na descrição 'Points'
+[23:15:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:39] [INFO] Clicando na descrição 'Points'
+[23:15:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:15:59] [INFO] Clicando na descrição 'Points'
+[23:16:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:08] [INFO] Clicando na descrição 'Points'
+[23:16:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:21] [INFO] Clicando na descrição 'Points'
+[23:16:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:29] [INFO] Clicando na descrição 'Points'
+[23:16:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:37] [INFO] Clicando na descrição 'Points'
+[23:16:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:46] [INFO] Clicando na descrição 'Points'
+[23:16:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:16:54] [INFO] Clicando na descrição 'Points'
+[23:16:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[23:17:01] Abrindo configurações de ID de publicidade...
+[23:17:04] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:17:06] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:17:08] Contador de resets: 67
+[23:17:14] Aplicativo iniciado com sucesso.
+[23:17:16] [INFO] Clicando na descrição 'Points'
+[23:17:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:17:22] Contador de resets: 68
+[23:17:27] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:17:33] [LOG] Ciclo 1/30... (T: 10s)
+[23:17:33] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:17:35] [LOG] Ciclo 2/30... (T: 12s)
+[23:17:35] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:17:36] [LOG] Ciclo 3/30... (T: 13s)
+[23:17:37] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:17:37] [LOG] Ciclo 4/30... (T: 14s)
+[23:17:41] [AVISO] Nenhum objeto detectado pela API.
+[23:17:42] [LOG] Voltou para MainActivity após 19s. Sucesso.
+[23:17:43] Aplicativo iniciado com sucesso.
+[23:17:45] [INFO] Clicando na descrição 'Points'
+[23:17:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:17:52] Contador de resets: 69
+[23:17:56] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:18:01] [LOG] Ciclo 1/30... (T: 9s)
+[23:18:01] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:18:04] Aplicativo iniciado com sucesso.
+[23:18:06] [INFO] Clicando na descrição 'Points'
+[23:18:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:18:13] Contador de resets: 70
+[23:18:17] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:18:22] [LOG] Ciclo 1/30... (T: 9s)
+[23:18:23] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:18:24] [LOG] Ciclo 2/30... (T: 11s)
+[23:18:25] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:18:25] [LOG] Ciclo 3/30... (T: 12s)
+[23:18:27] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[23:18:28] Aplicativo iniciado com sucesso.
+[23:18:30] [INFO] Clicando na descrição 'Points'
+[23:18:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:18:37] Contador de resets: 71
+[23:18:41] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:18:46] [LOG] Ciclo 1/30... (T: 9s)
+[23:18:46] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:18:49] Aplicativo iniciado com sucesso.
+[23:18:51] [INFO] Clicando na descrição 'Points'
+[23:19:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:19:08] Contador de resets: 72
+[23:19:12] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:19:17] [LOG] Ciclo 1/30... (T: 9s)
+[23:19:17] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:19:20] Aplicativo iniciado com sucesso.
+[23:19:22] [INFO] Clicando na descrição 'Points'
+[23:19:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:19:29] Contador de resets: 73
+[23:19:33] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:19:39] [LOG] Ciclo 1/30... (T: 9s)
+[23:19:39] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:19:40] [LOG] Ciclo 2/30... (T: 11s)
+[23:19:41] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:19:42] [LOG] Ciclo 3/30... (T: 12s)
+[23:19:43] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:19:45] Aplicativo iniciado com sucesso.
+[23:19:47] [INFO] Clicando na descrição 'Points'
+[23:19:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:19:53] Contador de resets: 74
+[23:19:58] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:20:04] [LOG] Ciclo 1/30... (T: 10s)
+[23:20:10] [AVISO] Nenhum objeto detectado pela API.
+[23:20:10] [LOG] Ciclo 2/30... (T: 16s)
+[23:20:10] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:20:13] [LOG] Ciclo 3/30... (T: 19s)
+[23:20:15] [LOG] Ciclo 4/30... (T: 21s)
+[23:20:19] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:20:19] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:20:20] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:20:21] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:20:22] Aplicativo iniciado com sucesso.
+[23:20:24] [INFO] Clicando na descrição 'Points'
+[23:20:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:20:31] Contador de resets: 75
+[23:20:35] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:20:40] [LOG] Ciclo 1/30... (T: 9s)
+[23:20:40] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:20:43] Aplicativo iniciado com sucesso.
+[23:20:45] [INFO] Clicando na descrição 'Points'
+[23:20:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:20:52] Contador de resets: 76
+[23:20:56] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:21:02] [LOG] Ciclo 1/30... (T: 9s)
+[23:21:02] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:21:03] [LOG] Ciclo 2/30... (T: 11s)
+[23:21:04] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:21:04] [LOG] Ciclo 3/30... (T: 12s)
+[23:21:06] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[23:21:08] Aplicativo iniciado com sucesso.
+[23:21:09] [INFO] Clicando na descrição 'Points'
+[23:21:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:21:17] [INFO] Clicando na descrição 'Points'
+[23:21:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:21:24] [INFO] Clicando na descrição 'Points'
+[23:21:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:21:30] Contador de resets: 77
+[23:21:35] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:21:41] [LOG] Ciclo 1/30... (T: 10s)
+[23:21:47] [AVISO] Nenhum objeto detectado pela API.
+[23:21:47] [LOG] Ciclo 2/30... (T: 16s)
+[23:21:47] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:21:50] [LOG] Ciclo 3/30... (T: 19s)
+[23:21:52] [LOG] Ciclo 4/30... (T: 20s)
+[23:21:55] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:21:56] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:21:57] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:21:58] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:21:59] Aplicativo iniciado com sucesso.
+[23:22:01] [INFO] Clicando na descrição 'Points'
+[23:22:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:22:08] Contador de resets: 78
+[23:22:12] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:22:17] [LOG] Ciclo 1/30... (T: 9s)
+[23:22:17] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:22:20] Aplicativo iniciado com sucesso.
+[23:22:22] [INFO] Clicando na descrição 'Points'
+[23:22:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:22:29] Contador de resets: 79
+[23:22:33] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:22:39] [LOG] Ciclo 1/30... (T: 9s)
+[23:22:39] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:22:40] [LOG] Ciclo 2/30... (T: 11s)
+[23:22:41] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:22:41] [LOG] Ciclo 3/30... (T: 12s)
+[23:22:43] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:22:44] Aplicativo iniciado com sucesso.
+[23:22:46] [INFO] Clicando na descrição 'Points'
+[23:22:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:22:53] Contador de resets: 80
+[23:22:57] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:23:02] [LOG] Ciclo 1/30... (T: 9s)
+[23:23:02] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:23:05] Aplicativo iniciado com sucesso.
+[23:23:07] [INFO] Clicando na descrição 'Points'
+[23:23:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:23:14] Contador de resets: 81
+[23:23:18] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:23:23] [LOG] Ciclo 1/30... (T: 9s)
+[23:23:23] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:23:26] Aplicativo iniciado com sucesso.
+[23:23:28] [INFO] Clicando na descrição 'Points'
+[23:23:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:23:35] Contador de resets: 82
+[23:23:39] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:23:44] [LOG] Ciclo 1/30... (T: 9s)
+[23:23:44] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:23:47] Aplicativo iniciado com sucesso.
+[23:23:49] [INFO] Clicando na descrição 'Points'
+[23:23:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:23:56] Contador de resets: 83
+[23:24:00] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:24:06] [LOG] Ciclo 1/30... (T: 9s)
+[23:24:06] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:24:07] [LOG] Ciclo 2/30... (T: 11s)
+[23:24:08] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:24:08] [LOG] Ciclo 3/30... (T: 12s)
+[23:24:11] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:24:12] Aplicativo iniciado com sucesso.
+[23:24:14] [INFO] Clicando na descrição 'Points'
+[23:24:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:24:20] Contador de resets: 84
+[23:24:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:24:30] [LOG] Ciclo 1/30... (T: 9s)
+[23:24:30] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:24:33] Aplicativo iniciado com sucesso.
+[23:24:35] [INFO] Clicando na descrição 'Points'
+[23:24:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:24:41] Contador de resets: 85
+[23:24:46] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:24:51] [LOG] Ciclo 1/30... (T: 9s)
+[23:24:51] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:24:54] Aplicativo iniciado com sucesso.
+[23:24:56] [INFO] Clicando na descrição 'Points'
+[23:24:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:25:03] Contador de resets: 86
+[23:25:07] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:25:13] [LOG] Ciclo 1/30... (T: 10s)
+[23:25:13] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:25:14] [LOG] Ciclo 2/30... (T: 11s)
+[23:25:15] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:25:15] [LOG] Ciclo 3/30... (T: 12s)
+[23:25:17] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:25:19] Aplicativo iniciado com sucesso.
+[23:25:20] [INFO] Clicando na descrição 'Points'
+[23:25:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:25:27] Contador de resets: 87
+[23:25:31] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:25:37] [LOG] Ciclo 1/30... (T: 10s)
+[23:25:44] [AVISO] Nenhum objeto detectado pela API.
+[23:25:44] [LOG] Ciclo 2/30... (T: 16s)
+[23:25:44] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:25:47] [LOG] Ciclo 3/30... (T: 19s)
+[23:25:49] [LOG] Ciclo 4/30... (T: 21s)
+[23:25:49] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:25:50] [LOG] Voltou para MainActivity após 23s. Sucesso.
+[23:25:52] Aplicativo iniciado com sucesso.
+[23:25:54] [INFO] Clicando na descrição 'Points'
+[23:25:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:26:00] Contador de resets: 88
+[23:26:04] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:26:11] [LOG] Ciclo 1/30... (T: 10s)
+[23:26:11] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:26:12] [LOG] Ciclo 2/30... (T: 11s)
+[23:26:13] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:26:13] [LOG] Ciclo 3/30... (T: 13s)
+[23:26:15] [LOG] Voltou para MainActivity após 15s. Sucesso.
+[23:26:17] Aplicativo iniciado com sucesso.
+[23:26:20] [INFO] Clicando na descrição 'Points'
+[23:26:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:26:28] [INFO] Clicando na descrição 'Points'
+[23:26:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:26:36] [INFO] Clicando na descrição 'Points'
+[23:26:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:26:43] [INFO] Clicando na descrição 'Points'
+[23:26:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:26:49] Contador de resets: 89
+[23:26:54] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:27:00] [LOG] Ciclo 1/30... (T: 10s)
+[23:27:00] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:27:01] [LOG] Ciclo 2/30... (T: 11s)
+[23:27:02] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:27:02] [LOG] Ciclo 3/30... (T: 13s)
+[23:27:04] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:27:06] Aplicativo iniciado com sucesso.
+[23:27:08] [INFO] Clicando na descrição 'Points'
+[23:27:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:27:14] Contador de resets: 90
+[23:27:18] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:27:24] [LOG] Ciclo 1/30... (T: 9s)
+[23:27:24] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:27:26] Aplicativo iniciado com sucesso.
+[23:27:28] [INFO] Clicando na descrição 'Points'
+[23:27:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:27:35] Contador de resets: 91
+[23:27:39] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:27:44] [LOG] Ciclo 1/30... (T: 9s)
+[23:27:44] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:27:47] Aplicativo iniciado com sucesso.
+[23:27:49] [INFO] Clicando na descrição 'Points'
+[23:27:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:27:55] Contador de resets: 92
+[23:28:00] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:28:05] [LOG] Ciclo 1/30... (T: 9s)
+[23:28:05] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:28:08] Aplicativo iniciado com sucesso.
+[23:28:09] [INFO] Clicando na descrição 'Points'
+[23:28:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:28:16] Contador de resets: 93
+[23:28:20] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:28:26] [LOG] Ciclo 1/30... (T: 9s)
+[23:28:26] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:28:27] [LOG] Ciclo 2/30... (T: 11s)
+[23:28:27] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:28:28] [LOG] Ciclo 3/30... (T: 12s)
+[23:28:28] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:28:29] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[23:28:30] Aplicativo iniciado com sucesso.
+[23:28:32] [INFO] Clicando na descrição 'Points'
+[23:28:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:28:38] Contador de resets: 94
+[23:28:42] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:28:48] [LOG] Ciclo 1/30... (T: 10s)
+[23:28:54] [AVISO] Nenhum objeto detectado pela API.
+[23:28:54] [LOG] Ciclo 2/30... (T: 15s)
+[23:28:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:28:56] [LOG] Ciclo 3/30... (T: 17s)
+[23:28:57] [LOG] Ciclo 4/30... (T: 19s)
+[23:29:01] [AVISO] Nenhum objeto detectado pela API.
+[23:29:01] [LOG] Ciclo 5/30... (T: 22s)
+[23:29:01] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:29:03] Aplicativo iniciado com sucesso.
+[23:29:05] [INFO] Clicando na descrição 'Points'
+[23:29:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:29:11] Contador de resets: 95
+[23:29:16] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:29:21] [LOG] Ciclo 1/30... (T: 9s)
+[23:29:22] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:29:22] [LOG] Ciclo 2/30... (T: 11s)
+[23:29:23] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:29:23] [LOG] Ciclo 3/30... (T: 11s)
+[23:29:25] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[23:29:26] Aplicativo iniciado com sucesso.
+[23:29:28] [INFO] Clicando na descrição 'Points'
+[23:29:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:29:35] [INFO] Clicando na descrição 'Points'
+[23:29:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:29:42] [INFO] Clicando na descrição 'Points'
+[23:29:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:29:50] [INFO] Clicando na descrição 'Points'
+[23:29:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:29:58] [INFO] Clicando na descrição 'Points'
+[23:29:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:06] [INFO] Clicando na descrição 'Points'
+[23:30:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:15] [INFO] Clicando na descrição 'Points'
+[23:30:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:24] [INFO] Clicando na descrição 'Points'
+[23:30:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:33] [INFO] Clicando na descrição 'Points'
+[23:30:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:43] [INFO] Clicando na descrição 'Points'
+[23:30:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:30:56] [INFO] Clicando na descrição 'Points'
+[23:30:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:04] [INFO] Clicando na descrição 'Points'
+[23:31:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:13] [INFO] Clicando na descrição 'Points'
+[23:31:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:21] [INFO] Clicando na descrição 'Points'
+[23:31:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:30] [INFO] Clicando na descrição 'Points'
+[23:31:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:39] [INFO] Clicando na descrição 'Points'
+[23:31:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:48] [INFO] Clicando na descrição 'Points'
+[23:31:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:31:58] [INFO] Clicando na descrição 'Points'
+[23:32:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:08] [INFO] Clicando na descrição 'Points'
+[23:32:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:18] [INFO] Clicando na descrição 'Points'
+[23:32:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:30] [INFO] Clicando na descrição 'Points'
+[23:32:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:39] [INFO] Clicando na descrição 'Points'
+[23:32:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:48] [INFO] Clicando na descrição 'Points'
+[23:32:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:32:57] [INFO] Clicando na descrição 'Points'
+[23:32:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:33:16] [INFO] Clicando na descrição 'Points'
+[23:33:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[23:33:23] Abrindo configurações de ID de publicidade...
+[23:33:25] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:33:27] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:33:30] Contador de resets: 96
+[23:33:35] Aplicativo iniciado com sucesso.
+[23:33:37] [INFO] Clicando na descrição 'Points'
+[23:33:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:33:45] [INFO] Clicando na descrição 'Points'
+[23:33:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:33:54] [INFO] Clicando na descrição 'Points'
+[23:33:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:03] [INFO] Clicando na descrição 'Points'
+[23:34:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:12] [INFO] Clicando na descrição 'Points'
+[23:34:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:20] [INFO] Clicando na descrição 'Points'
+[23:34:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:30] [INFO] Clicando na descrição 'Points'
+[23:34:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:39] [INFO] Clicando na descrição 'Points'
+[23:34:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:49] [INFO] Clicando na descrição 'Points'
+[23:34:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:34:59] [INFO] Clicando na descrição 'Points'
+[23:35:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:12] [INFO] Clicando na descrição 'Points'
+[23:35:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:21] [INFO] Clicando na descrição 'Points'
+[23:35:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:30] [INFO] Clicando na descrição 'Points'
+[23:35:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:38] [INFO] Clicando na descrição 'Points'
+[23:35:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:47] [INFO] Clicando na descrição 'Points'
+[23:35:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:35:56] [INFO] Clicando na descrição 'Points'
+[23:35:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:05] [INFO] Clicando na descrição 'Points'
+[23:36:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:14] [INFO] Clicando na descrição 'Points'
+[23:36:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:24] [INFO] Clicando na descrição 'Points'
+[23:36:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:34] [INFO] Clicando na descrição 'Points'
+[23:36:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:46] [INFO] Clicando na descrição 'Points'
+[23:36:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:36:54] [INFO] Clicando na descrição 'Points'
+[23:36:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:37:03] [INFO] Clicando na descrição 'Points'
+[23:37:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:37:11] [INFO] Clicando na descrição 'Points'
+[23:37:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:37:20] [INFO] Clicando na descrição 'Points'
+[23:37:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[23:37:27] Abrindo configurações de ID de publicidade...
+[23:37:29] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:37:31] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:37:34] Contador de resets: 97
+[23:37:39] Aplicativo iniciado com sucesso.
+[23:37:41] [INFO] Clicando na descrição 'Points'
+[23:37:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:37:50] [INFO] Clicando na descrição 'Points'
+[23:37:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:37:57] [INFO] Clicando na descrição 'Points'
+[23:37:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:38:04] Contador de resets: 98
+[23:38:08] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:38:13] [LOG] Ciclo 1/30... (T: 9s)
+[23:38:13] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:38:15] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:38:16] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:38:18] Aplicativo iniciado com sucesso.
+[23:38:20] [INFO] Clicando na descrição 'Points'
+[23:38:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:38:27] Contador de resets: 99
+[23:38:31] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:38:36] [LOG] Ciclo 1/30... (T: 9s)
+[23:38:43] [AVISO] Nenhum objeto detectado pela API.
+[23:38:43] [LOG] Ciclo 2/30... (T: 15s)
+[23:38:43] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:38:46] [LOG] Ciclo 3/30... (T: 18s)
+[23:38:47] [LOG] Ciclo 4/30... (T: 20s)
+[23:38:48] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:38:50] [LOG] Voltou para MainActivity após 23s. Sucesso.
+[23:38:53] [CLEANUP] Executando auto-limpeza periódica...
+[23:38:55] [CLEANUP] Memória limpa. Aguardando 2s antes de continuar...
+[23:38:59] Aplicativo iniciado com sucesso.
+[23:39:03] [INFO] Clicando na descrição 'Points'
+[23:39:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:39:10] [INFO] Clicando na descrição 'Points'
+[23:39:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:39:17] Contador de resets: 100
+[23:39:17] Resetando ID de publicidade...
+====================================================
+[23:39:18] Abrindo configurações de ID de publicidade...
+[23:39:20] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:39:22] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:39:27] Aplicativo iniciado com sucesso.
+[23:39:31] [INFO] Clicando na descrição 'Points'
+[23:39:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:39:38] [INFO] Clicando na descrição 'Points'
+[23:39:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:39:45] Contador de resets: 1
+[23:39:49] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:39:54] [LOG] Ciclo 1/30... (T: 9s)
+[23:39:55] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:39:58] Aplicativo iniciado com sucesso.
+[23:39:59] [INFO] Clicando na descrição 'Points'
+[23:40:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:40:07] [INFO] Clicando na descrição 'Points'
+[23:40:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:40:14] [INFO] Clicando na descrição 'Points'
+[23:40:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:40:21] Contador de resets: 2
+[23:40:26] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:40:31] [LOG] Ciclo 1/30... (T: 9s)
+[23:40:31] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:40:33] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:40:34] [LOG] Voltou para MainActivity após 12s. Sucesso.
+[23:40:36] Aplicativo iniciado com sucesso.
+[23:40:38] [INFO] Clicando na descrição 'Points'
+[23:40:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:40:44] Contador de resets: 3
+[23:40:49] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:40:54] [LOG] Ciclo 1/30... (T: 9s)
+[23:41:00] [AVISO] Nenhum objeto detectado pela API.
+[23:41:00] [LOG] Ciclo 2/30... (T: 15s)
+[23:41:00] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:41:04] [LOG] Ciclo 3/30... (T: 19s)
+[23:41:05] [LOG] Ciclo 4/30... (T: 20s)
+[23:41:09] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:41:10] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:41:11] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:41:12] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:41:13] Aplicativo iniciado com sucesso.
+[23:41:15] [INFO] Clicando na descrição 'Points'
+[23:41:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:41:22] Contador de resets: 4
+[23:41:26] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:41:32] [LOG] Ciclo 1/30... (T: 10s)
+[23:41:38] [AVISO] Nenhum objeto detectado pela API.
+[23:41:39] [LOG] Ciclo 2/30... (T: 17s)
+[23:41:39] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:41:42] [LOG] Ciclo 3/30... (T: 19s)
+[23:41:43] [LOG] Ciclo 4/30... (T: 21s)
+[23:41:47] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:41:47] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:41:49] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:41:49] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:41:51] Aplicativo iniciado com sucesso.
+[23:41:53] [INFO] Clicando na descrição 'Points'
+[23:41:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:41:59] Contador de resets: 5
+[23:42:04] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:42:10] [LOG] Ciclo 1/30... (T: 10s)
+[23:42:16] [AVISO] Nenhum objeto detectado pela API.
+[23:42:16] [LOG] Ciclo 2/30... (T: 16s)
+[23:42:16] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:42:19] [LOG] Ciclo 3/30... (T: 19s)
+[23:42:25] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:42:26] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[23:42:27] Aplicativo iniciado com sucesso.
+[23:42:29] [INFO] Clicando na descrição 'Points'
+[23:42:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:42:36] [INFO] Clicando na descrição 'Points'
+[23:42:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:42:43] Contador de resets: 6
+[23:42:47] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:42:52] [LOG] Ciclo 1/30... (T: 9s)
+[23:42:59] [AVISO] Nenhum objeto detectado pela API.
+[23:42:59] [LOG] Ciclo 2/30... (T: 15s)
+[23:42:59] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:43:02] [LOG] Ciclo 3/30... (T: 18s)
+[23:43:03] [LOG] Ciclo 4/30... (T: 20s)
+[23:43:07] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:43:07] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:43:09] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:43:09] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[23:43:11] Aplicativo iniciado com sucesso.
+[23:43:12] [INFO] Clicando na descrição 'Points'
+[23:43:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:43:20] [INFO] Clicando na descrição 'Points'
+[23:43:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:43:26] Contador de resets: 7
+[23:43:31] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:43:36] [LOG] Ciclo 1/30... (T: 9s)
+[23:43:43] [AVISO] Nenhum objeto detectado pela API.
+[23:43:43] [LOG] Ciclo 2/30... (T: 16s)
+[23:43:43] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:43:46] [LOG] Ciclo 3/30... (T: 19s)
+[23:43:47] [LOG] Ciclo 4/30... (T: 20s)
+[23:43:51] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:43:51] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.75
+[23:43:53] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:43:54] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[23:43:55] Aplicativo iniciado com sucesso.
+[23:43:57] [INFO] Clicando na descrição 'Points'
+[23:43:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:44:04] [INFO] Clicando na descrição 'Points'
+[23:44:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:44:12] [INFO] Clicando na descrição 'Points'
+[23:44:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:44:18] Contador de resets: 8
+[23:44:23] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:44:28] [LOG] Ciclo 1/30... (T: 9s)
+[23:44:39] [LOG] Elemento 'com.israbyte.dropbin:id/ad_close' detectado (resource-id). Clicando...
+[23:44:40] [LOG] Ciclo 2/30... (T: 21s)
+[23:44:41] [LOG] Ciclo 3/30... (T: 22s)
+[23:44:43] [LOG] Ciclo 4/30... (T: 24s)
+[23:44:47] [AVISO] Nenhum objeto detectado pela API.
+[23:44:47] [LOG] Ciclo 5/30... (T: 28s)
+[23:44:47] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:44:50] Aplicativo iniciado com sucesso.
+[23:44:52] [INFO] Clicando na descrição 'Points'
+[23:44:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:45:00] [INFO] Clicando na descrição 'Points'
+[23:45:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:45:06] Contador de resets: 9
+[23:45:11] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:45:16] [LOG] Ciclo 1/30... (T: 9s)
+[23:45:22] [AVISO] Nenhum objeto detectado pela API.
+[23:45:22] [LOG] Ciclo 2/30... (T: 15s)
+[23:45:22] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:45:26] [LOG] Ciclo 3/30... (T: 19s)
+[23:45:27] [LOG] Ciclo 4/30... (T: 20s)
+[23:45:31] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:45:31] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:45:33] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:45:33] [LOG] Voltou para MainActivity após 26s. Sucesso.
+[23:45:34] Aplicativo iniciado com sucesso.
+[23:45:36] [INFO] Clicando na descrição 'Points'
+[23:45:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:45:43] [INFO] Clicando na descrição 'Points'
+[23:45:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:45:49] Contador de resets: 10
+[23:45:54] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:45:59] [LOG] Ciclo 1/30... (T: 9s)
+[23:46:04] [AVISO] Nenhum objeto detectado pela API.
+[23:46:04] [LOG] Ciclo 2/30... (T: 15s)
+[23:46:04] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:46:07] [LOG] Ciclo 3/30... (T: 17s)
+[23:46:08] [LOG] Ciclo 4/30... (T: 18s)
+[23:46:12] [AVISO] Nenhum objeto detectado pela API.
+[23:46:12] [LOG] Ciclo 5/30... (T: 22s)
+[23:46:12] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:46:15] Aplicativo iniciado com sucesso.
+[23:46:16] [INFO] Clicando na descrição 'Points'
+[23:46:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:46:32] [INFO] Clicando na descrição 'Points'
+[23:46:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:46:38] Contador de resets: 11
+[23:46:43] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:46:48] [LOG] Ciclo 1/30... (T: 9s)
+[23:46:53] [AVISO] Nenhum objeto detectado pela API.
+[23:46:53] [LOG] Ciclo 2/30... (T: 14s)
+[23:46:53] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:46:55] [LOG] Ciclo 3/30... (T: 16s)
+[23:46:56] [LOG] Ciclo 4/30... (T: 17s)
+[23:47:00] [AVISO] Nenhum objeto detectado pela API.
+[23:47:00] [LOG] Ciclo 5/30... (T: 21s)
+[23:47:00] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:47:03] Aplicativo iniciado com sucesso.
+[23:47:05] [INFO] Clicando na descrição 'Points'
+[23:47:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:47:12] [INFO] Clicando na descrição 'Points'
+[23:47:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:47:19] [INFO] Clicando na descrição 'Points'
+[23:47:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:47:26] [INFO] Clicando na descrição 'Points'
+[23:47:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:47:44] [INFO] Clicando na descrição 'Points'
+[23:47:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:47:51] Contador de resets: 12
+[23:47:55] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:48:00] [LOG] Ciclo 1/30... (T: 9s)
+[23:48:06] [AVISO] Nenhum objeto detectado pela API.
+[23:48:06] [LOG] Ciclo 2/30... (T: 15s)
+[23:48:06] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:48:09] [LOG] Ciclo 3/30... (T: 17s)
+[23:48:10] [LOG] Ciclo 4/30... (T: 18s)
+[23:48:13] [AVISO] Nenhum objeto detectado pela API.
+[23:48:14] [LOG] Ciclo 5/30... (T: 22s)
+[23:48:14] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:48:17] Aplicativo iniciado com sucesso.
+[23:48:18] [INFO] Clicando na descrição 'Points'
+[23:48:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:48:30] [INFO] Clicando na descrição 'Points'
+[23:48:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:48:37] [INFO] Clicando na descrição 'Points'
+[23:48:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:48:43] Contador de resets: 13
+[23:48:48] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:48:53] [LOG] Ciclo 1/30... (T: 9s)
+[23:49:00] [AVISO] Nenhum objeto detectado pela API.
+[23:49:01] [LOG] Ciclo 2/30... (T: 17s)
+[23:49:01] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:49:04] [LOG] Ciclo 3/30... (T: 19s)
+[23:49:05] [LOG] Ciclo 4/30... (T: 21s)
+[23:49:19] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:49:19] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:49:21] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:49:21] [LOG] Voltou para MainActivity após 37s. Sucesso.
+[23:49:23] Aplicativo iniciado com sucesso.
+[23:49:25] [INFO] Clicando na descrição 'Points'
+[23:49:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:49:32] [INFO] Clicando na descrição 'Points'
+[23:49:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:49:38] Contador de resets: 14
+[23:49:43] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:49:48] [LOG] Ciclo 1/30... (T: 9s)
+[23:49:54] [AVISO] Nenhum objeto detectado pela API.
+[23:49:54] [LOG] Ciclo 2/30... (T: 16s)
+[23:49:54] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:49:57] [LOG] Ciclo 3/30... (T: 18s)
+[23:50:09] [LOG] Ciclo 4/30... (T: 30s)
+[23:50:09] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:50:12] Aplicativo iniciado com sucesso.
+[23:50:13] [INFO] Clicando na descrição 'Points'
+[23:50:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:50:31] [INFO] Clicando na descrição 'Points'
+[23:50:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:50:37] Contador de resets: 15
+[23:50:41] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:50:47] [LOG] Ciclo 1/30... (T: 9s)
+[23:50:52] [AVISO] Nenhum objeto detectado pela API.
+[23:50:52] [LOG] Ciclo 2/30... (T: 14s)
+[23:50:52] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:50:55] [LOG] Ciclo 3/30... (T: 17s)
+[23:50:56] [LOG] Ciclo 4/30... (T: 18s)
+[23:51:00] [AVISO] Nenhum objeto detectado pela API.
+[23:51:00] [LOG] Ciclo 5/30... (T: 22s)
+[23:51:00] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:51:02] Aplicativo iniciado com sucesso.
+[23:51:04] [INFO] Clicando na descrição 'Points'
+[23:51:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:51:12] [INFO] Clicando na descrição 'Points'
+[23:51:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:51:18] Contador de resets: 16
+[23:51:22] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:51:27] [LOG] Ciclo 1/30... (T: 9s)
+[23:51:32] [AVISO] Nenhum objeto detectado pela API.
+[23:51:33] [LOG] Ciclo 2/30... (T: 14s)
+[23:51:33] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:51:35] [LOG] Ciclo 3/30... (T: 17s)
+[23:51:36] [LOG] Ciclo 4/30... (T: 18s)
+[23:51:40] [AVISO] Nenhum objeto detectado pela API.
+[23:51:40] [LOG] Ciclo 5/30... (T: 22s)
+[23:51:40] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:51:43] Aplicativo iniciado com sucesso.
+[23:51:45] [INFO] Clicando na descrição 'Points'
+[23:51:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:51:52] [INFO] Clicando na descrição 'Points'
+[23:51:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:51:59] Contador de resets: 17
+[23:52:03] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:52:08] [LOG] Ciclo 1/30... (T: 9s)
+[23:52:13] [AVISO] Nenhum objeto detectado pela API.
+[23:52:13] [LOG] Ciclo 2/30... (T: 14s)
+[23:52:13] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:52:16] [LOG] Ciclo 3/30... (T: 17s)
+[23:52:17] [LOG] Ciclo 4/30... (T: 18s)
+[23:52:21] [AVISO] Nenhum objeto detectado pela API.
+[23:52:21] [LOG] Ciclo 5/30... (T: 22s)
+[23:52:21] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:52:23] Aplicativo iniciado com sucesso.
+[23:52:25] [INFO] Clicando na descrição 'Points'
+[23:52:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:52:32] [INFO] Clicando na descrição 'Points'
+[23:52:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:52:40] [INFO] Clicando na descrição 'Points'
+[23:52:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:52:47] [INFO] Clicando na descrição 'Points'
+[23:52:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:52:55] [INFO] Clicando na descrição 'Points'
+[23:52:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:03] [INFO] Clicando na descrição 'Points'
+[23:53:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:11] [INFO] Clicando na descrição 'Points'
+[23:53:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:19] [INFO] Clicando na descrição 'Points'
+[23:53:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:28] [INFO] Clicando na descrição 'Points'
+[23:53:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:37] [INFO] Clicando na descrição 'Points'
+[23:53:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:50] [INFO] Clicando na descrição 'Points'
+[23:53:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:53:58] [INFO] Clicando na descrição 'Points'
+[23:54:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:54:07] [INFO] Clicando na descrição 'Points'
+[23:54:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:54:16] [INFO] Clicando na descrição 'Points'
+[23:54:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:54:24] [INFO] Clicando na descrição 'Points'
+[23:54:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:54:43] [INFO] Clicando na descrição 'Points'
+[23:54:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:54:52] [INFO] Clicando na descrição 'Points'
+[23:54:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:01] [INFO] Clicando na descrição 'Points'
+[23:55:03] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:11] [INFO] Clicando na descrição 'Points'
+[23:55:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:21] [INFO] Clicando na descrição 'Points'
+[23:55:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:33] [INFO] Clicando na descrição 'Points'
+[23:55:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:42] [INFO] Clicando na descrição 'Points'
+[23:55:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:50] [INFO] Clicando na descrição 'Points'
+[23:55:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:55:59] [INFO] Clicando na descrição 'Points'
+[23:56:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:56:07] [INFO] Clicando na descrição 'Points'
+[23:56:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[23:56:15] Abrindo configurações de ID de publicidade...
+[23:56:17] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[23:56:19] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[23:56:21] Contador de resets: 18
+[23:56:27] Aplicativo iniciado com sucesso.
+[23:56:29] [INFO] Clicando na descrição 'Points'
+[23:56:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:56:37] [INFO] Clicando na descrição 'Points'
+[23:56:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:56:44] [INFO] Clicando na descrição 'Points'
+[23:56:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:56:51] Contador de resets: 19
+[23:56:55] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:57:01] [LOG] Ciclo 1/30... (T: 9s)
+[23:57:01] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:57:03] [LOG] Ciclo 2/30... (T: 11s)
+[23:57:03] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:57:04] [LOG] Ciclo 3/30... (T: 12s)
+[23:57:05] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:57:07] Aplicativo iniciado com sucesso.
+[23:57:09] [INFO] Clicando na descrição 'Points'
+[23:57:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:57:15] Contador de resets: 20
+[23:57:20] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:57:26] [LOG] Ciclo 1/30... (T: 10s)
+[23:57:32] [AVISO] Nenhum objeto detectado pela API.
+[23:57:32] [LOG] Ciclo 2/30... (T: 16s)
+[23:57:32] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:57:35] [LOG] Ciclo 3/30... (T: 19s)
+[23:57:37] [LOG] Ciclo 4/30... (T: 21s)
+[23:57:51] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[23:57:52] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[23:57:53] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[23:57:54] [LOG] Voltou para MainActivity após 38s. Sucesso.
+[23:57:54] [OK] Nenhum app não autorizado detectado.
+[23:57:55] Aplicativo iniciado com sucesso.
+[23:57:57] [INFO] Clicando na descrição 'Points'
+[23:57:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:58:04] Contador de resets: 21
+[23:58:08] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:58:13] [LOG] Ciclo 1/30... (T: 9s)
+[23:58:13] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:58:17] Aplicativo iniciado com sucesso.
+[23:58:18] [INFO] Clicando na descrição 'Points'
+[23:58:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:58:25] Contador de resets: 22
+[23:58:29] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:58:35] [LOG] Ciclo 1/30... (T: 9s)
+[23:58:35] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[23:58:37] [LOG] Ciclo 2/30... (T: 11s)
+[23:58:37] [LOG] Botão com texto vazio encontrado. Clicando...
+[23:58:38] [LOG] Ciclo 3/30... (T: 12s)
+[23:58:39] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[23:58:41] Aplicativo iniciado com sucesso.
+[23:58:43] [INFO] Clicando na descrição 'Points'
+[23:58:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:58:49] Contador de resets: 23
+[23:58:54] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:58:59] [LOG] Ciclo 1/30... (T: 9s)
+[23:58:59] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:59:02] Aplicativo iniciado com sucesso.
+[23:59:04] [INFO] Clicando na descrição 'Points'
+[23:59:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:59:10] Contador de resets: 24
+[23:59:15] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:59:20] [LOG] Ciclo 1/30... (T: 9s)
+[23:59:20] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:59:23] Aplicativo iniciado com sucesso.
+[23:59:25] [INFO] Clicando na descrição 'Points'
+[23:59:26] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:59:31] Contador de resets: 25
+[23:59:36] [LOG] Possível anúncio detectado. Aguardando 5s...
+[23:59:41] [LOG] Ciclo 1/30... (T: 9s)
+[23:59:41] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[23:59:44] Aplicativo iniciado com sucesso.
+[23:59:46] [INFO] Clicando na descrição 'Points'
+[23:59:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[23:59:52] Contador de resets: 26
+[23:59:57] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:00:02] [LOG] Ciclo 1/30... (T: 9s)
+[00:00:03] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:00:04] [LOG] Ciclo 2/30... (T: 11s)
+[00:00:04] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:00:05] [LOG] Ciclo 3/30... (T: 12s)
+[00:00:06] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[00:00:08] Aplicativo iniciado com sucesso.
+[00:00:10] [INFO] Clicando na descrição 'Points'
+[00:00:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:00:16] Contador de resets: 27
+[00:00:21] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:00:26] [LOG] Ciclo 1/30... (T: 9s)
+[00:00:26] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:00:29] Aplicativo iniciado com sucesso.
+[00:00:31] [INFO] Clicando na descrição 'Points'
+[00:00:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:00:37] Contador de resets: 28
+[00:00:42] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:00:47] [LOG] Ciclo 1/30... (T: 9s)
+[00:00:47] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:00:50] Aplicativo iniciado com sucesso.
+[00:00:52] [INFO] Clicando na descrição 'Points'
+[00:00:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:00:58] Contador de resets: 29
+[00:01:03] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:01:08] [LOG] Ciclo 1/30... (T: 9s)
+[00:01:09] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:01:10] [LOG] Ciclo 2/30... (T: 11s)
+[00:01:10] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:01:11] [LOG] Ciclo 3/30... (T: 12s)
+[00:01:12] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[00:01:14] Aplicativo iniciado com sucesso.
+[00:01:16] [INFO] Clicando na descrição 'Points'
+[00:01:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:01:22] Contador de resets: 30
+[00:01:27] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:01:33] [LOG] Ciclo 1/30... (T: 10s)
+[00:01:39] [AVISO] Nenhum objeto detectado pela API.
+[00:01:39] [LOG] Ciclo 2/30... (T: 16s)
+[00:01:39] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:01:42] [LOG] Ciclo 3/30... (T: 19s)
+[00:01:44] [LOG] Ciclo 4/30... (T: 21s)
+[00:01:48] [INFO] IA encontrou 1 objetos. Iniciando sequência de cliques inteligente...
+[00:01:48] [INFO] [1/1] Clicando em (981, 188) - Confiança: 0.76
+[00:01:49] [SUCESSO] Anúncio fechado! Voltou para MainActivity. Parando cliques.
+[00:01:50] [LOG] Voltou para MainActivity após 27s. Sucesso.
+[00:01:51] Aplicativo iniciado com sucesso.
+[00:01:53] [INFO] Clicando na descrição 'Points'
+[00:01:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:02:00] Contador de resets: 31
+[00:02:04] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:02:09] [LOG] Ciclo 1/30... (T: 9s)
+[00:02:09] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:02:12] Aplicativo iniciado com sucesso.
+[00:02:14] [INFO] Clicando na descrição 'Points'
+[00:02:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:02:21] Contador de resets: 32
+[00:02:25] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:02:31] [LOG] Ciclo 1/30... (T: 9s)
+[00:02:31] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:02:32] [LOG] Ciclo 2/30... (T: 11s)
+[00:02:33] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:02:33] [LOG] Ciclo 3/30... (T: 12s)
+[00:02:36] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[00:02:37] Aplicativo iniciado com sucesso.
+[00:02:39] [INFO] Iniciando processo de saque...
+[00:02:39] [LOG] Navegando para tela de saque...
+[00:02:44] [PROCESSANDO] Tentativa de saque 1/10
+[00:02:44] [LOG] Preenchendo email: joaogomes183@yahoo.com
+[00:02:46] [INFO] Clicando na descrição 'Confirm Email FaucetPay'
+[00:02:51] [LOG] Clicando em Send...
+[00:02:51] [INFO] Clicando na descrição 'Send'
+[00:03:01] [SUCESSO] Saque realizado (provável).
+[00:03:01] [INFO] Reiniciando app após tentativa de saque...
+[00:03:04] [INFO] Nenhuma descrição encontrada em ['Points', 'Login/Register']
+[00:03:04] [AVISO] Falha ao encontrar botão Points/Login (1/10)
+[00:03:06] [INFO] Clicando na descrição 'Points'
+[00:03:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:03:13] [INFO] Clicando na descrição 'Points'
+[00:03:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:03:20] Contador de resets: 33
+[00:03:24] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:03:30] [LOG] Ciclo 1/30... (T: 10s)
+[00:03:31] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:03:32] [LOG] Ciclo 2/30... (T: 11s)
+[00:03:32] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:03:32] [LOG] Ciclo 3/30... (T: 12s)
+[00:03:33] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:03:33] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[00:03:34] Aplicativo iniciado com sucesso.
+[00:03:36] [INFO] Clicando na descrição 'Points'
+[00:03:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:03:42] Contador de resets: 34
+[00:03:47] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:03:52] [LOG] Ciclo 1/30... (T: 9s)
+[00:03:52] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:03:54] Aplicativo iniciado com sucesso.
+[00:03:56] [INFO] Clicando na descrição 'Points'
+[00:03:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:04:02] Contador de resets: 35
+[00:04:07] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:04:13] [LOG] Ciclo 1/30... (T: 10s)
+[00:04:13] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:04:14] [LOG] Ciclo 2/30... (T: 11s)
+[00:04:15] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:04:15] [LOG] Ciclo 3/30... (T: 12s)
+[00:04:17] [LOG] Voltou para MainActivity após 14s. Sucesso.
+[00:04:18] Aplicativo iniciado com sucesso.
+[00:04:20] [INFO] Clicando na descrição 'Points'
+[00:04:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:04:27] Contador de resets: 36
+[00:04:31] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:04:36] [LOG] Ciclo 1/30... (T: 9s)
+[00:04:36] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:04:39] Aplicativo iniciado com sucesso.
+[00:04:41] [INFO] Clicando na descrição 'Points'
+[00:04:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:04:47] Contador de resets: 37
+[00:04:52] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:04:57] [LOG] Ciclo 1/30... (T: 9s)
+[00:04:57] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:05:00] Aplicativo iniciado com sucesso.
+[00:05:02] [INFO] Clicando na descrição 'Points'
+[00:05:03] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:05:08] Contador de resets: 38
+[00:05:13] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:05:18] [LOG] Ciclo 1/30... (T: 9s)
+[00:05:18] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:05:21] Aplicativo iniciado com sucesso.
+[00:05:23] [INFO] Clicando na descrição 'Points'
+[00:05:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:05:29] Contador de resets: 39
+[00:05:34] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:05:39] [LOG] Ciclo 1/30... (T: 9s)
+[00:05:39] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:05:40] [LOG] Ciclo 2/30... (T: 11s)
+[00:05:41] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:05:41] [LOG] Ciclo 3/30... (T: 11s)
+[00:05:53] [LOG] Voltou para MainActivity após 23s. Sucesso.
+[00:05:55] Aplicativo iniciado com sucesso.
+[00:05:56] [INFO] Clicando na descrição 'Points'
+[00:05:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:06:03] Contador de resets: 40
+[00:06:07] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:06:12] [LOG] Ciclo 1/30... (T: 9s)
+[00:06:12] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:06:15] Aplicativo iniciado com sucesso.
+[00:06:17] [INFO] Clicando na descrição 'Points'
+[00:06:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:06:23] Contador de resets: 41
+[00:06:28] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:06:34] [LOG] Ciclo 1/30... (T: 10s)
+[00:06:40] [AVISO] Nenhum objeto detectado pela API.
+[00:06:40] [LOG] Ciclo 2/30... (T: 16s)
+[00:06:40] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:06:43] [LOG] Ciclo 3/30... (T: 19s)
+[00:06:44] [LOG] Ciclo 4/30... (T: 20s)
+[00:06:48] [AVISO] Nenhum objeto detectado pela API.
+[00:06:48] [LOG] Ciclo 5/30... (T: 24s)
+[00:06:48] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:06:51] Aplicativo iniciado com sucesso.
+[00:06:53] [INFO] Clicando na descrição 'Points'
+[00:06:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:06:59] Contador de resets: 42
+[00:07:04] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:07:09] [LOG] Ciclo 1/30... (T: 9s)
+[00:07:09] [FAST-PATH] Detectado 'com.israbyte.dropbin:id/ad_close'. Clicando...
+[00:07:12] Aplicativo iniciado com sucesso.
+[00:07:24] [INFO] Clicando na descrição 'Points'
+[00:07:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:07:30] Contador de resets: 43
+[00:07:35] [LOG] Possível anúncio detectado. Aguardando 5s...
+[00:07:40] [LOG] Ciclo 1/30... (T: 9s)
+[00:07:41] [LOG] Elemento 'skip-button' detectado (resource-id). Clicando...
+[00:07:41] [LOG] Ciclo 2/30... (T: 10s)
+[00:07:42] [LOG] Botão com texto vazio encontrado. Clicando...
+[00:07:42] [LOG] Ciclo 3/30... (T: 11s)
+[00:07:44] [LOG] Voltou para MainActivity após 13s. Sucesso.
+[00:07:45] Aplicativo iniciado com sucesso.
+[00:07:46] [INFO] Clicando na descrição 'Points'
+[00:07:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:07:54] [INFO] Clicando na descrição 'Points'
+[00:07:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:01] [INFO] Clicando na descrição 'Points'
+[00:08:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:08] [INFO] Clicando na descrição 'Points'
+[00:08:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:16] [INFO] Clicando na descrição 'Points'
+[00:08:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:24] [INFO] Clicando na descrição 'Points'
+[00:08:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:32] [INFO] Clicando na descrição 'Points'
+[00:08:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:40] [INFO] Clicando na descrição 'Points'
+[00:08:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:48] [INFO] Clicando na descrição 'Points'
+[00:08:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:08:57] [INFO] Clicando na descrição 'Points'
+[00:08:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:07] [INFO] Clicando na descrição 'Points'
+[00:09:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:15] [INFO] Clicando na descrição 'Points'
+[00:09:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:23] [INFO] Clicando na descrição 'Points'
+[00:09:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:30] [INFO] Clicando na descrição 'Points'
+[00:09:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:39] [INFO] Clicando na descrição 'Points'
+[00:09:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:47] [INFO] Clicando na descrição 'Points'
+[00:09:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:09:57] [INFO] Clicando na descrição 'Points'
+[00:09:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:06] [INFO] Clicando na descrição 'Points'
+[00:10:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:16] [INFO] Clicando na descrição 'Points'
+[00:10:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:27] [INFO] Clicando na descrição 'Points'
+[00:10:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:40] [INFO] Clicando na descrição 'Points'
+[00:10:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:48] [INFO] Clicando na descrição 'Points'
+[00:10:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:10:56] [INFO] Clicando na descrição 'Points'
+[00:10:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:11:05] [INFO] Clicando na descrição 'Points'
+[00:11:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:11:14] [INFO] Clicando na descrição 'Points'
+[00:11:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:11:21] Abrindo configurações de ID de publicidade...
+[00:11:24] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:11:26] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:11:28] Contador de resets: 44
+[00:11:34] Aplicativo iniciado com sucesso.
+[00:11:37] [INFO] Clicando na descrição 'Points'
+[00:11:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:11:45] [INFO] Clicando na descrição 'Points'
+[00:11:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:11:53] [INFO] Clicando na descrição 'Points'
+[00:11:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:01] [INFO] Clicando na descrição 'Points'
+[00:12:03] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:10] [INFO] Clicando na descrição 'Points'
+[00:12:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:19] [INFO] Clicando na descrição 'Points'
+[00:12:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:28] [INFO] Clicando na descrição 'Points'
+[00:12:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:36] [INFO] Clicando na descrição 'Points'
+[00:12:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:43] [INFO] Clicando na descrição 'Points'
+[00:12:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:50] [INFO] Clicando na descrição 'Points'
+[00:12:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:12:59] [INFO] Elemento de pontos não encontrado.
+[00:13:00] [INFO] Clicando na descrição 'Login/Register'
+[00:13:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:06] [INFO] Elemento de pontos não encontrado.
+[00:13:07] [INFO] Clicando na descrição 'Login/Register'
+[00:13:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:13] [INFO] Elemento de pontos não encontrado.
+[00:13:13] [INFO] Clicando na descrição 'Login/Register'
+[00:13:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:22] [INFO] Elemento de pontos não encontrado.
+[00:13:22] [INFO] Clicando na descrição 'Login/Register'
+[00:13:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:29] [INFO] Elemento de pontos não encontrado.
+[00:13:29] [INFO] Clicando na descrição 'Login/Register'
+[00:13:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:36] [INFO] Elemento de pontos não encontrado.
+[00:13:36] [INFO] Clicando na descrição 'Login/Register'
+[00:13:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:43] [INFO] Elemento de pontos não encontrado.
+[00:13:43] [INFO] Clicando na descrição 'Login/Register'
+[00:13:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:50] [INFO] Elemento de pontos não encontrado.
+[00:13:50] [INFO] Clicando na descrição 'Login/Register'
+[00:13:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:13:56] [INFO] Elemento de pontos não encontrado.
+[00:13:56] [INFO] Clicando na descrição 'Login/Register'
+[00:13:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:03] [INFO] Elemento de pontos não encontrado.
+[00:14:03] [INFO] Clicando na descrição 'Login/Register'
+[00:14:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:12] [INFO] Elemento de pontos não encontrado.
+[00:14:12] [INFO] Clicando na descrição 'Login/Register'
+[00:14:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:19] [INFO] Elemento de pontos não encontrado.
+[00:14:19] [INFO] Clicando na descrição 'Login/Register'
+[00:14:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:26] [INFO] Elemento de pontos não encontrado.
+[00:14:26] [INFO] Clicando na descrição 'Login/Register'
+[00:14:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:32] [INFO] Elemento de pontos não encontrado.
+[00:14:33] [INFO] Clicando na descrição 'Login/Register'
+[00:14:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:14:39] [INFO] Elemento de pontos não encontrado.
+[00:14:39] [INFO] Clicando na descrição 'Login/Register'
+[00:14:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:14:46] Abrindo configurações de ID de publicidade...
+[00:14:48] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:14:50] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:14:52] Contador de resets: 45
+[00:14:56] Aplicativo iniciado com sucesso.
+[00:14:57] [INFO] Elemento de pontos não encontrado.
+[00:14:57] [INFO] Clicando na descrição 'Login/Register'
+[00:14:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:04] [INFO] Elemento de pontos não encontrado.
+[00:15:04] [INFO] Clicando na descrição 'Login/Register'
+[00:15:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:11] [INFO] Elemento de pontos não encontrado.
+[00:15:11] [INFO] Clicando na descrição 'Login/Register'
+[00:15:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:18] [INFO] Elemento de pontos não encontrado.
+[00:15:18] [INFO] Clicando na descrição 'Login/Register'
+[00:15:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:24] [INFO] Elemento de pontos não encontrado.
+[00:15:25] [INFO] Clicando na descrição 'Login/Register'
+[00:15:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:31] [INFO] Elemento de pontos não encontrado.
+[00:15:32] [INFO] Clicando na descrição 'Login/Register'
+[00:15:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:38] [INFO] Elemento de pontos não encontrado.
+[00:15:39] [INFO] Clicando na descrição 'Login/Register'
+[00:15:39] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:45] [INFO] Elemento de pontos não encontrado.
+[00:15:45] [INFO] Clicando na descrição 'Login/Register'
+[00:15:46] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:52] [INFO] Elemento de pontos não encontrado.
+[00:15:52] [INFO] Clicando na descrição 'Login/Register'
+[00:15:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:15:59] [INFO] Elemento de pontos não encontrado.
+[00:15:59] [INFO] Clicando na descrição 'Login/Register'
+[00:16:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:08] [INFO] Elemento de pontos não encontrado.
+[00:16:08] [INFO] Clicando na descrição 'Login/Register'
+[00:16:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:15] [INFO] Elemento de pontos não encontrado.
+[00:16:15] [INFO] Clicando na descrição 'Login/Register'
+[00:16:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:22] [INFO] Elemento de pontos não encontrado.
+[00:16:22] [INFO] Clicando na descrição 'Login/Register'
+[00:16:23] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:39] [INFO] Elemento de pontos não encontrado.
+[00:16:39] [INFO] Clicando na descrição 'Login/Register'
+[00:16:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:46] [INFO] Elemento de pontos não encontrado.
+[00:16:46] [INFO] Clicando na descrição 'Login/Register'
+[00:16:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:52] [INFO] Elemento de pontos não encontrado.
+[00:16:53] [INFO] Clicando na descrição 'Login/Register'
+[00:16:53] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:16:59] [INFO] Elemento de pontos não encontrado.
+[00:16:59] [INFO] Clicando na descrição 'Login/Register'
+[00:17:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:06] [INFO] Elemento de pontos não encontrado.
+[00:17:06] [INFO] Clicando na descrição 'Login/Register'
+[00:17:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:13] [INFO] Elemento de pontos não encontrado.
+[00:17:13] [INFO] Clicando na descrição 'Login/Register'
+[00:17:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:20] [INFO] Elemento de pontos não encontrado.
+[00:17:20] [INFO] Clicando na descrição 'Login/Register'
+[00:17:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:28] [INFO] Elemento de pontos não encontrado.
+[00:17:28] [INFO] Clicando na descrição 'Login/Register'
+[00:17:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:35] [INFO] Elemento de pontos não encontrado.
+[00:17:35] [INFO] Clicando na descrição 'Login/Register'
+[00:17:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:42] [INFO] Elemento de pontos não encontrado.
+[00:17:42] [INFO] Clicando na descrição 'Login/Register'
+[00:17:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:49] [INFO] Elemento de pontos não encontrado.
+[00:17:49] [INFO] Clicando na descrição 'Login/Register'
+[00:17:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:17:56] [INFO] Elemento de pontos não encontrado.
+[00:17:56] [INFO] Clicando na descrição 'Login/Register'
+[00:17:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:18:02] Abrindo configurações de ID de publicidade...
+[00:18:04] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:18:07] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:18:08] Contador de resets: 46
+[00:18:12] Aplicativo iniciado com sucesso.
+[00:18:14] [INFO] Elemento de pontos não encontrado.
+[00:18:14] [INFO] Clicando na descrição 'Login/Register'
+[00:18:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:20] [INFO] Elemento de pontos não encontrado.
+[00:18:21] [INFO] Clicando na descrição 'Login/Register'
+[00:18:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:27] [INFO] Elemento de pontos não encontrado.
+[00:18:27] [INFO] Clicando na descrição 'Login/Register'
+[00:18:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:34] [INFO] Elemento de pontos não encontrado.
+[00:18:34] [INFO] Clicando na descrição 'Login/Register'
+[00:18:35] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:41] [INFO] Elemento de pontos não encontrado.
+[00:18:41] [INFO] Clicando na descrição 'Login/Register'
+[00:18:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:48] [INFO] Elemento de pontos não encontrado.
+[00:18:48] [INFO] Clicando na descrição 'Login/Register'
+[00:18:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:18:55] [INFO] Elemento de pontos não encontrado.
+[00:18:55] [INFO] Clicando na descrição 'Login/Register'
+[00:18:56] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:01] [INFO] Elemento de pontos não encontrado.
+[00:19:02] [INFO] Clicando na descrição 'Login/Register'
+[00:19:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:08] [INFO] Elemento de pontos não encontrado.
+[00:19:08] [INFO] Clicando na descrição 'Login/Register'
+[00:19:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:15] [INFO] Elemento de pontos não encontrado.
+[00:19:15] [INFO] Clicando na descrição 'Login/Register'
+[00:19:16] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:24] [INFO] Elemento de pontos não encontrado.
+[00:19:24] [INFO] Clicando na descrição 'Login/Register'
+[00:19:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:30] [INFO] Elemento de pontos não encontrado.
+[00:19:31] [INFO] Clicando na descrição 'Login/Register'
+[00:19:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:37] [INFO] Elemento de pontos não encontrado.
+[00:19:37] [INFO] Clicando na descrição 'Login/Register'
+[00:19:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:44] [INFO] Elemento de pontos não encontrado.
+[00:19:44] [INFO] Clicando na descrição 'Login/Register'
+[00:19:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:51] [INFO] Elemento de pontos não encontrado.
+[00:19:51] [INFO] Clicando na descrição 'Login/Register'
+[00:19:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:19:58] [INFO] Elemento de pontos não encontrado.
+[00:19:58] [INFO] Clicando na descrição 'Login/Register'
+[00:19:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:05] [INFO] Elemento de pontos não encontrado.
+[00:20:05] [INFO] Clicando na descrição 'Login/Register'
+[00:20:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:11] [INFO] Elemento de pontos não encontrado.
+[00:20:12] [INFO] Clicando na descrição 'Login/Register'
+[00:20:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:18] [INFO] Elemento de pontos não encontrado.
+[00:20:18] [INFO] Clicando na descrição 'Login/Register'
+[00:20:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:36] [INFO] Elemento de pontos não encontrado.
+[00:20:36] [INFO] Clicando na descrição 'Login/Register'
+[00:20:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:44] [INFO] Elemento de pontos não encontrado.
+[00:20:44] [INFO] Clicando na descrição 'Login/Register'
+[00:20:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:51] [INFO] Elemento de pontos não encontrado.
+[00:20:51] [INFO] Clicando na descrição 'Login/Register'
+[00:20:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:20:58] [INFO] Elemento de pontos não encontrado.
+[00:20:58] [INFO] Clicando na descrição 'Login/Register'
+[00:20:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:05] [INFO] Elemento de pontos não encontrado.
+[00:21:05] [INFO] Clicando na descrição 'Login/Register'
+[00:21:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:11] [INFO] Elemento de pontos não encontrado.
+[00:21:12] [INFO] Clicando na descrição 'Login/Register'
+[00:21:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:21:18] Abrindo configurações de ID de publicidade...
+[00:21:20] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:21:23] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:21:24] Contador de resets: 47
+[00:21:28] Aplicativo iniciado com sucesso.
+[00:21:29] [INFO] Elemento de pontos não encontrado.
+[00:21:29] [INFO] Clicando na descrição 'Login/Register'
+[00:21:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:36] [INFO] Elemento de pontos não encontrado.
+[00:21:36] [INFO] Clicando na descrição 'Login/Register'
+[00:21:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:43] [INFO] Elemento de pontos não encontrado.
+[00:21:43] [INFO] Clicando na descrição 'Login/Register'
+[00:21:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:50] [INFO] Elemento de pontos não encontrado.
+[00:21:50] [INFO] Clicando na descrição 'Login/Register'
+[00:21:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:21:57] [INFO] Elemento de pontos não encontrado.
+[00:21:57] [INFO] Clicando na descrição 'Login/Register'
+[00:21:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:03] [INFO] Elemento de pontos não encontrado.
+[00:22:04] [INFO] Clicando na descrição 'Login/Register'
+[00:22:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:10] [INFO] Elemento de pontos não encontrado.
+[00:22:10] [INFO] Clicando na descrição 'Login/Register'
+[00:22:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:17] [INFO] Elemento de pontos não encontrado.
+[00:22:17] [INFO] Clicando na descrição 'Login/Register'
+[00:22:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:24] [INFO] Elemento de pontos não encontrado.
+[00:22:24] [INFO] Clicando na descrição 'Login/Register'
+[00:22:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:31] [INFO] Elemento de pontos não encontrado.
+[00:22:31] [INFO] Clicando na descrição 'Login/Register'
+[00:22:32] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:40] [INFO] Elemento de pontos não encontrado.
+[00:22:40] [INFO] Clicando na descrição 'Login/Register'
+[00:22:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:47] [INFO] Elemento de pontos não encontrado.
+[00:22:47] [INFO] Clicando na descrição 'Login/Register'
+[00:22:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:22:54] [INFO] Elemento de pontos não encontrado.
+[00:22:54] [INFO] Clicando na descrição 'Login/Register'
+[00:22:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:01] [INFO] Elemento de pontos não encontrado.
+[00:23:01] [INFO] Clicando na descrição 'Login/Register'
+[00:23:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:07] [INFO] Elemento de pontos não encontrado.
+[00:23:08] [INFO] Clicando na descrição 'Login/Register'
+[00:23:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:14] [INFO] Elemento de pontos não encontrado.
+[00:23:14] [INFO] Clicando na descrição 'Login/Register'
+[00:23:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:21] [INFO] Elemento de pontos não encontrado.
+[00:23:21] [INFO] Clicando na descrição 'Login/Register'
+[00:23:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:28] [INFO] Elemento de pontos não encontrado.
+[00:23:28] [INFO] Clicando na descrição 'Login/Register'
+[00:23:29] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:35] [INFO] Elemento de pontos não encontrado.
+[00:23:35] [INFO] Clicando na descrição 'Login/Register'
+[00:23:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:42] [INFO] Elemento de pontos não encontrado.
+[00:23:42] [INFO] Clicando na descrição 'Login/Register'
+[00:23:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:50] [INFO] Elemento de pontos não encontrado.
+[00:23:50] [INFO] Clicando na descrição 'Login/Register'
+[00:23:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:23:57] [INFO] Elemento de pontos não encontrado.
+[00:23:57] [INFO] Clicando na descrição 'Login/Register'
+[00:23:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:04] [INFO] Elemento de pontos não encontrado.
+[00:24:04] [INFO] Clicando na descrição 'Login/Register'
+[00:24:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:11] [INFO] Elemento de pontos não encontrado.
+[00:24:11] [INFO] Clicando na descrição 'Login/Register'
+[00:24:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:18] [INFO] Elemento de pontos não encontrado.
+[00:24:18] [INFO] Clicando na descrição 'Login/Register'
+[00:24:19] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:24:24] Abrindo configurações de ID de publicidade...
+[00:24:26] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:24:29] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:24:31] Contador de resets: 48
+[00:24:34] Aplicativo iniciado com sucesso.
+[00:24:36] [INFO] Elemento de pontos não encontrado.
+[00:24:36] [INFO] Clicando na descrição 'Login/Register'
+[00:24:36] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:42] [INFO] Elemento de pontos não encontrado.
+[00:24:43] [INFO] Clicando na descrição 'Login/Register'
+[00:24:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:49] [INFO] Elemento de pontos não encontrado.
+[00:24:49] [INFO] Clicando na descrição 'Login/Register'
+[00:24:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:24:56] [INFO] Elemento de pontos não encontrado.
+[00:24:56] [INFO] Clicando na descrição 'Login/Register'
+[00:24:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:03] [INFO] Elemento de pontos não encontrado.
+[00:25:03] [INFO] Clicando na descrição 'Login/Register'
+[00:25:06] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:12] [INFO] Elemento de pontos não encontrado.
+[00:25:12] [INFO] Clicando na descrição 'Login/Register'
+[00:25:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:19] [INFO] Elemento de pontos não encontrado.
+[00:25:19] [INFO] Clicando na descrição 'Login/Register'
+[00:25:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:26] [INFO] Elemento de pontos não encontrado.
+[00:25:26] [INFO] Clicando na descrição 'Login/Register'
+[00:25:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:43] [INFO] Elemento de pontos não encontrado.
+[00:25:43] [INFO] Clicando na descrição 'Login/Register'
+[00:25:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:50] [INFO] Elemento de pontos não encontrado.
+[00:25:50] [INFO] Clicando na descrição 'Login/Register'
+[00:25:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:25:59] [INFO] Elemento de pontos não encontrado.
+[00:25:59] [INFO] Clicando na descrição 'Login/Register'
+[00:26:00] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:06] [INFO] Elemento de pontos não encontrado.
+[00:26:06] [INFO] Clicando na descrição 'Login/Register'
+[00:26:07] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:12] [INFO] Elemento de pontos não encontrado.
+[00:26:12] [INFO] Clicando na descrição 'Login/Register'
+[00:26:13] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:19] [INFO] Elemento de pontos não encontrado.
+[00:26:19] [INFO] Clicando na descrição 'Login/Register'
+[00:26:30] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:36] [INFO] Elemento de pontos não encontrado.
+[00:26:36] [INFO] Clicando na descrição 'Login/Register'
+[00:26:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:43] [INFO] Elemento de pontos não encontrado.
+[00:26:43] [INFO] Clicando na descrição 'Login/Register'
+[00:26:44] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:50] [INFO] Elemento de pontos não encontrado.
+[00:26:50] [INFO] Clicando na descrição 'Login/Register'
+[00:26:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:26:57] [INFO] Elemento de pontos não encontrado.
+[00:26:57] [INFO] Clicando na descrição 'Login/Register'
+[00:26:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:04] [INFO] Elemento de pontos não encontrado.
+[00:27:04] [INFO] Clicando na descrição 'Login/Register'
+[00:27:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:11] [INFO] Elemento de pontos não encontrado.
+[00:27:11] [INFO] Clicando na descrição 'Login/Register'
+[00:27:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:19] [INFO] Elemento de pontos não encontrado.
+[00:27:19] [INFO] Clicando na descrição 'Login/Register'
+[00:27:20] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:26] [INFO] Elemento de pontos não encontrado.
+[00:27:26] [INFO] Clicando na descrição 'Login/Register'
+[00:27:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:33] [INFO] Elemento de pontos não encontrado.
+[00:27:33] [INFO] Clicando na descrição 'Login/Register'
+[00:27:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:40] [INFO] Elemento de pontos não encontrado.
+[00:27:40] [INFO] Clicando na descrição 'Login/Register'
+[00:27:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:27:47] [INFO] Elemento de pontos não encontrado.
+[00:27:47] [INFO] Clicando na descrição 'Login/Register'
+[00:27:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:27:53] Abrindo configurações de ID de publicidade...
+[00:27:55] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:27:58] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:28:00] Contador de resets: 49
+[00:28:03] [CLEANUP] Executando auto-limpeza periódica...
+[00:28:05] [CLEANUP] Memória limpa. Aguardando 2s antes de continuar...
+[00:28:08] Aplicativo iniciado com sucesso.
+[00:28:09] [INFO] Elemento de pontos não encontrado.
+[00:28:09] [INFO] Clicando na descrição 'Login/Register'
+[00:28:10] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:16] [INFO] Elemento de pontos não encontrado.
+[00:28:16] [INFO] Clicando na descrição 'Login/Register'
+[00:28:17] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:23] [INFO] Elemento de pontos não encontrado.
+[00:28:23] [INFO] Clicando na descrição 'Login/Register'
+[00:28:24] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:30] [INFO] Elemento de pontos não encontrado.
+[00:28:30] [INFO] Clicando na descrição 'Login/Register'
+[00:28:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:37] [INFO] Elemento de pontos não encontrado.
+[00:28:37] [INFO] Clicando na descrição 'Login/Register'
+[00:28:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:44] [INFO] Elemento de pontos não encontrado.
+[00:28:44] [INFO] Clicando na descrição 'Login/Register'
+[00:28:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:50] [INFO] Elemento de pontos não encontrado.
+[00:28:51] [INFO] Clicando na descrição 'Login/Register'
+[00:28:51] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:28:57] [INFO] Elemento de pontos não encontrado.
+[00:28:57] [INFO] Clicando na descrição 'Login/Register'
+[00:28:58] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:04] [INFO] Elemento de pontos não encontrado.
+[00:29:04] [INFO] Clicando na descrição 'Login/Register'
+[00:29:05] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:11] [INFO] Elemento de pontos não encontrado.
+[00:29:11] [INFO] Clicando na descrição 'Login/Register'
+[00:29:12] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:20] [INFO] Elemento de pontos não encontrado.
+[00:29:20] [INFO] Clicando na descrição 'Login/Register'
+[00:29:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:26] [INFO] Elemento de pontos não encontrado.
+[00:29:27] [INFO] Clicando na descrição 'Login/Register'
+[00:29:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:33] [INFO] Elemento de pontos não encontrado.
+[00:29:34] [INFO] Clicando na descrição 'Login/Register'
+[00:29:34] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:40] [INFO] Elemento de pontos não encontrado.
+[00:29:40] [INFO] Clicando na descrição 'Login/Register'
+[00:29:41] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:47] [INFO] Elemento de pontos não encontrado.
+[00:29:47] [INFO] Clicando na descrição 'Login/Register'
+[00:29:48] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:29:54] [INFO] Elemento de pontos não encontrado.
+[00:29:54] [INFO] Clicando na descrição 'Login/Register'
+[00:29:55] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:01] [INFO] Elemento de pontos não encontrado.
+[00:30:01] [INFO] Clicando na descrição 'Login/Register'
+[00:30:02] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:08] [INFO] Elemento de pontos não encontrado.
+[00:30:08] [INFO] Clicando na descrição 'Login/Register'
+[00:30:09] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:15] [INFO] Elemento de pontos não encontrado.
+[00:30:15] [INFO] Clicando na descrição 'Login/Register'
+[00:30:15] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:21] [INFO] Elemento de pontos não encontrado.
+[00:30:22] [INFO] Clicando na descrição 'Login/Register'
+[00:30:22] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:30] [INFO] Elemento de pontos não encontrado.
+[00:30:30] [INFO] Clicando na descrição 'Login/Register'
+[00:30:31] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:37] [INFO] Elemento de pontos não encontrado.
+[00:30:37] [INFO] Clicando na descrição 'Login/Register'
+[00:30:38] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:44] [INFO] Elemento de pontos não encontrado.
+[00:30:44] [INFO] Clicando na descrição 'Login/Register'
+[00:30:45] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:51] [INFO] Elemento de pontos não encontrado.
+[00:30:51] [INFO] Clicando na descrição 'Login/Register'
+[00:30:52] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:30:58] [INFO] Elemento de pontos não encontrado.
+[00:30:58] [INFO] Clicando na descrição 'Login/Register'
+[00:30:59] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:31:04] Abrindo configurações de ID de publicidade...
+[00:31:06] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:31:09] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:31:10] Contador de resets: 50
+[00:31:14] Aplicativo iniciado com sucesso.
+[00:31:15] [INFO] Elemento de pontos não encontrado.
+[00:31:15] [INFO] Clicando na descrição 'Login/Register'
+[00:31:27] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:31:32] [INFO] Elemento de pontos não encontrado.
+[00:31:33] [INFO] Clicando na descrição 'Login/Register'
+[00:31:33] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:31:39] [INFO] Elemento de pontos não encontrado.
+[00:31:39] [INFO] Clicando na descrição 'Login/Register'
+[00:31:40] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:31:46] [INFO] Elemento de pontos não encontrado.
+[00:31:46] [INFO] Clicando na descrição 'Login/Register'
+[00:31:47] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:31:53] [INFO] Elemento de pontos não encontrado.
+[00:31:53] [INFO] Clicando na descrição 'Login/Register'
+[00:31:54] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:00] [INFO] Elemento de pontos não encontrado.
+[00:32:00] [INFO] Clicando na descrição 'Login/Register'
+[00:32:01] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:07] [INFO] Elemento de pontos não encontrado.
+[00:32:07] [INFO] Clicando na descrição 'Login/Register'
+[00:32:08] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:13] [INFO] Elemento de pontos não encontrado.
+[00:32:14] [INFO] Clicando na descrição 'Login/Register'
+[00:32:14] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:20] [INFO] Elemento de pontos não encontrado.
+[00:32:20] [INFO] Clicando na descrição 'Login/Register'
+[00:32:21] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:27] [INFO] Elemento de pontos não encontrado.
+[00:32:27] [INFO] Clicando na descrição 'Login/Register'
+[00:32:28] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:36] [INFO] Elemento de pontos não encontrado.
+[00:32:36] [INFO] Clicando na descrição 'Login/Register'
+[00:32:37] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:43] [INFO] Elemento de pontos não encontrado.
+[00:32:43] [INFO] Clicando na descrição 'Login/Register'
+[00:32:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:49] [INFO] Elemento de pontos não encontrado.
+[00:32:49] [INFO] Clicando na descrição 'Login/Register'
+[00:32:50] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:32:56] [INFO] Elemento de pontos não encontrado.
+[00:32:56] [INFO] Clicando na descrição 'Login/Register'
+[00:32:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:03] [INFO] Elemento de pontos não encontrado.
+[00:33:03] [INFO] Clicando na descrição 'Login/Register'
+[00:33:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:10] [INFO] Elemento de pontos não encontrado.
+[00:33:10] [INFO] Clicando na descrição 'Login/Register'
+[00:33:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:17] [INFO] Elemento de pontos não encontrado.
+[00:33:17] [INFO] Clicando na descrição 'Login/Register'
+[00:33:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:24] [INFO] Elemento de pontos não encontrado.
+[00:33:24] [INFO] Clicando na descrição 'Login/Register'
+[00:33:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:41] [INFO] Elemento de pontos não encontrado.
+[00:33:41] [INFO] Clicando na descrição 'Login/Register'
+[00:33:42] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:48] [INFO] Elemento de pontos não encontrado.
+[00:33:48] [INFO] Clicando na descrição 'Login/Register'
+[00:33:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:33:56] [INFO] Elemento de pontos não encontrado.
+[00:33:56] [INFO] Clicando na descrição 'Login/Register'
+[00:33:57] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:03] [INFO] Elemento de pontos não encontrado.
+[00:34:03] [INFO] Clicando na descrição 'Login/Register'
+[00:34:04] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:10] [INFO] Elemento de pontos não encontrado.
+[00:34:10] [INFO] Clicando na descrição 'Login/Register'
+[00:34:11] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:17] [INFO] Elemento de pontos não encontrado.
+[00:34:17] [INFO] Clicando na descrição 'Login/Register'
+[00:34:18] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:24] [INFO] Elemento de pontos não encontrado.
+[00:34:24] [INFO] Clicando na descrição 'Login/Register'
+[00:34:25] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+====================================================
+[00:34:30] Abrindo configurações de ID de publicidade...
+[00:34:33] [LOG] Opção de reset encontrada: 'Redefinir ID de publicidade'. Clicando...
+[00:34:35] [LOG] Botão de confirmação 'OK' (button1) encontrado. Clicando...
+[00:34:37] Contador de resets: 51
+[00:34:40] Aplicativo iniciado com sucesso.
+[00:34:42] [INFO] Elemento de pontos não encontrado.
+[00:34:42] [INFO] Clicando na descrição 'Login/Register'
+[00:34:43] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:48] [INFO] Elemento de pontos não encontrado.
+[00:34:48] [INFO] Clicando na descrição 'Login/Register'
+[00:34:49] [LOG] Abrindo anúncio via 'Points/Login'... Activity: com.israbyte.dropbin.MainActivity
+[00:34:55] [INFO] Elemento de pontos não encontrado.
+[00:34:55] [INFO] Clicando na descrição 'Login/Register'

@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando interface...
+start "" py scan.py
