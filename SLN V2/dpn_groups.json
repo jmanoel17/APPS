@@ -1,0 +1,11 @@
+{
+  "_comentario": [
+    "Mapeamento devices -> DPN. controller.type: 'fake' (offline) ou 'deeper_connect' (skeleton; integração real pendente).",
+    "Edite 'devices' e 'controller'. NÃO hardcodar IPs de devices no código.",
+    "O runner (dpn_coordinator_run.py) só roda se config_sln_v2.json tiver dpn_routing_enabled=true."
+  ],
+  "DPN_01": {
+    "devices": ["192.168.1.100:5555", "192.168.1.101:5555"],
+    "controller": {"type": "fake", "sequence": ["10.0.0.1", "10.0.0.2"]}
+  }
+}

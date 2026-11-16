@@ -1,0 +1,17 @@
+# ---- APPS (raiz) - artefatos pesados / ambiente (nao versionar) ----
+# Protege contra `git add -A` acidental em dirs enormes.
+
+venv/
+runs/
+dataset/
+build/
+dist/
+tests_runs/
+
+# Compactados / backups
+*.7z
+*.zip
+
+# Python
+__pycache__/
+*.pyc

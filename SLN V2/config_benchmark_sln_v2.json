@@ -1,0 +1,19 @@
+{
+  "_comentario": [
+    "PERFIL DE BENCHMARK (escala) — NÃO é a config de desenvolvimento.",
+    "config_sln_v2.json continua intacto; este arquivo é MESCLADO SOBRE config_sln_v2.json (OVERLAY).",
+    "Aplicar:  SLN_CONFIG_OVERLAY=config_benchmark_sln_v2.json python main_sln_v2.py <device> 0 <limite>",
+    "Sem a variável de ambiente, o bot usa config_sln_v2.json e nada muda.",
+    "Só telemetria/diagnóstico mudam aqui. NENHUM gate funcional é alterado.",
+    "Como overlay, NÃO substitui download_apps_pct do dev (permanece 5)."
+  ],
+  "fast_close_log_every_tick": false,
+  "ia_url": "http://127.0.0.1:8000",
+  "rewarded_no_countdown_diag_timeout_s": 0,
+  "top_control_experiment_mode": "off",
+  "playable_diag_click_enabled": false,
+  "use_legacy_applovin": false,
+  "recovery_close_enabled": true,
+  "applovin_reward_completion_required": true,
+  "applovin_skip_to_endcard_enabled": true
+}

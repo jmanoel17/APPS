@@ -1,0 +1,23 @@
+{
+  "_comentario": [
+    "TEST-ONLY overlay para smoke QA realistic (3-5 devices). NÃO é produção.",
+    "Reduz delays/intervalos/cooldown TEMPORARIAMENTE para validar a lógica em poucos minutos.",
+    "O default de produção (24h cooldown, 10-60s delay, 2-30 ciclos) permanece em config_qa_realistic_sln_v2.json."
+  ],
+  "qa_realistic_behavior_enabled": true,
+  "qa_action_delay_min_s": 2,
+  "qa_action_delay_max_s": 5,
+  "qa_reset_interval_min_cycles": 1,
+  "qa_reset_interval_max_cycles": 3,
+  "qa_reset_population_pct_min": 60,
+  "qa_reset_population_pct_max": 100,
+  "qa_max_concurrent_resets": 1,
+  "qa_reset_start_jitter_min_s": 0,
+  "qa_reset_start_jitter_max_s": 2,
+  "qa_install_pct_min": 50,
+  "qa_install_pct_max": 100,
+  "qa_install_cooldown_hours": 0.02,
+  "qa_random_seed": "smoke",
+  "qa_reset_window_minutes": 10,
+  "qa_install_window_hours": 0.05
+}

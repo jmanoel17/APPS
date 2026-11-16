@@ -1,0 +1,21 @@
+{
+  "_comentario": [
+    "BENCHMARK C60: cenário C (persistent + adaptive) + heartbeat/watchdog habilitados.",
+    "Mesma base funcional do cenário C; watchdog/observabilidade adicionados."
+  ],
+  "fast_close_log_every_tick": false,
+  "rewarded_no_countdown_diag_timeout_s": 0,
+  "top_control_experiment_mode": "off",
+  "playable_diag_click_enabled": false,
+  "use_legacy_applovin": false,
+  "recovery_close_enabled": true,
+  "applovin_reward_completion_required": true,
+  "applovin_skip_to_endcard_enabled": true,
+  "persistent_logcat_enabled": true,
+  "adaptive_tick_enabled": true,
+  "heartbeat_enabled": true,
+  "heartbeat_dir": "heartbeats",
+  "heartbeat_interval_s": 5.0,
+  "watchdog_stale_s": 120.0,
+  "watchdog_restart_max": 3
+}

@@ -1,0 +1,12 @@
+{
+  "_comentario": [
+    "OVERLAY DE VALIDACAO DA ESCALA (FASE 12/13) - NAO e producao.",
+    "persistent_logcat + adaptive_tick LIGADOS. Aplicar com SLN_CONFIG_OVERLAY."
+  ],
+  "persistent_logcat_enabled": true,
+  "adaptive_tick_enabled": true,
+  "fast_close_log_every_tick": false,
+  "recovery_close_enabled": true,
+  "applovin_reward_completion_required": true,
+  "applovin_skip_to_endcard_enabled": true
+}

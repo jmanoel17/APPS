@@ -1,0 +1,26 @@
+# ===== Dependências SLN V2 (Python 3.13) =====
+# Uso: python -m pip install -r requirements_sln_v2.txt
+# Python recomendado: 3.13 (C:\Users\joao_\AppData\Local\Programs\Python\Python313\python.exe)
+
+# ---- Interface (interface_sln_v2.py) ----
+# tkinter vem com o Python (Windows). Necessário p/ rastreamento de processos:
+psutil>=5.9
+
+# ---- Bot (main_sln_v2.py) ----
+# Automação Android (uiautomator2 via ADB)
+uiautomator2>=3.2.10
+# Requisições ao servidor de IA e endpoints
+requests>=2.32
+
+# ---- Servidor de IA (aiMain_sln_v2.py) ----
+# API de inferência de detecção do botão X
+fastapi>=0.110
+uvicorn>=0.29
+python-multipart>=0.0.9
+# YOLO (ultralytics) + visão computacional
+ultralytics>=8.3
+opencv-python>=4.10
+numpy>=2.0
+
+# ---- Observador (observador.py) ----
+# O observador usa apenas stdlib + ADB (sem deps extras).

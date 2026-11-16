@@ -1,0 +1,37 @@
+# ---- SLN V2 - artefatos de execução / debug (não versionar) ----
+
+# Logs de execução (bot, IA, interface e testes)
+*.log
+logs/
+errors/
+
+# Saída do benchmark (CSV/JSONL gerados pelo benchmark_host.py)
+benchmarks/
+
+# APKs puxados das fontes para sideload (sideload_gms_chrome.py --setup)
+apks/
+
+# Estado de runtime do DPN (status.json, commands/, ip_history, locks, workers)
+state/dpn/
+
+# Dumps de hierarquia de janela (debug do watcher)
+window_dump_*.xml
+
+# Estado de runtime (gerado/atualizado pela interface)
+paused.json
+
+# Python
+__pycache__/
+*.pyc
+
+# Artefatos compactados / backups
+*.zip
+*.7z
+
+# Dumps/capturas e simulacoes (debug; grandes)
+captures/
+simart5/
+
+# Estado de runtime (QA/interface/DPN/heartbeats)
+state/
+heartbeats/
