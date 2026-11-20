@@ -1,0 +1,65 @@
+{
+  "agent": {
+    "state": "store",
+    "candidate": null,
+    "counts": {
+      "nodes": 15,
+      "clickable": 0,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.android.vending",
+      "activity": "com.google.android.finsky.activities.MainActivity",
+      "component": "com.android.vending/com.google.android.finsky.activities.MainActivity",
+      "window_id": 842,
+      "observed_at_ms": 1795199674203
+    },
+    "authorized": true,
+    "gate_reason": "",
+    "decision": "BACK",
+    "reason": "external_return",
+    "endcard": {
+      "confirmed": false,
+      "signals": []
+    },
+    "subad": {
+      "found": false
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  },
+  "adb_reference": {
+    "state": "store",
+    "candidate": null,
+    "counts": {
+      "nodes": 30,
+      "clickable": 1,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.android.vending",
+      "activity": "com.google.android.finsky.activities.MainActivity",
+      "component": "com.android.vending/com.google.android.finsky.activities.MainActivity"
+    },
+    "authorized": true,
+    "gate_reason": "",
+    "decision": "BACK",
+    "reason": "external_return",
+    "endcard": {
+      "confirmed": true,
+      "signals": [
+        "cta_button",
+        "endcard_id"
+      ]
+    },
+    "subad": {
+      "found": false
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "agent": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.flixdigital.dramaclassic.MainActivity",
+    "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity",
+    "window_id": 835,
+    "observed_at_ms": 1795199476795
+  },
+  "adb": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.flixdigital.dramaclassic.MainActivity",
+    "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity"
+  }
+}

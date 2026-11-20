@@ -38,6 +38,9 @@ class DirectAtomOS(AtomOSOps):
     def get_exit_ip(self):
         return self._client.get_exit_ip()
 
+    def list_access_control(self):
+        return self._client.list_devices()
+
     def set_node_lb_mode(self, mode):
         return self._client.set_node_lb_mode(mode)
 

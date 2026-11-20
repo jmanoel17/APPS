@@ -76,6 +76,9 @@ class AtomOSOps:
     def get_exit_ip(self):
         raise NotImplementedError
 
+    def list_access_control(self):
+        raise NotImplementedError
+
     def set_node_lb_mode(self, mode):
         raise NotImplementedError
 

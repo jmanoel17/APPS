@@ -1,0 +1,14 @@
+{
+  "agent": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+    "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity",
+    "window_id": 883,
+    "observed_at_ms": 1795200521470
+  },
+  "adb": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+    "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity"
+  }
+}

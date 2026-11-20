@@ -1,0 +1,27 @@
+{
+  "case": "live_ad_1",
+  "ad_type": "unknown",
+  "foreground_adb": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+    "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity"
+  },
+  "foreground_agent": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+    "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity",
+    "window_id": 0,
+    "observed_at_ms": 1794971617100
+  },
+  "display": {
+    "width_px": 1080,
+    "height_px": 2280,
+    "rotation": 0,
+    "density_dpi": 420
+  },
+  "agent_tree_ok": true,
+  "agent_nodes": 35,
+  "elapsed": 5,
+  "armed": true,
+  "reward_completed": true
+}

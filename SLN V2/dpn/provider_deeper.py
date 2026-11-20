@@ -177,6 +177,11 @@ class DeeperConnectProvider(DPNProvider):
     def from_config(cls, controller_cfg=None):
         return cls(controller_cfg)
 
+    def set_agent_hub(self, hub):
+        """Injeta o AgentHub (transporte agent) após a construção; reseta a sessão."""
+        self._agent_hub = hub
+        self._client = None
+
     # ---------------------------------------------------------------- infra
     def _configured(self):
         return bool(self.address and self.tunnel_code)
@@ -300,6 +305,28 @@ class DeeperConnectProvider(DPNProvider):
         if not self._configured():
             return None
         return self.tunnel_code
+
+    # ---------------------------------------------------------------- observabilidade (read-only)
+    def fetch_tunnels(self):
+        """Lista de túneis (listTunnels). Read-only; nunca levanta (retorna None em falha)."""
+        try:
+            if not self._configured():
+                return None
+            return _normalize_tunnels(self._read(lambda c: c.get_exit_ip()))
+        except Exception:
+            return None
+
+    def fetch_access_control(self):
+        """accessControl/list normalizado {online,offline}. Read-only; nunca levanta."""
+        try:
+            data = self._read(lambda c: c.list_access_control())
+            if isinstance(data, dict):
+                return {"online": data.get("online") or [], "offline": data.get("offline") or []}
+            if isinstance(data, list):
+                return {"online": data, "offline": []}
+            return {"online": [], "offline": []}
+        except Exception:
+            return None
 
     def device_metadata(self):
         """Metadata opcional: identidade física (deviceId). Nunca levanta."""

@@ -1,11 +1,67 @@
 {
   "_comentario": [
-    "Mapeamento devices -> DPN. controller.type: 'fake' (offline) ou 'deeper_connect' (skeleton; integração real pendente).",
-    "Edite 'devices' e 'controller'. NÃO hardcodar IPs de devices no código.",
-    "O runner (dpn_coordinator_run.py) só roda se config_sln_v2.json tiver dpn_routing_enabled=true."
+    "Mapeamento DPN -> agent (transporte agent). Gerado por E2.4A (read-only).",
+    "Nao contem senha/token/token_hash/cookies. tunnel_code = fullTunnel real da unidade.",
+    "Usar com dpn_routing_enabled=true SOMENTE apos aprovacao; coordinator run separado."
   ],
   "DPN_01": {
-    "devices": ["192.168.1.100:5555", "192.168.1.101:5555"],
-    "controller": {"type": "fake", "sequence": ["10.0.0.1", "10.0.0.2"]}
+    "devices": [
+      "192.168.1.50:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "agent_id": "1289c252-691b-42d4-b259-1e5b65575ad3",
+      "android_serial": "192.168.1.50:5555",
+      "expected_dpn_id": "Deeper-Wire-HW-475f18130829|d0573ee22050a544",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 10,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_02": {
+    "devices": [
+      "192.168.1.99:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "agent_id": "97bd0061-22e1-49c9-b03b-afe2129572fe",
+      "android_serial": "192.168.1.99:5555",
+      "expected_dpn_id": "Deeper-Wire-HW-423036503540|c9dd893c1cdab3ae",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 10,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_03": {
+    "devices": [
+      "192.168.1.127:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "agent_id": "9e004865-914b-483e-a973-fb5c69b1f1c1",
+      "android_serial": "192.168.1.127:5555",
+      "expected_dpn_id": "Deeper-Wire-HW-17bf3b402b4a|e6960e1a4882b589",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "BR",
+      "node_lb_mode": "none",
+      "request_timeout_s": 10,
+      "connect_timeout_s": 5
+    }
   }
 }

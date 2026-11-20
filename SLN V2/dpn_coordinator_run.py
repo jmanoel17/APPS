@@ -58,7 +58,7 @@ class Runner:
     """Autoridade DPN por host. Importável para testes (step/publish/process sem threads)."""
 
     def __init__(self, cfg, groups, base_dir, state_dir, tick_s=1.0, log_fn=print,
-                 now_fn=time.time, alive_fn=None):
+                 now_fn=time.time, alive_fn=None, agent_hub=None):
         self.cfg = cfg
         self.groups = groups if isinstance(groups, dict) else {}
         self.base_dir = base_dir
@@ -72,8 +72,58 @@ class Runner:
         self._prev = {}
         self._last_trans = {}
         self._lock = threading.Lock()
+        self._access_cache = {}
+        self._access_refresh_s = float(self.cfg.get("dpn_status_access_refresh_s", 15) or 15)
+        self._agent_hub = None
+        self._owns_hub = False
         os.makedirs(self.state_dir, exist_ok=True)
+        self._prepare_hub(agent_hub)
         self._build()
+
+    def _prepare_hub(self, injected):
+        """Sobe o AgentHub real somente se houver DPN com transport=agent e agent_id."""
+        if injected is not None:
+            self._agent_hub = injected
+            return
+        agent_ctrls = [g.get("controller") or {} for g in self.groups.values()
+                       if isinstance(g, dict) and str((g.get("controller") or {}).get("transport", "")).lower() == "agent"
+                       and (g.get("controller") or {}).get("agent_id")]
+        if not agent_ctrls:
+            return
+        try:
+            from dpn.agent_transport import AgentHub, DPNControlSQLiteRegistry
+            from dpn.agent_core.provision import ensure_adb_reverse
+        except Exception as e:  # noqa: BLE001
+            self.log("[DPN][ERROR] hub import: %s: %s" % (type(e).__name__, e))
+            return
+        la = os.environ.get("LOCALAPPDATA", "")
+        serials = [c.get("android_serial") for c in agent_ctrls if c.get("android_serial")]
+        for s in serials:
+            try:
+                ensure_adb_reverse(s, 8765)
+            except Exception:
+                pass
+        hub = AgentHub(registry=DPNControlSQLiteRegistry(os.path.join(la, "dpn", "dpn.db")),
+                       state_dir=self.state_dir, host="0.0.0.0", port=8765,
+                       cert_path=os.path.join(la, "dpn", "controller-cert.pem"),
+                       key_path=os.path.join(la, "dpn", "controller-key.pem"),
+                       reverse_serials_fn=lambda: serials, reverse_interval_s=15.0,
+                       log_fn=self.log)
+        try:
+            hub.start()
+        except Exception as e:  # noqa: BLE001
+            self.log("[DPN][ERROR] AgentHub start: %s: %s" % (type(e).__name__, e))
+            return
+        self._agent_hub = hub
+        self._owns_hub = True
+        want = [c.get("agent_id") for c in agent_ctrls]
+        t0 = time.time()
+        while time.time() - t0 < 150:
+            if all(hub.online(a) for a in want):
+                break
+            time.sleep(1.0)
+        online = sum(1 for a in want if hub.online(a))
+        self.log("[DPN][HUB] agents_online=%d/%d" % (online, len(want)))
 
     def _build(self):
         limit = int(self.cfg.get("dpn_work_units_per_ip", 20) or 20)
@@ -87,7 +137,8 @@ class Runner:
             ctype = controller.get("type")
             entry = {"dpn_id": dpn_id, "devices": devices, "error": None}
             try:
-                provider = build_provider(ctype, controller, dpn_id=dpn_id)
+                provider = build_provider(ctype, controller, dpn_id=dpn_id,
+                                          agent_hub=self._agent_hub)
             except UnknownProviderError:
                 entry["error"] = "unknown_provider:%s" % ctype
                 self.dpns[dpn_id] = entry
@@ -166,6 +217,28 @@ class Runner:
             active = len(devs)
         return safe, active
 
+    def _access_snapshot(self, dpn_id, e):
+        """Snapshot tunnels/devices (read-only, cacheado). None se o provider não suportar."""
+        prov = e.get("provider")
+        if prov is None or not (hasattr(prov, "fetch_tunnels")
+                                and hasattr(prov, "fetch_access_control")):
+            return None
+        now = self.now_fn()
+        cache = self._access_cache.get(dpn_id)
+        if cache is not None and (now - cache[0]) < self._access_refresh_s:
+            return cache[1]
+        try:
+            tunnels = prov.fetch_tunnels()
+            ac = prov.fetch_access_control()
+            from dpn.access_model import build_access_snapshot
+            snap = build_access_snapshot(dpn_id, tunnels, ac)
+            self._access_cache[dpn_id] = (now, snap)
+            return snap
+        except Exception:
+            if cache is not None:
+                return cache[1]
+            return None
+
     def snapshot(self):
         with self._lock:
             errs = dict(self._errs)
@@ -178,11 +251,13 @@ class Runner:
                     "limit": limit, "duplicate_rotations": 0, "safe_devices": 0,
                     "active_devices": len(e.get("devices") or []), "last_transition_at": None,
                     "last_error": e.get("error") or errs.get(dpn_id), "cooldown_remaining_s": 0,
+                    "tunnels": [], "smart_devices": [], "disabled_devices": [],
+                    "blackhole_devices": [], "totals": {"online": 0, "total": 0},
                 }
                 continue
             st = S.read_dpn_state(self.state_dir, dpn_id)
             safe, active = self._safe_active(e)
-            dpns[dpn_id] = {
+            entry = {
                 "state": st.get("state"),
                 "node_id": (st.get("node") or {}).get("node_id"),
                 "current_ip": st.get("current_ip"),
@@ -194,6 +269,20 @@ class Runner:
                 "last_error": errs.get(dpn_id) or st.get("last_error"),
                 "cooldown_remaining_s": self._cooldown_remaining(st.get("current_ip")),
             }
+            acc = self._access_snapshot(dpn_id, e)
+            if acc:
+                entry.update({
+                    "tunnels": acc.get("tunnels", []),
+                    "smart_devices": acc.get("smart_devices", []),
+                    "disabled_devices": acc.get("disabled_devices", []),
+                    "blackhole_devices": acc.get("blackhole_devices", []),
+                    "unmatched_devices": acc.get("unmatched_devices", []),
+                    "totals": acc.get("totals", {"online": 0, "total": 0}),
+                })
+            else:
+                entry.update({"tunnels": [], "smart_devices": [], "disabled_devices": [],
+                              "blackhole_devices": [], "totals": {"online": 0, "total": 0}})
+            dpns[dpn_id] = entry
         return {"updated_at": self.now_fn(), "runner_pid": os.getpid(),
                 "host_id": host_id(self.cfg), "dpns": dpns}
 
@@ -277,6 +366,17 @@ class Runner:
                     p.close()
             except Exception:
                 pass
+        if self._agent_hub is not None and hasattr(self._agent_hub, "ops_counts"):
+            try:
+                self.log("[DPN][OPS] %s" % dict(self._agent_hub.ops_counts()))
+            except Exception:
+                pass
+        if self._owns_hub and self._agent_hub is not None:
+            try:
+                self._agent_hub.stop()
+            except Exception:
+                pass
+            self._agent_hub = None
 
     def run(self, duration=0, use_threads=True):
         stop = threading.Event()

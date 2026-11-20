@@ -1,0 +1,5 @@
+{
+  "package": "com.android.vending",
+  "activity": "com.google.android.finsky.activities.MainActivity",
+  "component": "com.android.vending/com.google.android.finsky.activities.MainActivity"
+}

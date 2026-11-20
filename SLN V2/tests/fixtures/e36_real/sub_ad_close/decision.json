@@ -1,0 +1,182 @@
+{
+  "agent": {
+    "state": "applovin",
+    "candidate": {
+      "source": "subad_close",
+      "bounds": [
+        958,
+        217,
+        1028,
+        287
+      ],
+      "center": [
+        993,
+        252
+      ],
+      "rid": "",
+      "text": "",
+      "desc": "",
+      "detail": {
+        "found": true,
+        "bounds": [
+          958,
+          217,
+          1028,
+          287
+        ],
+        "center": [
+          993,
+          252
+        ],
+        "norm": [
+          0.887,
+          0.095,
+          0.952,
+          0.126
+        ],
+        "clickable": true,
+        "child_same_bounds": true,
+        "webview_context": true,
+        "reason": "subad_close_signature",
+        "reject_reason": null
+      }
+    },
+    "counts": {
+      "nodes": 14,
+      "clickable": 2,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+      "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity",
+      "window_id": 880,
+      "observed_at_ms": 1795200489674
+    },
+    "authorized": true,
+    "gate_reason": "armed",
+    "decision": "CLICK",
+    "reason": "close_authorized",
+    "endcard": {
+      "confirmed": false,
+      "signals": []
+    },
+    "subad": {
+      "found": true,
+      "bounds": [
+        958,
+        217,
+        1028,
+        287
+      ],
+      "center": [
+        993,
+        252
+      ],
+      "norm": [
+        0.887,
+        0.095,
+        0.952,
+        0.126
+      ],
+      "clickable": true,
+      "child_same_bounds": true,
+      "webview_context": true,
+      "reason": "subad_close_signature",
+      "reject_reason": null
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  },
+  "adb_reference": {
+    "state": "applovin",
+    "candidate": {
+      "source": "subad_close",
+      "bounds": [
+        958,
+        217,
+        1028,
+        287
+      ],
+      "center": [
+        993,
+        252
+      ],
+      "rid": "",
+      "text": "",
+      "desc": "",
+      "detail": {
+        "found": true,
+        "bounds": [
+          958,
+          217,
+          1028,
+          287
+        ],
+        "center": [
+          993,
+          252
+        ],
+        "norm": [
+          0.887,
+          0.095,
+          0.952,
+          0.126
+        ],
+        "clickable": true,
+        "child_same_bounds": true,
+        "webview_context": true,
+        "reason": "subad_close_signature",
+        "reject_reason": null
+      }
+    },
+    "counts": {
+      "nodes": 14,
+      "clickable": 2,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+      "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity"
+    },
+    "authorized": true,
+    "gate_reason": "armed",
+    "decision": "CLICK",
+    "reason": "close_authorized",
+    "endcard": {
+      "confirmed": false,
+      "signals": []
+    },
+    "subad": {
+      "found": true,
+      "bounds": [
+        958,
+        217,
+        1028,
+        287
+      ],
+      "center": [
+        993,
+        252
+      ],
+      "norm": [
+        0.887,
+        0.095,
+        0.952,
+        0.126
+      ],
+      "clickable": true,
+      "child_same_bounds": true,
+      "webview_context": true,
+      "reason": "subad_close_signature",
+      "reject_reason": null
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  }
+}

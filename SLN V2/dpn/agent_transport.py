@@ -154,6 +154,8 @@ class AgentHub:
         self._lock = None
         self._reverse_stop = threading.Event()
         self._reverse_thread = None
+        self._ops = []
+        self._ops_lock = threading.Lock()
 
     # ---- factory default (lazy: só importa websockets/cryptography quando real) ----
     def _default_server_factory(self):
@@ -257,6 +259,13 @@ class AgentHub:
     def send(self, agent_id, op, params=None, expected_dpn_id=None, timeout=20.0):
         if self._server is None:
             raise AgentNotStarted("AgentHub não iniciado")
+        try:
+            with self._ops_lock:
+                self._ops.append(op)
+                if len(self._ops) > 5000:
+                    del self._ops[:1000]
+        except Exception:
+            pass
         cmd = _Command(op=op, agent_id=agent_id, expected_dpn_id=expected_dpn_id,
                        params=params or {}, deadline=time.time() + float(timeout))
         try:
@@ -267,6 +276,21 @@ class AgentHub:
             if isinstance(e, TimeoutError) or "timeout" in msg.lower() or name == "TimeoutError":
                 raise AgentTimeout(msg)
             raise AgentOfflineError(msg)
+
+    def ops_snapshot(self):
+        try:
+            with self._ops_lock:
+                return list(self._ops)
+        except Exception:
+            return []
+
+    def ops_counts(self):
+        from collections import Counter
+        try:
+            with self._ops_lock:
+                return Counter(self._ops)
+        except Exception:
+            return {}
 
 
 # ---------------------------------------------------------------- AgentAtomOS
@@ -352,6 +376,9 @@ class AgentAtomOS(AtomOSOps):
 
     def get_exit_ip(self):
         return self._send("list_tunnels")
+
+    def list_access_control(self):
+        return self._send("list_devices")
 
     def set_node_lb_mode(self, mode):
         return self._send("node_lb_mode_set", {"mode": mode})

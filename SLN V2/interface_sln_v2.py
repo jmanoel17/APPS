@@ -1055,12 +1055,13 @@ app_scan = ScannerTab(tab_scan)
 tab_dpn = ttk.Frame(notebook)
 notebook.add(tab_dpn, text="🌐 DPN")
 
-_dpn_cols = ("dpn", "state", "node", "ip", "wu", "lim", "cool", "dup", "act", "safe", "trans", "err")
-_dpn_tree = ttk.Treeview(tab_dpn, columns=_dpn_cols, show="headings", height=14)
-for _c, _h, _w in (("dpn", "DPN", 90), ("state", "Estado", 120), ("node", "Node", 90),
-                   ("ip", "IP Atual", 120), ("wu", "Work", 55), ("lim", "Lim", 45),
-                   ("cool", "Cool(s)", 70), ("dup", "Dup", 45), ("act", "Ativos", 55),
-                   ("safe", "Safe", 50), ("trans", "Últ.Trans", 90), ("err", "Erro", 160)):
+_dpn_cols = ("state", "tunnel", "tip", "online", "total", "mode", "lan")
+_dpn_tree = ttk.Treeview(tab_dpn, columns=_dpn_cols, show="tree headings", height=16)
+_dpn_tree.heading("#0", text="Nome")
+_dpn_tree.column("#0", width=230, anchor="w")
+for _c, _h, _w in (("state", "Estado", 110), ("tunnel", "Tunnel", 70),
+                   ("tip", "Tunnel IP", 120), ("online", "Online", 60),
+                   ("total", "Total", 55), ("mode", "RouteMode", 90), ("lan", "LAN IP", 120)):
     _dpn_tree.heading(_c, text=_h)
     _dpn_tree.column(_c, width=_w, anchor="w")
 _dpn_tree.pack(fill="both", expand=True, padx=8, pady=6)
@@ -1091,7 +1092,7 @@ def _dpn_publish(action):
     if not sel:
         messagebox.showwarning("DPN", "Selecione uma DPN na tabela.")
         return
-    dpn_id = _dpn_tree.item(sel[0], "values")[0]
+    dpn_id = str(sel[0]).split(":", 1)[0]
     if action in ("rotate_now", "reset_node_now"):
         if not messagebox.askyesno("Confirmação", "Confirmar %s em %s?" % (action, dpn_id)):
             return
@@ -1137,13 +1138,14 @@ def _dpn_apply_status(status):
         online = UI.coordinator_online(status, stale_s=8.0)
         _lbl_coord.config(text="Status Coordinator: %s" % ("ONLINE" if online else "OFFLINE"),
                           fg=("#2e7d32" if online else "#b71c1c"))
-        for iid in _dpn_tree.get_children():
+        for iid in _dpn_tree.get_children(""):
             _dpn_tree.delete(iid)
-        for r in UI.rows(status):
-            _dpn_tree.insert("", "end", values=(
-                r["dpn_id"], r["state"], r["node"], r["ip"], r["work_units"], r["limit"],
-                r["cooldown_s"], r["duplicates"], r["active"], r["safe"], r["last_transition"],
-                (r["error"] or "")))
+        for r in UI.tree_rows(status):
+            parent = r.get("parent") or ""
+            _dpn_tree.insert(parent, "end", iid=r["iid"], text=r["name"], values=(
+                r.get("state", ""), r.get("tunnel", ""), r.get("tunnel_ip", ""),
+                r.get("online", ""), r.get("total", ""), r.get("route_mode", ""),
+                r.get("lan_ip", "")))
     except Exception:
         pass
 

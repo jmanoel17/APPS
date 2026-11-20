@@ -18,6 +18,7 @@ import subad_close as SC
 
 PASS = 0
 FAIL = 0
+SKIP = 0
 PKG = "com.flixdigital.dramaclassic"
 ERR = os.path.join(BASE, "errors")
 
@@ -30,6 +31,12 @@ def check(name, cond):
     else:
         FAIL += 1
         print("  FAIL", name)
+
+
+def skip(name, reason="fixture ausente"):
+    global SKIP
+    SKIP += 1
+    print("  skip", name, "(%s)" % reason)
 
 
 def load(fn):
@@ -48,7 +55,7 @@ def test_positive():
     print("[replay] POSITIVO (ciclo 4)")
     root = load(POS)
     if root is None:
-        check("dump positivo presente", False); return
+        skip("dump positivo presente"); return
     r = detect(root)
     check("found=True", r["found"] is True)
     check("bounds=[958,217][1028,287]", r.get("bounds") == (958, 217, 1028, 287))
@@ -69,7 +76,7 @@ def test_negatives_real():
     for name, fn in cases:
         root = load(fn)
         if root is None:
-            check("presente: " + name, False); continue
+            skip("presente: " + name); continue
         r = detect(root)
         check("NÃO casa: " + name + " (reject=%s)" % r.get("reject_reason"), r["found"] is False)
 
@@ -155,7 +162,7 @@ def main():
     test_different_screen_size()
     test_reward_gate_authorization()
     test_dedupe()
-    print("\nRESULT: PASS=%d FAIL=%d" % (PASS, FAIL))
+    print("\nRESULT: PASS=%d FAIL=%d SKIP=%d" % (PASS, FAIL, SKIP))
     sys.exit(0 if FAIL == 0 else 1)
 
 

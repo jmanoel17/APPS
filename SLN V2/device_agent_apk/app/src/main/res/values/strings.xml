@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SLN Device Agent</string>
+    <string name="acc_desc">SLN Device Agent accessibility (BACK/HOME)</string>
+</resources>

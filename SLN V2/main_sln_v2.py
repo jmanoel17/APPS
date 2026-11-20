@@ -40,6 +40,7 @@ import uiautomator2 as u2
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config_sln_v2 as CONFIG
+from device_backend import make_backend, BackendError
 
 _cv2 = None
 _np = None
@@ -71,6 +72,8 @@ _t_startup = time.time()
 package = "com.flixdigital.dramaclassic"
 rodadas = 0
 d = None
+BACKEND = None
+AGENT_BRIDGE = None
 qtd_reset = 0
 total_ads = 0
 total_installs = 0
@@ -361,7 +364,10 @@ def _dump_hierarchy_medido():
     """ÚNICO choke point de d.dump_hierarchy(): mede count/bytes/ms para o [PERF].
     Exceções sobem como antes (o tratamento continua com quem chamou)."""
     t0 = time.perf_counter()
-    raw = d.dump_hierarchy()
+    if BACKEND is not None:
+        raw = BACKEND.get_ui_tree().raw
+    else:
+        raw = d.dump_hierarchy()
     ms = (time.perf_counter() - t0) * 1000
     perf_inc("hierarchy_dump_count")
     perf_bytes("hierarchy_dump_bytes", len(raw) if raw else 0)
@@ -376,13 +382,49 @@ def _dump_hierarchy_medido():
 
 
 def safe_connect(device):
-    global d
+    global d, BACKEND, AGENT_BRIDGE
+    if str(cfg.get("device_backend", "adb")).lower() == "agent":
+        # E3.8: Agent is authoritative. Never open uiautomator2/UiAutomation here: on this
+        # ROM it disables the Agent AccessibilityService. ADB is bootstrap/diagnostic only.
+        try:
+            log(f"[E38][CONNECT] Agent backend device={device} mode={cfg.get('execution_mode')}")
+            if AGENT_BRIDGE is None:
+                from device_backend.agent_bridge import AgentControllerBridge
+                from device_backend.agent_device import AgentDeviceFacade
+                AGENT_BRIDGE = AgentControllerBridge(device, cfg, log_fn=log)
+                AGENT_BRIDGE.start()
+                d = AgentDeviceFacade(device, AGENT_BRIDGE, None, log_fn=log)
+            elif not AGENT_BRIDGE.wait_connected(15):
+                raise BackendError("AGENT_RECONNECT_TIMEOUT")
+            BACKEND = make_backend("agent", d=d, device=device, cfg=cfg,
+                                   command_fn=AGENT_BRIDGE.command_fn,
+                                   agent_id=AGENT_BRIDGE.agent_id)
+            d.backend = BACKEND
+            log(f"[BACKEND] device_backend={BACKEND.name} execution_mode={cfg.get('execution_mode')}")
+            log("[E38][CONNECT] Agent principal; ADB somente gaps legados")
+            return
+        except Exception as e:
+            log(f"[E38][ABORT] preflight/backend Agent falhou: {type(e).__name__}: {e}")
+            if AGENT_BRIDGE is not None:
+                try:
+                    AGENT_BRIDGE.stop()
+                except Exception:
+                    pass
+                AGENT_BRIDGE = None
+            raise
     retries = 0
     while True:
         try:
             log(f"Conectando ao dispositivo: {device}")
             d = u2.connect(device)
             if d.info:
+                try:
+                    BACKEND = make_backend(cfg.get("device_backend", "adb"), d=d,
+                                           device=device, cfg=cfg)
+                    log(f"[BACKEND] device_backend={BACKEND.name}")
+                except BackendError as be:
+                    log(f"[BACKEND][ERROR] {be}")
+                    BACKEND = None
                 log("Conectado com sucesso!")
                 return
             raise Exception("Dispositivo nao disponivel")
@@ -402,6 +444,8 @@ def _device_bloqueado(d):
     """(bloqueado, motivo). Tela apagada/dormindo, keyguard (lockscreen / 'Proteção contra
     toque acidental' da Samsung) ou dreaming lockscreen. Não tenta contornar nada."""
     try:
+        if BACKEND is not None:
+            return BACKEND.get_status().blocked()
         pw = d.shell("dumpsys power").output
         if "mWakefulness=Dozing" in pw or "mWakefulness=Asleep" in pw:
             return True, "screen_off"
@@ -444,6 +488,8 @@ def is_doze(d):
 
 def cur_app():
     try:
+        if BACKEND is not None:
+            return BACKEND.get_foreground_app().as_dict()
         return d.app_current()
     except Exception:
         return {}
@@ -510,7 +556,12 @@ def clicar_coordenada_por_seletor(attr_name, attr_values):
             cx, cy = (x1 + x2) // 2, (y1 + y2) // 2
             log(f"[LOG] Elemento '{value}' ({attr_name}) -> clique por coordenada ({cx},{cy})")
             try:
-                d.click(cx, cy)
+                if BACKEND is not None:
+                    r = BACKEND.tap(cx, cy, 50)
+                    if not r.ok:
+                        return False
+                else:
+                    _backend_tap(cx, cy)
                 time.sleep(0.3)
                 return True
             except Exception as e:
@@ -563,19 +614,24 @@ def tentar_clicar_xpath(xpaths):
 # ==================== IA (servidor central) ====================
 
 def screenshot_bytes():
-    """Screenshot em PNG bytes (via uiautomator2). Instrumentado no [PERF] (count/bytes)."""
+    """Screenshot em PNG bytes (via backend/ADB). Instrumentado no [PERF] (count/bytes)."""
     png = None
     try:
-        img = d.screenshot()
-        buf = io.BytesIO()
-        img.save(buf, format='PNG')
-        png = buf.getvalue()
+        if BACKEND is not None:
+            png = BACKEND.capture_screen().png
+        else:
+            img = d.screenshot()
+        if BACKEND is None:
+            buf = io.BytesIO()
+            img.save(buf, format='PNG')
+            png = buf.getvalue()
     except Exception:
-        try:
-            perf_inc("adb_subprocess_count")
-            png = subprocess.check_output(f'adb -s {device} exec-out screencap -p', shell=True, timeout=10)
-        except Exception:
-            png = None
+        if BACKEND is None:
+            try:
+                perf_inc("adb_subprocess_count")
+                png = subprocess.check_output(f'adb -s {device} exec-out screencap -p', shell=True, timeout=10)
+            except Exception:
+                png = None
     if png:
         perf_inc("screenshot_count")
         perf_bytes("screenshot_bytes", len(png))
@@ -709,7 +765,10 @@ def voltar_de_externo(d, max_backs=3):
 
     log(f"[LOG] Aberto app externo ({pkg}/{act}). Pressionando BACK para voltar...")
     for _ in range(max_backs):
-        d.press("back")
+        if BACKEND is not None:
+            BACKEND.back()
+        else:
+            _backend_key("back")
         time.sleep(0.8)
         try:
             cur = cur_app()
@@ -727,7 +786,7 @@ def voltar_de_externo(d, max_backs=3):
     # BACK não resolveu (ex.: Chrome não sai com BACK) -> força parada do pacote externo
     log("[LOG] BACK não saiu do app externo. Forçando parada...")
     try:
-        d.app_stop(pkg)
+        _backend_stop_app(pkg)
         time.sleep(1)
     except Exception:
         pass
@@ -747,7 +806,7 @@ def tocar_para_revelar_x(d, tentativas=2):
         cx = int(w * random.uniform(0.30, 0.70))
         cy = int(h * random.uniform(0.30, 0.70))
         log(f"[LOG] Tocando na tela do anúncio em ({cx},{cy}) para revelar X...")
-        d.click(cx, cy)
+        _backend_tap(cx, cy)
         time.sleep(1.2)
 
         # Se o toque abriu Play Store/browser, volta com BACK
@@ -758,7 +817,7 @@ def tocar_para_revelar_x(d, tentativas=2):
         dump = None
         if pos:
             log(f"[LOG] X revelado após toque em ({pos[0]},{pos[1]}). Clicando...")
-            d.click(pos[0], pos[1])
+            _backend_tap(pos[0], pos[1])
             time.sleep(0.8)
             # Se o clique no X abriu Play Store, volta com BACK
             voltar_de_externo(d, max_backs=2)
@@ -778,7 +837,7 @@ def cliques_proporcionais_topo(d, tentativas=1):
                        (int(w*0.93), int(h*0.11)), (int(w*0.08), int(h*0.07)),
                        (int(w*0.94), int(h*0.28))]:
             log(f"[LOG] X proporcional ({cx},{cy})")
-            d.click(cx, cy)
+            _backend_tap(cx, cy)
             time.sleep(1.0)
     return False
 
@@ -994,7 +1053,7 @@ def fechar_anuncio_applovin(d):
             else:
                 x, y = alvo[1], alvo[2]
                 log(f"[APPLOVIN] Close encontrado em ({x},{y}). Clicando imediatamente.")
-                d.click(x, y)
+                _backend_tap(x, y)
             time.sleep(1.5)
             try:
                 p2, a2 = cur_app().get('package'), str(cur_app().get('activity', ''))
@@ -1017,7 +1076,7 @@ def fechar_anuncio_applovin(d):
             cx, cy = cantos_applovin[idx]
             if applovin_confirmar_aberto():
                 log(f"[APPLOVIN][INTERSTITIAL] Janela do botão (9~20s). Tentando fechar na posição ({cx},{cy}).")
-                d.click(cx, cy)
+                _backend_tap(cx, cy)
                 time.sleep(1.2)
                 try:
                     cur2 = cur_app()
@@ -1039,7 +1098,7 @@ def fechar_anuncio_applovin(d):
                 w_, h_ = 1080, 2280
             log("[APPLOVIN][INTERSTITIAL] 30s sem botão útil. Confirmando anúncio antes do fallback.")
             log(f"[APPLOVIN][INTERSTITIAL] Executando clique central único em ({w_ // 2},{h_ // 2}).")
-            d.click(w_ // 2, h_ // 2)
+            _backend_tap(w_ // 2, h_ // 2)
             clicou_centro_applovin = True   # Regra 4/5: UMA ÚNICA vez
             time.sleep(1.0)
             # POLLING rápido de IA logo após o clique central: o botão costuma
@@ -1060,7 +1119,7 @@ def fechar_anuncio_applovin(d):
                     dentro_cta = (gp1x <= x <= gp2x and gp1y <= y <= gp2y)
                     if conf >= 0.25 and y < h_p * 0.20 and not dentro_cta:
                         log(f"[APPLOVIN] Close encontrado após clique central em ({x},{y}) conf={conf:.2f}. Clicando imediatamente.")
-                        d.click(x, y)
+                        _backend_tap(x, y)
                         time.sleep(1.5)
                         try:
                             cur2 = cur_app()
@@ -1094,7 +1153,7 @@ def fechar_anuncio_applovin(d):
                     dentro_cta = (gp1x <= x <= gp2x and gp1y <= y <= gp2y)
                     if conf >= 0.25 and y < h_p * 0.20 and not dentro_cta:
                         log(f"[APPLOVIN] Close encontrado após clique central em ({x},{y}) conf={conf:.2f}. Clicando imediatamente.")
-                        d.click(x, y)
+                        _backend_tap(x, y)
                         time.sleep(1.5)
                         try:
                             cur2 = cur_app()
@@ -1159,7 +1218,7 @@ def fechar_anuncio_applovin_legacy(d):
                         cx = (x1 + x2) // 2
                         cy = (y1 + y2) // 2
                         log(f"[LEGACY] Clicando no X em {cx},{cy} (bounds: {bounds})")
-                        d.click(cx, cy)
+                        _backend_tap(cx, cy)
                         time.sleep(0.8)
                         return True
         return False
@@ -1225,7 +1284,7 @@ def fechar_anuncio_applovin_legacy(d):
                 if not applovin_confirmar_aberto():
                     return False
                 log(f"[LEGACY][CANTO] Tentando botão real em ({cx},{cy}).")
-                d.click(cx, cy)
+                _backend_tap(cx, cy)
                 time.sleep(1.2)
                 try:
                     if applovin_confirmar_aberto():
@@ -1285,7 +1344,7 @@ def fechar_anuncio_applovin_legacy(d):
                     h_ = 2280
                 if conf >= 0.30 and y < h_ * 0.30:
                     log(f"[LEGACY][IA] X detectado em ({x},{y}) conf={conf:.2f}. Clicando...")
-                    d.click(x, y)
+                    _backend_tap(x, y)
                     time.sleep(1.0)
                     clicou = True
 
@@ -1311,7 +1370,7 @@ def fechar_anuncio_applovin_legacy(d):
 # ==================== FAST CLOSE WATCHER (AppLovin — P0) ====================
 # Controlador ÚNICO do anúncio AppLovin. Observa desde T0 com UM dump por tick,
 # decide localmente e só clica com evidência: X confiável nos bounds do próprio
-# dump -> d.click(cx, cy). Sem cliques cegos, sem swipes, sem UiObject.click()
+# dump -> _backend_tap(cx, cy). Sem cliques cegos, sem swipes, sem UiObject.click()
 # (must_wait de até 20s), sem app_current() por tick, sem IA no loop.
 # Rollback: "fast_close_enabled": false (+ "use_legacy_applovin": true).
 
@@ -1763,7 +1822,7 @@ def _fc_experimento_topo(st, an, w, h, ts, t0, raw, armed, miss_ticks):
         flog(f"[FASTCLOSE][CONTROL_TEST] part=icon x={ix} y={iy} pill_bounds={_fc_b(pb)} text_bounds={_fc_b(tb)} "
              f"text_left={tb[0]} pill_age={ts - ex['pill_since']:.2f}s origin={ex['origin']} "
              f"age={el:.2f}s armed={armed}")
-        d.click(ix, iy)
+        _backend_tap(ix, iy)
         ex["control_done"] = True
         ex["control_pending"] = True
         ex["control_at"] = time.perf_counter()
@@ -1786,7 +1845,7 @@ def _fc_experimento_topo(st, an, w, h, ts, t0, raw, armed, miss_ticks):
         pt = _fc_ponto_reveal_topo(an, w, h, y, ex["pill_last"]["pill"] if ex["pill_last"] else None)
         if pt:
             _fc_salvar_artefato(st, "before_reveal", raw, prefixo="experiment")
-            d.click(pt[0], pt[1])
+            _backend_tap(pt[0], pt[1])
             ex["reveals"] += 1
             ex["reveal_at"] = time.perf_counter()
             ex["reveal_waiting"] = True
@@ -2103,7 +2162,7 @@ def _fc_recovery_try_click(cand, an, w, h, motivo):
         return None
     cx, cy = (b[0] + b[2]) // 2, (b[1] + b[3]) // 2
     t0 = time.perf_counter()
-    d.click(cx, cy)
+    _backend_tap(cx, cy)
     ms = (time.perf_counter() - t0) * 1000
     flog(f"[RECOVERY_CLOSE][CLICK] motivo={motivo} center=({cx},{cy}) bounds={_fc_b(b)} "
          f"click_rpc={ms:.0f}ms")
@@ -2316,7 +2375,7 @@ def _fc_endcard_close(st, an, root, raw, w, h, t, t0):
     fonte, x, y, det = alvo
     flog(f"[FASTCLOSE][ENDCARD_X_FOUND] source={fonte} {det} center=({x},{y})")
     t_c = time.perf_counter()
-    d.click(x, y)  # bounds do dump atual; NUNCA UiObject.click()
+    _backend_tap(x, y)  # bounds do dump atual; NUNCA UiObject.click()
     t_c2 = time.perf_counter()
     fl["x_clicks"] += 1
     fl["x_click_at"] = t_c2
@@ -2535,7 +2594,7 @@ def _fc_diag_rewarded_sem_countdown(st, an, w, h, raw, t, t0, ad_type):
                     fl["diag_click_at"] = time.perf_counter()
                     flog(f"[FASTCLOSE][PLAYABLE_CLICK] close onscreen estável x={cx} y={cy} "
                          f"bounds={_fc_b(b)} elapsed={el:.2f}s — diagnóstico (gate NÃO alterado)")
-                    d.click(cx, cy)
+                    _backend_tap(cx, cy)
                     st.last_action, st.last_action_at = "diag_playable_close", fl["diag_click_at"]
         elif prev is not None and close_btn is None:
             fl["diag_last_close"] = None
@@ -2835,7 +2894,7 @@ def _fc_fluxo_applovin(st, an, root, raw, w, h, t, t0, armed, ad_type="unknown")
             ix = (pb[0] + tb[0]) // 2 if tb[0] > pb[0] + 10 else pb[0] + int(0.13 * (pb[2] - pb[0]))
             iy = pil["cy"]
             t_c = time.perf_counter()
-            d.click(ix, iy)
+            _backend_tap(ix, iy)
             fl["skips"] += 1
             fl["skip_at"] = time.perf_counter()
             _, fl["skip_reason"] = _fc_gate_motivo(st, ad_type, armed, t, t0)
@@ -2895,7 +2954,7 @@ def _fc_fluxo_applovin(st, an, root, raw, w, h, t, t0, armed, ad_type="unknown")
             if autorizado:
                 cx, cy = sub["center"]
                 t_c = time.perf_counter()
-                d.click(cx, cy)
+                _backend_tap(cx, cy)
                 fl["subad_clicks"] = fl.get("subad_clicks", 0) + 1
                 fl["subad_click_at"] = t_c
                 fl["skip_at"] = t_c            # MESMA fase de skip: evita t - None depois
@@ -2947,7 +3006,7 @@ def _fc_fluxo_applovin(st, an, root, raw, w, h, t, t0, armed, ad_type="unknown")
         y = fl["pill_last"]["cy"] if fl["pill_last"] else int(h * float(cfg.get("top_reveal_y_ratio", 0.075)))
         pt = _fc_ponto_reveal_topo(an, w, h, y, fl["pill_last"]["pill"] if fl["pill_last"] else None)
         if pt:
-            d.click(pt[0], pt[1])
+            _backend_tap(pt[0], pt[1])
             fl["reveals"] += 1
             fl["reveal_at"] = time.perf_counter()
             fl["reveal_waiting"] = True
@@ -3380,7 +3439,7 @@ def fast_close_watcher_applovin(tipo_future=None, tipo_inicial=("unknown", "", "
                 pronto = (idade_loja >= float(cfg.get("applovin_store_initial_back_delay_s", 1.5)) if fl["store_backs"] == 0
                           else not fl["store_back_pending"] and t_parse - fl["store_back_at"] >= retry)
                 if fl["store_backs"] < max_backs and pronto:
-                    d.press("back")
+                    _backend_key("back")
                     fl["store_back_at"] = last_back = time.perf_counter()
                     fl["store_backs"] += 1
                     fl["store_back_pending"] = True
@@ -3412,7 +3471,7 @@ def fast_close_watcher_applovin(tipo_future=None, tipo_inicial=("unknown", "", "
                         result = FC_LEFT_AD
                         break
                 if time.perf_counter() - last_back >= _FC_BACK_MIN_INTERVAL:
-                    d.press("back")
+                    _backend_key("back")
                     last_back = time.perf_counter()
                     flog(f"[FASTCLOSE][BACK] from={state}")
                     st.last_action, st.last_action_at = "recovery_back", last_back
@@ -3466,7 +3525,7 @@ def fast_close_watcher_applovin(tipo_future=None, tipo_inicial=("unknown", "", "
                         elif st.last_click_at is None or time.perf_counter() - st.last_click_at >= click_cd:
                             fonte = "reappeared_x" if st.reappeared_after_reveal else best["src"]
                             t_c = time.perf_counter()
-                            d.click(best["cx"], best["cy"])  # coordenada do dump; NUNCA UiObject.click()
+                            _backend_tap(best["cx"], best["cy"])  # coordenada do dump; NUNCA UiObject.click()
                             t_c2 = time.perf_counter()
                             st.clicks += 1
                             st.last_click_at = t_c2
@@ -3511,7 +3570,7 @@ def fast_close_watcher_applovin(tipo_future=None, tipo_inicial=("unknown", "", "
                             and (st.last_reveal_at is None or ts - st.last_reveal_at >= reveal_cd)):
                         pt = _fc_ponto_reveal(an, w, h)
                         if pt:
-                            d.click(pt[0], pt[1])
+                            _backend_tap(pt[0], pt[1])
                             st.reveal_attempts += 1
                             st.last_reveal_at = time.perf_counter()
                             st.waiting_after_reveal = True
@@ -3666,9 +3725,9 @@ def processar_applovin_fast(origem):
     total_escapes += 1
     log(f"[APPLOVIN] fast_close result={res}. Escape {total_escapes} (HOME + force-stop)...")
     try:
-        d.press("home")
+        _backend_key("home")
         time.sleep(1)
-        d.app_stop(package)
+        _backend_stop_app(package)
         time.sleep(1)
     except Exception:
         pass
@@ -3716,9 +3775,9 @@ def _fc_pre_anuncio():
                 espera = min(30 * _fc_banner_falhas, 120)  # sem anúncio: backoff, não polling
             log(f"[LOG] Banner não carregou mesmo após tentativas. [BANNER][BACKOFF] falhas_seguidas="
                 f"{_fc_banner_falhas} aguardando={espera:.0f}s antes de reiniciar o app...")
-            d.app_stop(package)
+            _backend_stop_app(package)
             time.sleep(espera)
-            d.app_start(package)
+            _backend_start_app(package)
             return False
         _fc_banner_falhas = 0
     if eh_anuncio_applovin():
@@ -3857,7 +3916,7 @@ def fechar_anuncio_cirurgico(d):
                         x, y, conf = hit
                         if conf >= 0.25 and y < h_ * 0.16 and _fora_do_cta(x, y):
                             log(f"[IA] >| detectado em ({x},{y}) conf={conf:.2f}. Clique único...")
-                            d.click(x, y)
+                            _backend_tap(x, y)
                             time.sleep(1.5)
                             p__, a__ = cur_app().get('package'), str(cur_app().get('activity', ''))
                             if p__ == package and '.MainActivity' in a__:
@@ -3873,9 +3932,9 @@ def fechar_anuncio_cirurgico(d):
                 # não capturou: reinicia o app p/ o ciclo seguir (o anúncio pode auto-fechar)
                 log("[LOG] Playable sem >| na janela. Reiniciando app p/ seguir ciclo...")
                 try:
-                    d.app_stop(package)
+                    _backend_stop_app(package)
                     time.sleep(1)
-                    d.app_start(package)
+                    _backend_start_app(package)
                     time.sleep(1)
                 except Exception:
                     pass
@@ -3915,7 +3974,7 @@ def fechar_anuncio_cirurgico(d):
             pos = achar_botao_fechar_no_dump(dump)
             if pos:
                 log(f"[LOG] X no dump em ({pos[0]},{pos[1]}). Clique...")
-                d.click(pos[0], pos[1])
+                _backend_tap(pos[0], pos[1])
                 time.sleep(1.0)
                 clicou = True
 
@@ -3935,7 +3994,7 @@ def fechar_anuncio_cirurgico(d):
                     h_ = 2280
                 if 0 <= y <= h_ * 0.30 and conf >= 0.30:
                     log(f"[IA] X detectado em ({x},{y}) conf={conf:.2f}. Clique...")
-                    d.click(x, y)
+                    _backend_tap(x, y)
                     time.sleep(1.0)
                     clicou = True
 
@@ -3944,9 +4003,9 @@ def fechar_anuncio_cirurgico(d):
     total_escapes += 1
     log(f"[LOG] Fechamento esgotou ciclos. Escape {total_escapes} (HOME + force-stop)...")
     try:
-        d.press("home")
+        _backend_key("home")
         time.sleep(1)
-        d.app_stop(package)
+        _backend_stop_app(package)
         time.sleep(1)
     except Exception:
         pass
@@ -3967,13 +4026,13 @@ def movimentar_anuncio(d, duracao):
     while time.time() < end:
         direcao = random.choice(["up", "down", "left", "right"])
         if direcao == "up":
-            d.swipe(int(w*0.5), int(h*0.8), int(w*0.5), int(h*0.2), duration=0.5)
+            _backend_swipe(int(w*0.5), int(h*0.8), int(w*0.5), int(h*0.2), 500)
         elif direcao == "down":
-            d.swipe(int(w*0.5), int(h*0.2), int(w*0.5), int(h*0.8), duration=0.5)
+            _backend_swipe(int(w*0.5), int(h*0.2), int(w*0.5), int(h*0.8), 500)
         elif direcao == "left":
-            d.swipe(int(w*0.9), int(h*0.5), int(w*0.1), int(h*0.5), duration=0.5)
+            _backend_swipe(int(w*0.9), int(h*0.5), int(w*0.1), int(h*0.5), 500)
         else:
-            d.swipe(int(w*0.1), int(h*0.5), int(w*0.9), int(h*0.5), duration=0.5)
+            _backend_swipe(int(w*0.1), int(h*0.5), int(w*0.9), int(h*0.5), 500)
         time.sleep(random.uniform(0.8, 1.5))
     total_moves += 1
     return True
@@ -4048,9 +4107,9 @@ def sair_de_playable_travado(d, forcar=False):
         dump = None
         if empty and forcar:
             log("[LOG] Playable sem elementos confirmado. Aplicando HOME + force-stop...")
-            d.press("home")
+            _backend_key("home")
             time.sleep(1)
-            d.app_stop(package)
+            _backend_stop_app(package)
             time.sleep(1)
             return True
         return False
@@ -4134,14 +4193,14 @@ def tratar_play_store(d):
                     qa_scheduler.save()
                 # volta pro app
                 for _ in range(4):
-                    d.press("back")
+                    _backend_key("back")
                     time.sleep(0.8)
             else:
                 log("[STORE] Botão Instalar não encontrado. Voltando...")
                 if qa_scheduler is not None:
                     qa_scheduler.on_install_result(False)
                     qa_scheduler.save()
-                d.press("back")
+                _backend_key("back")
                 time.sleep(1)
         else:
             # Não instalar: intersticial PLAY STORE transparente (HsdpAlias).
@@ -4151,12 +4210,12 @@ def tratar_play_store(d):
             is_overlay = "HsdpAlias" in act or "transparent" in act.lower()
             if is_overlay:
                 log("[STORE] Overlay Play Store transparente detectado. Fechando com BACK (sem clicar em Fechar planilha)...")
-                d.press("back")
+                _backend_key("back")
                 time.sleep(1)
             else:
                 # Loja completa: tenta fechar com BACK também (mais seguro)
                 log("[STORE] Tela da Play Store. Fechando com BACK...")
-                d.press("back")
+                _backend_key("back")
                 time.sleep(1)
         dump_ps = None
         gc.collect()
@@ -4190,7 +4249,7 @@ def reset_id():
             d(resourceId="android:id/button1").click()
         time.sleep(1)
         # confirma retorno à home (reset concluído / saiu da tela de publicidade)
-        d.press("home")
+        _backend_key("home")
         time.sleep(1)
         if not clicou:
             # Sem ação real de reset não há reset: falha IDENTIFICÁVEL (nunca success silencioso).
@@ -4214,6 +4273,7 @@ def reset_id():
 # device não bloqueia os outros.
 _reset_pending = False          # reset de identidade falhou -> repetir com backoff (sem abrir o app)
 _clear_pending = False          # clear avulso falhou -> repetir com backoff (sem abrir o app)
+_clear_uncertain = False        # backend Agent: UNCERTAIN nao pode ser reexecutado automaticamente
 _pending_backoff_s = 0.0        # backoff corrente desta pendência
 _PENDING_BACKOFF_BASE_S = 15.0
 _PENDING_BACKOFF_MAX_S = 300.0
@@ -4232,14 +4292,32 @@ def _clear_app_data_verified(contexto="reset", max_tent=3):
     - NUNCA levanta exceção: retorna bool.
 
     (Corrige o risco de `r` não definida quando d.shell() lança exceção.)"""
-    global _last_clear_ms
+    global _last_clear_ms, _clear_uncertain
     log(f"[RESET][APP] clear_data start context={contexto}")
+    if BACKEND is not None and BACKEND.name == "agent":
+        try:
+            res = BACKEND.clear_app_data(package)
+        except Exception as e:
+            log(f"[RESET][ERROR] agent clear_data {type(e).__name__}: {e}")
+            _clear_uncertain = False
+            return False
+        if res.uncertain:
+            _clear_uncertain = True
+            log("[RESET][ERROR] agent clear_data UNCERTAIN ? pending sem retry automatico")
+            return False
+        _clear_uncertain = False
+        if res.ok:
+            perf_inc("clear_count")
+            log("[RESET][APP] clear_data success (backend=agent)")
+            return True
+        log(f"[RESET][WARN] agent clear_data failure {res.error}")
+        return False
     t_clear = time.perf_counter()
     saiu = ""
     for tent in range(1, max_tent + 1):
         # force-stop antes do pm clear (garante nenhum processo segurando os dados)
         try:
-            d.app_stop(package)
+            _backend_stop_app(package)
             time.sleep(0.5)
             d.shell(f"am force-stop {package}")
         except Exception as e:
@@ -4356,8 +4434,8 @@ def verificar_e_corrigir_package():
         current_package = current_info.get('package')
         if current_package != package:
             log(f"[ALERTA] Fora do app ({current_package}). Voltando...")
-            d.app_stop(current_package)
-            d.app_start(package)
+            _backend_stop_app(current_package)
+            _backend_start_app(package)
             time.sleep(1)
             return cur_app()
         return current_info
@@ -4405,7 +4483,7 @@ def tratar_consentimento_cas(d):
     cx, cy = (nums[0] + nums[2]) // 2, (nums[1] + nums[3]) // 2
     log(f"[CONSENT][CAS] detected signals={sorted(textos)} action={acao} click=({cx},{cy}) "
         f"bounds={alvo.attrib.get('bounds')}")
-    d.click(cx, cy)
+    _backend_tap(cx, cy)
     time.sleep(1.5)
     dump2 = get_hierarchy_data()
     ainda = dump2 is not None and any(
@@ -4484,7 +4562,7 @@ def abrir_anuncio_banner(d, max_tries=6, wait_each=6):
 
         # garante botão visível
         if not d(resourceId="com.flixdigital.dramaclassic:id/btnRewardAds").exists(timeout=1):
-            d.app_start(package)
+            _backend_start_app(package)
             time.sleep(1)
             d.swipe_ext("up", 0.3)
             time.sleep(0.5)
@@ -4657,9 +4735,9 @@ def processar_ciclo_anuncio():
                     abriu = abrir_anuncio_banner(d)
                     if not abriu:
                         log("[LOG] Banner não carregou mesmo após tentativas. Reiniciando app...")
-                        d.app_stop(package)
+                        _backend_stop_app(package)
                         time.sleep(1)
-                        d.app_start(package)
+                        _backend_start_app(package)
                         return False
                     break
                 else:
@@ -4743,7 +4821,7 @@ def processar_ciclo_anuncio():
             if isinstance(resulto, tuple):
                 # X encontrado após assistir completo: 1 clique cirúrgico
                 log(f"[LOG] Reward completo. Clique no X em ({resulto[0]},{resulto[1]}) (1x).")
-                d.click(resulto[0], resulto[1])
+                _backend_tap(resulto[0], resulto[1])
                 time.sleep(1.5)
                 # se abriu loja, volta
                 voltar_de_externo(d, max_backs=2)
@@ -4770,7 +4848,7 @@ def processar_ciclo_anuncio():
         if cfg.get("save_errors", True):
             salvar_error_screenshot("fail")
         try:
-            d.app_stop(package)
+            _backend_stop_app(package)
             time.sleep(1)
         except Exception:
             pass
@@ -4964,7 +5042,7 @@ if __name__ == '__main__':
                 # "Assistir anúncio" de novo (1 clique = 1 ciclo, N stages).
                 pass
             else:
-                d.app_start(package)
+                _backend_start_app(package)
                 time.sleep(1)
                 cur = cur_app()
                 if cur.get('package') == package:
@@ -4973,7 +5051,7 @@ if __name__ == '__main__':
                 if '.MainActivity' in activity:
                     if not processar_home(d):
                         log("[AVISO] Botão reward não encontrado. Reiniciando app...")
-                        d.app_stop(package)
+                        _backend_stop_app(package)
                         time.sleep(1)
                         continue
                     # Aguarda sair da MainActivity (abrir ad)
@@ -5029,7 +5107,7 @@ if __name__ == '__main__':
             # Sob QA realistic, o agendador é a autoridade de reset (intervalo individual + quota).
             if qa_scheduler is None and CONFIG.decide(cfg, "reset_id_pct"):
                 if reset_identity_and_app_state():
-                    d.app_start(package)
+                    _backend_start_app(package)
                     time.sleep(2)
                     _fc_coins_last = None  # dados do app zerados: saldo antigo inválido
                 else:
@@ -5045,7 +5123,7 @@ if __name__ == '__main__':
             elif qa_scheduler is None and CONFIG.decide(cfg, "clear_data_pct"):
                 if clear_app_data_pct():
                     try:
-                        d.app_start(package)
+                        _backend_start_app(package)
                         time.sleep(2)
                     except Exception:
                         pass
@@ -5057,8 +5135,9 @@ if __name__ == '__main__':
             if rodadas_local % 30 == 0:
                 gc.collect()
                 try:
-                    d.app_stop(package)
-                    d.shell(f"am force-stop {package}")
+                    # E3.8: backend.stop_app is the single periodic force-stop path.
+                    # Do not also call d.shell (would duplicate the physical mutation).
+                    _backend_stop_app(package)
                     time.sleep(0.5)
                 except Exception:
                     pass

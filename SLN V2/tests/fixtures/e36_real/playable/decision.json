@@ -1,0 +1,70 @@
+{
+  "agent": {
+    "state": "applovin",
+    "candidate": null,
+    "counts": {
+      "nodes": 35,
+      "clickable": 1,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+      "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity",
+      "window_id": 883,
+      "observed_at_ms": 1795200521470
+    },
+    "authorized": true,
+    "gate_reason": "armed",
+    "decision": "OBSERVE",
+    "reason": "ad_no_candidate",
+    "endcard": {
+      "confirmed": false,
+      "signals": [
+        "cta_button"
+      ]
+    },
+    "subad": {
+      "found": false,
+      "reason": "no_subad_close",
+      "reject_reason": "not_clickable"
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  },
+  "adb_reference": {
+    "state": "applovin",
+    "candidate": null,
+    "counts": {
+      "nodes": 40,
+      "clickable": 1,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+      "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity"
+    },
+    "authorized": true,
+    "gate_reason": "armed",
+    "decision": "OBSERVE",
+    "reason": "ad_no_candidate",
+    "endcard": {
+      "confirmed": false,
+      "signals": [
+        "cta_button"
+      ]
+    },
+    "subad": {
+      "found": false,
+      "reason": "no_subad_close",
+      "reject_reason": "not_clickable"
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  }
+}

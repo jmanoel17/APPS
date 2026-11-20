@@ -1,0 +1,30 @@
+{
+  "case": "store",
+  "ad_type": "unknown",
+  "armed": true,
+  "reward_completed": true,
+  "elapsed": 202.3,
+  "foreground_adb": {
+    "package": "com.android.vending",
+    "activity": "com.google.android.finsky.activities.MainActivity",
+    "component": "com.android.vending/com.google.android.finsky.activities.MainActivity"
+  },
+  "foreground_agent": {
+    "package": "com.android.vending",
+    "activity": "com.google.android.finsky.activities.MainActivity",
+    "component": "com.android.vending/com.google.android.finsky.activities.MainActivity",
+    "window_id": 842,
+    "observed_at_ms": 1795199674203
+  },
+  "display": {
+    "width_px": 1080,
+    "height_px": 2280,
+    "rotation": 0,
+    "density_dpi": 420
+  },
+  "agent_tree_ok": true,
+  "agent_nodes": 15,
+  "agent_capture_ms": 40,
+  "source": "e36_real_capture",
+  "qa_context": "observed"
+}

@@ -1,0 +1,94 @@
+{
+  "agent": {
+    "state": "main",
+    "candidate": {
+      "source": "reward_button",
+      "bounds": [
+        251,
+        1137,
+        829,
+        1295
+      ],
+      "center": [
+        540,
+        1216
+      ],
+      "rid": "com.flixdigital.dramaclassic:id/btnRewardAds",
+      "text": "Carregando anúncio...",
+      "desc": "",
+      "detail": {}
+    },
+    "counts": {
+      "nodes": 10,
+      "clickable": 0,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.flixdigital.dramaclassic.MainActivity",
+      "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity",
+      "window_id": 835,
+      "observed_at_ms": 1795199476795
+    },
+    "authorized": true,
+    "gate_reason": "",
+    "decision": "CLICK",
+    "reason": "reward_button",
+    "endcard": {
+      "confirmed": false,
+      "signals": []
+    },
+    "subad": {
+      "found": false
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  },
+  "adb_reference": {
+    "state": "main",
+    "candidate": {
+      "source": "reward_button",
+      "bounds": [
+        251,
+        1137,
+        829,
+        1295
+      ],
+      "center": [
+        540,
+        1216
+      ],
+      "rid": "com.flixdigital.dramaclassic:id/btnRewardAds",
+      "text": "Carregando anúncio...",
+      "desc": "",
+      "detail": {}
+    },
+    "counts": {
+      "nodes": 10,
+      "clickable": 0,
+      "candidates": 0
+    },
+    "foreground": {
+      "package": "com.flixdigital.dramaclassic",
+      "activity": "com.flixdigital.dramaclassic.MainActivity",
+      "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity"
+    },
+    "authorized": true,
+    "gate_reason": "",
+    "decision": "CLICK",
+    "reason": "reward_button",
+    "endcard": {
+      "confirmed": false,
+      "signals": []
+    },
+    "subad": {
+      "found": false
+    },
+    "countdown": {
+      "n": 0,
+      "values": []
+    }
+  }
+}

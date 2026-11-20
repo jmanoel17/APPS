@@ -415,3 +415,159 @@ RESET forçado em `.124`: `pm clear` `Success` em 844 ms, `total_reset_cycle_ms=
   inventário, não falha). Status **`CYCLE_ACCOUNTING_V2_PASS`**; semântica congelada.
   Ferramentas: `accounting_smoke.py`, `config_qa_10dev_accounting_sln_v2.json`. Não iniciar C90.
 
+
+## 20. DEVICE AGENT E3.2B - LIFECYCLE/REBOOT (2026-11-15)
+
+- Controller WSS real 8766 + store persistente `state/device_agents/e32b`; APK: retry reset somente em
+  HELLO_OK, AUTH_REVOKED em UNAUTHORIZED, caps refresh por heartbeat, PAIRING_REQUIRED sem token e
+  `server.status=AUTH_REVOKED`.
+- Device `.124` (SM-G975F, Android 12, **Ethernet eth0**). Matriz: S7 PASS; S2 PASS (FGS sobrevive);
+  S3 PASS (start manual 1,0 s); S4 LIMITATION (Wi-Fi nao se aplica em eth0); S4b PASS (perda de
+  transporte 60 s, reconexao 25,0 s); S5 PASS (offline 130 s, reconexao 1,5 s, OFFLINE age 126,8 s,
+  5 tentativas, CPU 0,0%, PSS 62.658 KB); S8 PASS (install -r, 2,1 s); S6 PASS (AUTH_REVOKED, 1
+  tentativa/48 s); S9 PASS (pm clear -> novo pairing, possible_reenrollment); S1 PASS (reboot +
+  dismiss keyguard: BOOT_RECEIVED, auto hello 51,4 s).
+- Identidade persiste em kill/force-stop/update/reboot; `pm clear` exige re-pair. BOOT_COMPLETED fica
+  retido ate dismiss keyguard; para pre-unlock: directBootAware + LOCKED_BOOT_COMPLETED (nao implementado).
+- Regressao 26/26 device_agent + compileall OK. Doc: `docs/E32B_LIFECYCLE.md`.
+
+## 21. DEVICE AGENT E3.3A - TAP/SWIPE (2026-11-15)
+
+- Protocolo sln-device/1 ganhou `TAP {x,y,duration_ms}` e `SWIPE {x1,y1,x2,y2,duration_ms}`,
+  mutacoes serializadas no controller e no APK. Faixas TAP 10-1000ms, SWIPE 10-3000ms; bounds
+  validados contra `display{width_px,height_px,rotation,density_dpi}` (HELLO/heartbeat + GET_STATUS/
+  GET_DEVICE_INFO). Resultado apenas no callback real (`GESTURE_CANCELLED`/`GESTURE_TIMEOUT`);
+  `command_id` deduplicado; disconnect pos-dispatch => UNCERTAIN sem reenvio.
+- APK 0.2: `canPerformGestures=true`, executor unico para TAP/SWIPE/BACK/HOME/START_APP, caps
+  dinamicas (Accessibility + display), refresh em config change/heartbeat. QA Activity propria com
+  botao/contador/scrolls (`QA_LAYOUT`/`QA_STATE`).
+- Matriz 18/18 PASS (TAP-1..8, SWIPE-1..8, caps off/on, lifecycle). 30 TAP: 0 falhas, total avg
+  65,10ms (p95 75,97; transport 16,10; queue 1,43; gesture 47,57). 30 SWIPE: 0 falhas, avg 284,54ms
+  (p95 294,61; gesture 266,93). ADB QA: tap 180,85ms avg (0/30 falhas), swipe 482,03ms (0/30).
+- Rotacao nativa bloqueada pelo ROM; validada via `wm size 1920x1080` -> rotation=3/layout
+  1080x1920 e TAP no novo centro (restaurado 1080x2280). Accessibility habilitada ao final.
+- Testes 41/41 device_agent + compileall OK. Doc: `docs/E33A_GESTURES.md`.
+
+## 22. DEVICE AGENT E3.3A.1 - HARDENING (2026-11-15)
+
+- Gesture state machine propria (NOT_DISPATCHED/DISPATCHING/DISPATCHED/COMPLETED/CANCELLED/
+  UNKNOWN_AFTER_DISPATCH): timeout pre-dispatch nunca despacha; pos-dispatch sem callback =>
+  UNCERTAIN; callback tardio nao muda terminal; lane segura ate duration+1.5s; job isolado.
+- SQLite monotono: UPDATE condicional `status NOT IN (terminais)` + INSERT OR IGNORE; terminal
+  nunca regride. RESULT validado contra agent/device/op/protocolo; status allowlist
+  (success/failure/expired/uncertain/duplicate); codigos tipados. command_id UUID4 no controller
+  e APK; invalido rejeitado. START_APP com `allowed_packages` server-side (default nega).
+- WsClient single-flight com ConnectionGuard (estados + connectionGeneration, 1 handshake e 1
+  reconnect agendado, callbacks antigos ignorados). Provision exported com gate shell/root/self
+  via referrer/callingPackage e URL wss; QA Activity agora debug-only (release merged sem QA).
+  Server separa `timeout` de espera do TTL (`deadline_ms`).
+- Testes: 50/50 Python; 14/14 selftests on-device (gesture/guard/APK validation). Real .124:
+  13/13 PASS, incluindo PRE_DISPATCH sem efeito visual, POST_DISPATCH UNCERTAIN sem retry,
+  dedupe, concorrentes, disconnect, a11y e resize. Benchmark limpo 30 TAP (p50 62,46; p99 76,82)
+  e 30 SWIPE (p50 276,80; p99 301,15), 0 falhas. Risco: stalls ocasionais de I/O do host (~2 s p99
+  no run completo), sem perda de corretude. Doc: `docs/E33A1_HARDENING.md`.
+
+## 23. DEVICE AGENT E3.3A.2 - FINAL BASELINE FIX (2026-11-15)
+
+- Reserva atomica de command_id no controller: INSERT OR IGNORE antes de qualquer send; se nao
+  inseriu, valida binding (agent/device/op) e retorna cached terminal / DUPLICATE_IN_PROGRESS /
+  COMMAND_ID_CONFLICT. `_send_and_wait` nao salva mais; somente inserted=true envia. UUID expirada
+  e reservada terminal (idempotente). Transicoes SQLite estritas (QUEUED->SENT->terminal; sem
+  volta/QUEUED->QUEUED).
+- Superficies: ProvisionActivity/QaActivity apenas no manifest/sourceSet debug (ambas exported=true);
+  release merged sem ambas. Provision nao usa mais referrer como autenticacao; bootstrap ADB debug
+  preservado. Merged manifests debug/release validados.
+- Testes 59/59 (56 controller + 3 manifestos); smoke real .124 PASS: provisioning ADB, PING,
+  1 TAP, mesmo UUID => counter 0->1 e duas respostas success (uma execucao). Benchmark nao repetido
+  (TAP/SWIPE inalterados). Doc: `docs/E33A2_BASELINE_FIX.md`.
+- Status: **E3.3A PRODUCTION BASELINE = FROZEN**.
+
+## 24. E3.4 - ADB PARITY AUDIT (2026-11-15)
+
+- Auditoria read-only de todo o projeto: 55 itens inventariados (31 operacionais). Device Agent cobre
+  TAP/SWIPE/BACK/HOME/START_APP/display/identidade/IP, mas falta a camada de percepcao (UI tree,
+  screenshot, foreground com activity) e lifecycle privilegiado (force-stop/pm clear).
+- Scores: primitivas operacionais 40,3% (9 C/7 P/15 M), hot path 37,5% (16 etapas), chamadas
+  estimadas 21,7% (modelo por ciclo; dump de UI domina e esta 0%). 6 blockers: GET_UI_TREE,
+  FIND_ELEMENT/TAP_ELEMENT, CAPTURE_SCREEN, foreground activity, STOP_APP/force-stop,
+  CLEAR_APP_DATA. Logcat/READ_LOGS e importante com fallback visual; POWER opcional.
+- Viabilidade: UI tree/screenshot via Accessibility (sem root); force-stop/pm clear exigem ADB, root
+  ou device-owner. Bootstrap ADB permanece (install/provision/reverse/discovery/sideload/diagnostico).
+- Nenhuma feature/integracao/alteracao de codigo nesta fase. Artefatos:
+  `docs/E34_ADB_PARITY_AUDIT.md` e `state/device_agents/e34_parity_inventory.json`.
+
+## 25. E3.5 - PERCEPTION PARITY (2026-11-15)
+
+- Agent 0.3: GET_UI_TREE e CAPTURE_SCREEN read-only (Accessibility rootInActiveWindow/
+  takeScreenshot), foreground package+activity/component/window, GET_STATUS estendido
+  (device_time/elapsed/keyguard). Limites de depth/nodes/text/payload, timeout, redaction de senha,
+  rate limits e logs somente de metricas. UsageStats fallback para activity (appop GET_USAGE_STATS).
+- Device .124: UI tree 100/100 (10 nodes, avg 49ms, 3KB); ADB dump 2.36s. CAPTURE 30/30 (1/s),
+  p50 350ms, PNG/SHA/dims corretos e diff 0. 300ms tree sustentavel (3,33/s, 0 falhas; PSS
+  41,7-64MB); CAPTURE 2/s 16/16. Senha redigida; payload 799B/2 nodes truncado.
+- Shadow: MainActivity+reward FULL; AppLovin playable/WebView 13/14 FULL + 1 PARTIAL transitoria,
+  activity/package 14/14, WebView FULL 13/PARTIAL 1, screenshots 15/15 dims e diff medio 0,21.
+  RIDs p50 1.0; bounds de reward/game-field/game-controls exatos; containers full-height diferem
+  por inset de nav bar do uiautomator.
+- Limitacao critica: shadow paralelo impossivel no ROM (uiautomator2/UiAutomation desabilita o
+  AccessibilityService; 136/136 tree failures). Comparacao sequencial/manual sem alterar main/bot;
+  nenhuma acao do Agent. STOP/CLEAR/logcat e FIND_ELEMENT continuam pendentes. Testes 64/64.
+- Docs: `docs/E35_PERCEPTION_PARITY.md`; report: `state/device_agents/e32b/e35_report.json`.
+
+## 26. E3.5B - SHIZUKU PRIVILEGED BRIDGE (2026-11-15)
+
+- Shizuku oficial 13.1.5 API/provider; provider no manifest; bridge com ping/permission/listeners/
+  UserService oficial. READY somente com binder vivo + permissao + UserService + UID 2000.
+- UserService AIDL minimo (getUid/getProcessName/stopApp/clearAppData/destroy), sem shell/argv
+  remoto; comandos internos fixos am force-stop/pm clear com package validado. Controller allowlist
+  + denylist Agent/Shizuku/sistema; CLEAR mutating/dedupe/deadline.
+- Device .124: READY/UID 2000, Shizuku 13.6.0; STOP_APP PASS (333ms, pid/foreground saiu),
+  START_APP PASS, CLEAR_APP_DATA PASS (8.248s, marcador removido/pid encerrado), dedupe fisico 1
+  por UUID, disconnect pos-dispatch e bridge morto => UNCERTAIN sem retry. BINDER_DEAD caps false;
+  Shizuku reiniciado via libshizuku.so --apk=... => READY. Agent/controller restart READY.
+- Permission revoke nao validado (switch do gerenciador nao revogou). Sem logcat/main integration.
+  Regressao 68/68. Docs: `docs/E35B_SHIZUKU_BRIDGE.md`; report `e35b_report.json`.
+
+## 27. E3.6 - DECISION PARITY / SHADOW BOT (2026-11-15)
+
+- Criado `decision_parity_replay.py`: adapters ADB XML/Agent JSON -> NormalizedTree e decision
+  engine host-only reutilizando as funcoes puras de fast-close do main para os DOIS lados.
+  Nenhum clique do Agent; nenhum main_sln_v2 alterado.
+- Fixtures reais: main_reward, ad_applovin, live_ad_0..9 (playable/WebView), store. 14 casos:
+  package 100%, state 100%, candidate 100%, authorization 100%, decision 100%, 0 critical,
+  0 OBSERVE->CLICK, 0 acoes do Agent. Activity 92,9% (store ViewGroup vs TransparentActivity).
+- Detectores MAIN/reward/APPLOVIN/store/session PARITY_PASS. CLOSE_CANDIDATE, SUB_AD_CLOSE,
+  COUNTDOWN, CONSENT, ENDCARD = FIXTURE_MISSING. Screenshots 14/14 dims, diff medio 1,43,
+  classificacao OpenCV igual; IA offline. Testes 76/76.
+- Veredito: **PARITY_PARTIAL / COVERAGE_PENDING**; nao PASS, sem integracao. Doc:
+  `docs/E36_DECISION_PARITY.md`; JSON `state/device_agents/e36_parity.json`.
+
+## 28. E3.6R - REAL DEVICE DECISION PARITY (2026-11-15)
+
+- `e36_real_capture.py` read-only: 300 s de captura real, 552 snapshots (522 success/30 transicoes),
+  tree p50 50,26ms, decision 0,68ms, PSS 63.336KB, shadow_actions=0; QA ADB separado (5 acoes) e
+  reward somente quando clickable/enabled/visible.
+- Fixtures reais: reward, return_main, playable, sub_ad_close, store. SUB_AD_CLOSE real com
+  bounds [958,217,1028,287], ADB/Agent ambos CLICK/authorized, sem clique do Agent.
+- Replay 19 casos: package 100%, activity 94,7% (store ViewGroup benigno), state/candidate/
+  authorization/decision 100%, 0 critical, 0 OBSERVE->CLICK. Faltam CONSENT, COUNTDOWN, ENDCARD,
+  structural/anonymous e rotulo INTERSTITIAL/REWARDED reais.
+- Veredito: **PARITY_PASS_WITH_COVERAGE_PENDING** (criticos PASS, cobertura parcial); sem PASS
+  completo e sem integracao. Testes 79/79. Doc: `docs/E36R_REAL_PARITY.md`; report:
+  `state/device_agents/e36r_report.json`.
+
+## 29. E3.7 - DEVICE BACKEND ABSTRACTION (2026-11-15)
+
+- Criado `device_backend` com `DeviceBackend`, modelos tipados e implementacoes `ADBBackend`
+  (uiautomator2/ADB legado) e `AgentBackend` (controller injetado, sem ADB). Flag
+  `device_backend=adb|agent` e `execution_mode=normal|shadow`; env `SLN_DEVICE_BACKEND` /
+  `SLN_EXECUTION_MODE`. Default adb; Agent sem controller falha explicitamente; sem fallback.
+- Agent shadow bloqueia tap/swipe/back/home/start/stop/clear (`ShadowMutationBlocked`) e propaga
+  UNCERTAIN. Main roteia dump/foreground/screenshot/status e 28 taps, 11 back/home, 8 start,
+  12 stop, swipe de movimento e clear Agent; reset com clear UNCERTAIN nao reexecuta.
+- Equivalencia E3.6 normalizada (containers diferem por inset ADB; bounds do reward exatos).
+  Contrato 7/7; regressao 86/86; compile OK. Smoke real ADB 74 nodes/1080x2280 read-only;
+  Agent 5 nodes/screenshot, 7/7 mutacoes BLOCKED, 0 acoes.
+- Limitacoes: seletores/xpath, `swipe_ext`, power e force-stop periodico ainda u2 direto; sem
+  logcat/eventos; nenhum ciclo completo via Agent. Veredito: **PASS_DEFAULT_ADB_CONTRACT**.
+  Doc: `docs/E37_DEVICE_BACKEND.md`; report: `state/device_agents/e37_report.json`.

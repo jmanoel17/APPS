@@ -285,6 +285,9 @@ DEFAULTS = {
     "dpn_coordinator_tick_s": 1.0,
     "dpn_state_dir": os.path.join("state", "dpn"),
     "dpn_groups_file": "dpn_groups.json",
+    # ===== DEVICE BACKEND ABSTRACTION (default ADB; agent must be opt-in) =====
+    "device_backend": "adb",
+    "execution_mode": "normal",
 }
 
 
@@ -297,6 +300,12 @@ def load_config():
     overlay = _resolve_overlay_file()
     if overlay:
         _merge(_read_json(overlay), cfg)
+    env_backend = os.environ.get("SLN_DEVICE_BACKEND")
+    if env_backend:
+        cfg["device_backend"] = env_backend
+    env_mode = os.environ.get("SLN_EXECUTION_MODE")
+    if env_mode:
+        cfg["execution_mode"] = env_mode
     return cfg
 
 

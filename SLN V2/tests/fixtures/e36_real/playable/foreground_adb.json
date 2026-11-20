@@ -1,0 +1,5 @@
+{
+  "package": "com.flixdigital.dramaclassic",
+  "activity": "com.applovin.adview.AppLovinFullscreenActivity",
+  "component": "com.flixdigital.dramaclassic/com.applovin.adview.AppLovinFullscreenActivity"
+}

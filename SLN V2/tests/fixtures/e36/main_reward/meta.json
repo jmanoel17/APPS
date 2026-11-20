@@ -1,0 +1,33 @@
+{
+  "case": "main_reward",
+  "ad_type": "unknown",
+  "foreground_adb": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.flixdigital.dramaclassic.MainActivity",
+    "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity"
+  },
+  "foreground_agent": {
+    "package": "com.flixdigital.dramaclassic",
+    "activity": "com.flixdigital.dramaclassic.MainActivity",
+    "component": "com.flixdigital.dramaclassic/com.flixdigital.dramaclassic.MainActivity",
+    "window_id": 739,
+    "observed_at_ms": 1794970382037
+  },
+  "display": {
+    "width_px": 1080,
+    "height_px": 2280,
+    "rotation": 0,
+    "density_dpi": 420
+  },
+  "agent_tree_ok": true,
+  "agent_tree_error": "",
+  "agent_capture_ms": 12,
+  "agent_nodes": 10,
+  "adb_xml_bytes": 3693,
+  "adb_png_bytes": 52513,
+  "agent_png_bytes": 52513,
+  "cdp_ms": {
+    "elapsed": 0,
+    "armed": false
+  }
+}
