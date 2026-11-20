@@ -1,8 +1,8 @@
 # CURRENT_STATE.md — SLN V2
 
 > Estado atual + próximos trabalhos. **Atualize este arquivo ao final de toda mudança.**
-> Última atualização: 2026-10-02 — **CYCLE_ACCOUNTING_V2** (§18; COMPLETED **e** FAILED contam 1 ciclo;
-> ABORTED/sem-sessão não). Antes: RESET TREE 5/5 (§17), SUB_AD_CLOSE (§16), Ciclo (§15).
+> Última atualização: 2026-11-20 — **MULTI-APP (SLN_APP_PACKAGE)** + runner `run_apps.py` + wrappers `_backend_*`
+> (bot volta a rodar standalone/ADB). Antes: CYCLE_ACCOUNTING_V2 (§18), RESET TREE 5/5 (§17), SUB_AD_CLOSE (§16).
 
 ## O que está validado e NÃO deve ser redesenhado
 

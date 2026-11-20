@@ -33,14 +33,31 @@ import config_sln_v2 as CONFIG
 # ==================== CONFIG ====================
 SCRIPT_DIR = os.getcwd()
 if not os.path.exists(os.path.join(SCRIPT_DIR, "main_sln_v2.py")):
+    sln_dir = os.path.join(SCRIPT_DIR, "SLN V2")
     parent = os.path.dirname(SCRIPT_DIR)
-    if os.path.exists(os.path.join(parent, "main_sln_v2.py")):
+    if os.path.exists(os.path.join(sln_dir, "main_sln_v2.py")):
+        SCRIPT_DIR = sln_dir
+    elif os.path.exists(os.path.join(parent, "main_sln_v2.py")):
         SCRIPT_DIR = parent
 
 SCRIPTS_MAP = {
     "SLN V2 (main_sln_v2.py)": "main_sln_v2.py",
 }
 DEFAULT_SCRIPT_NAME = "SLN V2 (main_sln_v2.py)"
+
+# Apps suportados pelo bot completo (SLN_APP_PACKAGE). "Todos" roda cada um em sequência
+# via run_apps.py (na raiz do projeto). Chave -> (pacote, label).
+APPS = {
+    "1": ("com.MW.MxMotosV2", "Mx MotosV2"),
+    "2": ("com.flixdigital.dramaclassic", "cas"),
+    "3": ("com.MW.MxPuxouNoGrau", "Puxo No Grau"),
+    "4": ("com.ManecoGames.MxBikesGrau", "Bike Mx"),
+    "5": ("com.Wg.GrauBahia", "Grau Bahia"),
+    "6": ("com.ManecoGames.BikesMilGrau", "Bikes Mil Grau"),
+}
+# Onde ficam os scripts do runner (raiz do projeto).
+ROOT_DIR = SCRIPT_DIR if os.path.exists(os.path.join(SCRIPT_DIR, "run_apps.py")) else os.path.dirname(SCRIPT_DIR)
+RUN_APPS_PATH = os.path.join(ROOT_DIR, "run_apps.py")
 
 GROUPS_FILE = os.path.join(SCRIPT_DIR, "groups.json")
 SCAN_CONFIG_FILE = os.path.join(SCRIPT_DIR, "ip_ranges.json")
@@ -249,6 +266,15 @@ def run_script(device_id):
     safe_id = device_id.replace(":", "_").replace(".", "_")
     log_file = os.path.join(log_dir, f"{safe_id}.log")
 
+    app_keys = selected_apps()
+    if not app_keys:
+        print("[AVISO] Nenhum app selecionado. Marque ao menos um app em 'Apps a rodar'.")
+        return
+    try:
+        cycles = max(1, int(spin_cycles.get() or "1"))
+    except Exception:
+        cycles = 1
+
     def worker():
         # O semáforo controla APENAS o ARRANQUE (Popen + registro + pequena estabilização).
         # O process.wait() roda FORA do semáforo: a quantidade TOTAL de bots rodando não é
@@ -256,17 +282,34 @@ def run_script(device_id):
         f_log = None
         process = None
         try:
-            if not os.path.isfile(script_path):
-                print(f"[ERRO] Script não encontrado: {script_path}")
-                return
-            cmd = ["python", script_path, device_id, "0"]
-            creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
-            # Perfil: injeta SLN_CONFIG_OVERLAY no filho (dev = sem overlay; benchmark = overlay).
-            env = os.environ.copy()
-            overlay = PROFILE_OVERLAYS.get(profile_flag.get("name"), None)
-            if overlay:
-                env["SLN_CONFIG_OVERLAY"] = overlay
+            if len(app_keys) == 1:
+                key = app_keys[0]
+                package, label = APPS[key]
+                if not os.path.isfile(script_path):
+                    print(f"[ERRO] Script não encontrado: {script_path}")
+                    return
+                cmd = [sys.executable, "-u", script_path, device_id, "0"]
+                creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+                # Perfil: injeta SLN_CONFIG_OVERLAY no filho (dev = sem overlay; benchmark = overlay).
+                env = os.environ.copy()
+                overlay = PROFILE_OVERLAYS.get(profile_flag.get("name"), None)
+                if overlay:
+                    env["SLN_CONFIG_OVERLAY"] = overlay
+                else:
+                    env.pop("SLN_CONFIG_OVERLAY", None)
+                env["SLN_APP_PACKAGE"] = package
+                env["SLN_APP_LABEL"] = label
+                env["SLN_TEST_MAX_CYCLES"] = str(cycles)
             else:
+                if not os.path.isfile(RUN_APPS_PATH):
+                    print(f"[ERRO] Runner não encontrado: {RUN_APPS_PATH}")
+                    return
+                cmd = [sys.executable, "-u", RUN_APPS_PATH] + app_keys + [
+                    "--device", device_id, "--cycles", str(cycles), "--delay", "2"]
+                creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+                env = os.environ.copy()
+                env.pop("SLN_APP_PACKAGE", None)
+                env.pop("SLN_APP_LABEL", None)
                 env.pop("SLN_CONFIG_OVERLAY", None)
             START_SEMAPHORE.acquire()
             try:
@@ -275,7 +318,7 @@ def run_script(device_id):
                 f_log.flush()
                 process = subprocess.Popen(
                     cmd, stdout=f_log, stderr=subprocess.STDOUT,
-                    creationflags=creationflags, cwd=SCRIPT_DIR, text=True, env=env
+                    creationflags=creationflags, cwd=ROOT_DIR, text=True, env=env
                 )
                 processos_ativos[device_id] = process
                 last_running_cache.add(device_id)
@@ -1043,6 +1086,45 @@ chk_headless = tk.Checkbutton(
 chk_headless.pack(side="left", padx=5)
 ToolTip(chk_headless, "Marcado: bot roda sem janela (só log em logs/). Desmarcado: ao iniciar o(s) "
                       "aparelho(s) selecionado(s), abre também uma janela de console por aparelho com o log ao vivo.")
+
+# ==================== SELEÇÃO DE APP ====================
+frame_apps = tk.LabelFrame(tab_bots, text="Apps a rodar (marque quais)", padx=8, pady=4)
+frame_apps.pack(pady=4, padx=10, fill="x")
+app_vars = {}
+row = 0
+col = 0
+for key in sorted(APPS, key=int):
+    package, label = APPS[key]
+    var = tk.BooleanVar(value=True)
+    app_vars[key] = var
+    chk = tk.Checkbutton(frame_apps, text=f"{key}. {label}", variable=var,
+                         font=("Arial", 9))
+    chk.grid(row=row, column=col, sticky="w", padx=6, pady=1)
+    col += 1
+    if col >= 3:
+        col = 0
+        row += 1
+chk_all = tk.Checkbutton(frame_apps, text="(de)selecionar todos", font=("Arial", 9, "bold"),
+                         command=lambda: toggle_all_apps())
+chk_all.grid(row=row, column=0, sticky="w", padx=6, pady=2)
+
+
+def toggle_all_apps():
+    value = not all(app_vars[k].get() for k in app_vars)
+    for k in app_vars:
+        app_vars[k].set(value)
+
+
+tk.Label(frame_apps, text="  Ciclos por app:", font=("Arial", 9, "bold")).grid(row=0, column=3, sticky="w", padx=(20, 0))
+spin_cycles = tk.Spinbox(frame_apps, from_=1, to=999, width=5)
+spin_cycles.delete(0, "end")
+spin_cycles.insert(0, "1")
+spin_cycles.grid(row=0, column=4, sticky="w", padx=(0, 10))
+ToolTip(spin_cycles, "Quantos ciclos (assistir anúncio) por app selecionado.")
+
+
+def selected_apps():
+    return [k for k in sorted(APPS, key=int) if app_vars.get(k, None) and app_vars[k].get()]
 
 # Scanner tab
 tab_scan = ttk.Frame(notebook)

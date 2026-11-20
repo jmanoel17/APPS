@@ -69,7 +69,8 @@ try:
 except Exception:
     WORKER_GENERATION = 0
 _t_startup = time.time()
-package = "com.flixdigital.dramaclassic"
+package = os.environ.get("SLN_APP_PACKAGE", "com.flixdigital.dramaclassic")
+app_label = os.environ.get("SLN_APP_LABEL", package)
 rodadas = 0
 d = None
 BACKEND = None
@@ -83,6 +84,56 @@ falhas_consecutivas = 0
 SESS = requests.Session()
 
 cfg = CONFIG.load_config()
+
+
+def _backend_tap(x, y, duration_ms=50):
+    try:
+        if BACKEND is not None:
+            return BACKEND.tap(float(x), float(y), duration_ms=duration_ms)
+        return d.click(float(x), float(y))
+    except Exception:
+        return None
+
+
+def _backend_key(name):
+    try:
+        if BACKEND is not None:
+            fn = getattr(BACKEND, {"back": "back", "home": "home"}.get(name, name), None)
+            if fn is not None:
+                return fn()
+        return d.press(name)
+    except Exception:
+        return None
+
+
+def _backend_start_app(package):
+    try:
+        if BACKEND is not None:
+            return BACKEND.start_app(package)
+        return d.app_start(package)
+    except Exception:
+        return None
+
+
+def _backend_stop_app(package):
+    try:
+        if BACKEND is not None:
+            return BACKEND.stop_app(package)
+        return d.app_stop(package)
+    except Exception:
+        return None
+
+
+def _backend_swipe(x1, y1, x2, y2, duration_ms=300):
+    try:
+        if BACKEND is not None:
+            return BACKEND.swipe(float(x1), float(y1), float(x2), float(y2),
+                                 duration_ms=duration_ms)
+        return d.swipe(float(x1), float(y1), float(x2), float(y2),
+                       duration=float(duration_ms) / 1000.0)
+    except Exception:
+        return None
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ERRORS_DIR = os.path.join(BASE_DIR, cfg.get("errors_dir", "errors"))
@@ -2697,7 +2748,7 @@ def _fc_ler_formato_logcat():
             piso = dev_now - timedelta(seconds=max(0.0, time.perf_counter() - _fc_fmt_session_perf))
         pid_str = ""
         try:
-            pid = subprocess.run(["adb", "-s", device, "shell", "pidof com.flixdigital.dramaclassic"],
+            pid = subprocess.run(["adb", "-s", device, "shell", "pidof " + package],
                                  capture_output=True, text=True, timeout=3).stdout.strip()
             if re.fullmatch(r"\d+", pid):
                 pid_str = f"--pid={pid} "
@@ -3074,7 +3125,7 @@ def _fc_eventos_pid(t0_perf):
     início da sessão (piso device-clock) para não associar REWARD_EARNED/CLICKED de anúncio antigo
     ao anúncio atual. NÃO altera o gate."""
     try:
-        pid = subprocess.run(["adb", "-s", device, "shell", "pidof com.flixdigital.dramaclassic"],
+        pid = subprocess.run(["adb", "-s", device, "shell", "pidof " + package],
                              capture_output=True, text=True, timeout=3).stdout.strip()
         if not re.fullmatch(r"\d+", pid):
             return {}
@@ -4506,7 +4557,7 @@ def processar_home(d):
     except Exception as e:
         log(f"[CONSENT][CAS] erro={type(e).__name__}: {e}")
     for _ in range(3):
-        if d(resourceId="com.flixdigital.dramaclassic:id/btnRewardAds").exists(timeout=1):
+        if d(resourceId=(package + ":id/btnRewardAds")).exists(timeout=1):
             break
         d.swipe_ext("up", 0.3)
         time.sleep(0.5)
@@ -4519,7 +4570,7 @@ def processar_home(d):
     except Exception as e:
         flog(f"[FASTCLOSE][REWARD] before=None source=processar_home erro={type(e).__name__}")
     try:
-        if clicar_coordenada_por_seletor("resource-id", ["com.flixdigital.dramaclassic:id/btnRewardAds"]):
+        if clicar_coordenada_por_seletor("resource-id", [(package + ":id/btnRewardAds")]):
             return True
         if clicar_coordenada_por_seletor("text", ["Assistir anúncio"]):
             return True
@@ -4561,7 +4612,7 @@ def abrir_anuncio_banner(d, max_tries=6, wait_each=6):
             pass
 
         # garante botão visível
-        if not d(resourceId="com.flixdigital.dramaclassic:id/btnRewardAds").exists(timeout=1):
+        if not d(resourceId=(package + ":id/btnRewardAds")).exists(timeout=1):
             _backend_start_app(package)
             time.sleep(1)
             d.swipe_ext("up", 0.3)
@@ -4570,7 +4621,7 @@ def abrir_anuncio_banner(d, max_tries=6, wait_each=6):
         sig_antes = dump_signature()
         log(f"[BANNER] Clique {tent+1}/{max_tries} no botão de anúncio...")
         try:
-            if not clicar_coordenada_por_seletor("resource-id", ["com.flixdigital.dramaclassic:id/btnRewardAds"]):
+            if not clicar_coordenada_por_seletor("resource-id", [(package + ":id/btnRewardAds")]):
                 clicar_coordenada_por_seletor("text", ["Assistir anúncio"])
         except Exception as e:
             log(f"[BANNER] Erro no clique: {e}")
@@ -4934,7 +4985,7 @@ def _hb_mark_dump_end():
 
 if __name__ == '__main__':
     safe_connect(device)
-    set_window_title(f"Dispositivo: {device} | Drama Classic")
+    set_window_title(f"Dispositivo: {device} | {app_label}")
     log(f"[APPLOVIN][CONFIG] legacy={bool(cfg.get('use_legacy_applovin'))} "
         f"fast_close={bool(cfg.get('fast_close_enabled'))} tick={cfg.get('fast_close_tick_ms')}ms "
         f"timeout={cfg.get('applovin_fast_close_timeout_seconds')}s "
