@@ -83,7 +83,7 @@ _IMPORTANT_TAGS = (
     "Exception",
     "BackendError",
     "Limite de",
-    "Não conseguiu abrir anúncio",
+    "conseguiu abrir",
 )
 
 _PAT_FMT = re.compile(r"\[FASTCLOSE\]\[AD_SUMMARY_FORMAT\] format=(\w+).*?network=([\w.]+)")
@@ -94,6 +94,7 @@ _PAT_RWD = re.compile(r"\[FASTCLOSE\]\[REWARD\] before=\S+ after=\S+ delta=([+\-
 _PAT_CMP = re.compile(r"\[QA\]\[CYCLE_COMPLETED\] cycle_id=(\d+) .*?duration_s=([\d.]+)")
 _PAT_FAIL = re.compile(r"\[QA\]\[CYCLE_FAILED\] cycle_id=(\d+)")
 _PAT_START = re.compile(r"\[QA\]\[CYCLE_START\] cycle_id=(\d+)")
+_PAT_NOFILL = re.compile(r"conseguiu abrir an.ncio")
 _PAT_ERR = re.compile(r"\berror\b|\berro\b|exception|traceback")
 
 _FRIENDLY = (
@@ -135,6 +136,7 @@ def run_app(device, package, label, cycles, runtime, mode, log_fn=None):
     env["SLN_APP_LABEL"] = label
     env["SLN_TEST_MAX_CYCLES"] = str(cycles)
     env["SLN_TEST_MAX_RUNTIME_S"] = str(runtime)
+    env["PYTHONIOENCODING"] = "utf-8"
 
     os.makedirs(LOGS, exist_ok=True)
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -160,6 +162,7 @@ def run_app(device, package, label, cycles, runtime, mode, log_fn=None):
 
     ctx = {}
     done = {"n": 0}
+    nofill_aborted = {"v": False}
     last_activity = {"t": time.monotonic()}
     last_report = {"t": time.monotonic()}
 
@@ -193,10 +196,11 @@ def run_app(device, package, label, cycles, runtime, mode, log_fn=None):
         ctx.clear()
 
     try:
-        with open(log_path, "w", encoding="utf-8") as fh:
+        with open(log_path, "w", encoding="utf-8", buffering=1) as fh:
             for line in proc.stdout:
                 line = line.rstrip("\r\n")
                 fh.write(line + "\n")
+                fh.flush()
                 folded = False
                 m = _PAT_START.search(line)
                 if m:
@@ -230,6 +234,16 @@ def run_app(device, package, label, cycles, runtime, mode, log_fn=None):
                     ctx["dur"] = m.group(2)
                     flush_cycle()
                     continue
+                m = _PAT_NOFILL.search(line)
+                if m and done["n"] == 0 and not nofill_aborted["v"]:
+                    nofill_aborted["v"] = True
+                    print("[{}] sem anúncio disponível (no-fill) — encerrando este app e seguindo".format(label))
+                    proc.terminate()
+                    try:
+                        proc.wait(timeout=10)
+                    except subprocess.TimeoutExpired:
+                        proc.kill()
+                    break
                 if not folded and _is_important(line):
                     print("[{}] {}".format(label, _friendly(line)))
                     last_activity["t"] = time.monotonic()
@@ -243,7 +257,9 @@ def run_app(device, package, label, cycles, runtime, mode, log_fn=None):
                 proc.kill()
 
     ok = proc.returncode == 0
-    if done["n"] < cycles:
+    if nofill_aborted["v"]:
+        print("[{}] app sem anúncio — {}/{} (no-fill, pulado)".format(label, done["n"], cycles))
+    elif done["n"] < cycles:
         print("[{}] atenção: fechou só {}/{} anúncio(s) — tempo esgotado ou sem inventário de anúncio".format(
             label, done["n"], cycles))
     print("[{}] concluído ({}/{})".format(label, done["n"], cycles))
