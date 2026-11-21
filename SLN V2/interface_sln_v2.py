@@ -259,9 +259,6 @@ def run_script(device_id):
         print(f"[AVISO] Bot já rodando para {device_id}. Ignorando.")
         return
     headless = headless_flag["on"]
-    selected = combo_scripts.get()
-    script_filename = SCRIPTS_MAP.get(selected, "main_sln_v2.py")
-    script_path = os.path.join(SCRIPT_DIR, script_filename)
     log_dir = LOGS_DIR
     safe_id = device_id.replace(":", "_").replace(".", "_")
     log_file = os.path.join(log_dir, f"{safe_id}.log")
@@ -271,9 +268,23 @@ def run_script(device_id):
         print("[AVISO] Nenhum app selecionado. Marque ao menos um app em 'Apps a rodar'.")
         return
     try:
-        cycles = max(1, int(spin_cycles.get() or "1"))
+        cmin = max(1, int(spin_cycles_min.get() or "5"))
+        cmax = max(1, int(spin_cycles_max.get() or "15"))
     except Exception:
-        cycles = 1
+        cmin, cmax = 5, 15
+    if cmax < cmin:
+        cmin, cmax = cmax, cmin
+    try:
+        kmin = max(1, int(spin_chunk_min.get() or "1"))
+        kmax = max(1, int(spin_chunk_max.get() or "3"))
+    except Exception:
+        kmin, kmax = 1, 3
+    if kmax < kmin:
+        kmin, kmax = kmax, kmin
+    try:
+        rounds = max(0, int(spin_rounds.get() or "0"))
+    except Exception:
+        rounds = 0
 
     def worker():
         # O semáforo controla APENAS o ARRANQUE (Popen + registro + pequena estabilização).
@@ -282,35 +293,21 @@ def run_script(device_id):
         f_log = None
         process = None
         try:
-            if len(app_keys) == 1:
-                key = app_keys[0]
-                package, label = APPS[key]
-                if not os.path.isfile(script_path):
-                    print(f"[ERRO] Script não encontrado: {script_path}")
-                    return
-                cmd = [sys.executable, "-u", script_path, device_id, "0"]
-                creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
-                # Perfil: injeta SLN_CONFIG_OVERLAY no filho (dev = sem overlay; benchmark = overlay).
-                env = os.environ.copy()
-                overlay = PROFILE_OVERLAYS.get(profile_flag.get("name"), None)
-                if overlay:
-                    env["SLN_CONFIG_OVERLAY"] = overlay
-                else:
-                    env.pop("SLN_CONFIG_OVERLAY", None)
-                env["SLN_APP_PACKAGE"] = package
-                env["SLN_APP_LABEL"] = label
-                env["SLN_TEST_MAX_CYCLES"] = str(cycles)
-            else:
-                if not os.path.isfile(RUN_APPS_PATH):
-                    print(f"[ERRO] Runner não encontrado: {RUN_APPS_PATH}")
-                    return
-                cmd = [sys.executable, "-u", RUN_APPS_PATH] + app_keys + [
-                    "--device", device_id, "--cycles", str(cycles), "--delay", "2"]
-                creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
-                env = os.environ.copy()
-                env.pop("SLN_APP_PACKAGE", None)
-                env.pop("SLN_APP_LABEL", None)
-                env.pop("SLN_CONFIG_OVERLAY", None)
+            if not os.path.isfile(RUN_APPS_PATH):
+                print(f"[ERRO] Runner não encontrado: {RUN_APPS_PATH}")
+                return
+            # Rodar cada app em sequência, com ciclos ALEATÓRIOS entre cmin e cmax por app,
+            # até terminar todos os apps selecionados (quem encerra é o próprio runner).
+            cmd = [sys.executable, "-u", RUN_APPS_PATH] + app_keys + [
+                "--device", device_id,
+                "--cycles-min", str(cmin), "--cycles-max", str(cmax),
+                "--chunk-min", str(kmin), "--chunk-max", str(kmax),
+                "--runtime", "0", "--rounds", str(rounds), "--delay", "2"]
+            creationflags = subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0
+            env = os.environ.copy()
+            env.pop("SLN_APP_PACKAGE", None)
+            env.pop("SLN_APP_LABEL", None)
+            env.pop("SLN_CONFIG_OVERLAY", None)
             START_SEMAPHORE.acquire()
             try:
                 f_log = open(log_file, "a", encoding='utf-8')
@@ -1115,12 +1112,36 @@ def toggle_all_apps():
         app_vars[k].set(value)
 
 
-tk.Label(frame_apps, text="  Ciclos por app:", font=("Arial", 9, "bold")).grid(row=0, column=3, sticky="w", padx=(20, 0))
-spin_cycles = tk.Spinbox(frame_apps, from_=1, to=999, width=5)
-spin_cycles.delete(0, "end")
-spin_cycles.insert(0, "1")
-spin_cycles.grid(row=0, column=4, sticky="w", padx=(0, 10))
-ToolTip(spin_cycles, "Quantos ciclos (assistir anúncio) por app selecionado.")
+tk.Label(frame_apps, text="  Anuncios/app (quota):", font=("Arial", 9, "bold")).grid(row=0, column=3, sticky="w", padx=(20, 0))
+spin_cycles_min = tk.Spinbox(frame_apps, from_=1, to=999, width=4)
+spin_cycles_min.delete(0, "end")
+spin_cycles_min.insert(0, "5")
+spin_cycles_min.grid(row=0, column=4, sticky="w", padx=(0, 2))
+tk.Label(frame_apps, text="a", font=("Arial", 9)).grid(row=0, column=5, sticky="w")
+spin_cycles_max = tk.Spinbox(frame_apps, from_=1, to=999, width=4)
+spin_cycles_max.delete(0, "end")
+spin_cycles_max.insert(0, "15")
+spin_cycles_max.grid(row=0, column=6, sticky="w", padx=(2, 14))
+ToolTip(spin_cycles_min, "QUOTA MÍNIMA de anúncios por app em cada grande ciclo. No início do ciclo é sorteada a quota total de cada app (ex.: 10, 12, 15).")
+ToolTip(spin_cycles_max, "QUOTA MÁXIMA de anúncios por app em cada grande ciclo. Ex.: 5 a 15 = cada app sorteia sua quota total entre 5 e 15 anúncios.")
+tk.Label(frame_apps, text="  por passo:", font=("Arial", 9, "bold")).grid(row=0, column=7, sticky="w", padx=(0, 2))
+spin_chunk_min = tk.Spinbox(frame_apps, from_=1, to=99, width=4)
+spin_chunk_min.delete(0, "end")
+spin_chunk_min.insert(0, "1")
+spin_chunk_min.grid(row=0, column=8, sticky="w", padx=(0, 2))
+tk.Label(frame_apps, text="a", font=("Arial", 9)).grid(row=0, column=9, sticky="w")
+spin_chunk_max = tk.Spinbox(frame_apps, from_=1, to=99, width=4)
+spin_chunk_max.delete(0, "end")
+spin_chunk_max.insert(0, "3")
+spin_chunk_max.grid(row=0, column=10, sticky="w", padx=(2, 14))
+ToolTip(spin_chunk_min, "Anúncios MÍNIMOS assistidos por PASS0 dentro da quota. Ex.: quota 10, passo sorteia 2 -> restam 8; repete até zerar.")
+ToolTip(spin_chunk_max, "Anúncios MÁXIMOS assistidos por PASS0. Ex.: 1 a 3 -> a cada passo sorteia quantos assistir, até completar a quota de cada app.")
+tk.Label(frame_apps, text="  Grandes (0=inf):", font=("Arial", 9, "bold")).grid(row=0, column=11, sticky="w", padx=(20, 0))
+spin_rounds = tk.Spinbox(frame_apps, from_=0, to=999, width=4)
+spin_rounds.delete(0, "end")
+spin_rounds.insert(0, "0")
+spin_rounds.grid(row=0, column=12, sticky="w", padx=(0, 10))
+ToolTip(spin_rounds, "0 = loop infinito: após todos os apps completarem suas quotas, faz RESET DE ID (pm clear) e sorteia novas quotas. 1+ = número fixo de grandes ciclos.")
 
 
 def selected_apps():
