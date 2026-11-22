@@ -28,6 +28,10 @@ class DPNProvider:
     def reset_node(self):
         raise NotImplementedError
 
+    def refresh_route_set(self):
+        """Refresh tunnel/route set. Semantically NOT reset_node; may be async."""
+        return False
+
     def health(self):
         raise NotImplementedError
 
@@ -55,6 +59,7 @@ class FakeDPNProvider(DPNProvider):
         self._reset_seq = list(reset_sequence) if reset_sequence else None
         self.rotate_calls = 0
         self.reset_calls = 0
+        self.refresh_calls = 0
 
     # ---- leitura ----
     def get_public_ip(self):
@@ -76,6 +81,13 @@ class FakeDPNProvider(DPNProvider):
         if self._i + 1 < len(self._seq):
             self._i += 1
         return True
+
+    def refresh_route_set(self):
+        self.refresh_calls += 1
+        return True
+
+    def get_candidates(self):
+        return [{"public_ip": ip, "tunnel_code": self._node_id} for ip in self._seq]
 
     def reset_node(self):
         self.reset_calls += 1

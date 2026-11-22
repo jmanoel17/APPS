@@ -473,8 +473,12 @@ class DeeperConnectProvider(DPNProvider):
             return RotationResult(RotationStatus.OK, str(current), None,
                                   self.tunnel_code, "requested")
 
+    def refresh_route_set(self):
+        """Semantically refreshTunnel, never reset_node; may be asynchronous."""
+        return self._refresh_tunnel()
+
     def reset_node(self):
-        # Decisão congelada: NÃO usar reboot/addTunnel/refreshTunnel como "reset node".
+        # Decis�o congelada: N�O usar reboot/addTunnel/refreshTunnel como "reset node".
         raise ProviderNotImplemented("NO_NODE_RESET_ENDPOINT")
 
     def close(self):

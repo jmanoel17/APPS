@@ -86,6 +86,34 @@ def publish_safe(sd, dpn_id, device, instance_id=None, cycle_id=None, now=None):
                             "last_seen": (now if now is not None else time.time())})
 
 
+def v2_enabled(cfg=None):
+    cfg = cfg or _cfg()
+    return bool(cfg.get("dpn_group_ledger_v2_enabled", False))
+
+
+def resolve_route_group(device, cfg=None):
+    from .group_ledger import route_groups_from_config
+    for gid, grp in route_groups_from_config(load_groups(cfg)).items():
+        if device in (grp.get("members") or []):
+            return gid
+    return None
+
+
+def _group_state(cfg, group_id):
+    from .group_ledger import GroupLedgerStore
+    return GroupLedgerStore(state_dir(cfg)).load().get("groups", {}).get(group_id) or {}
+
+
+def _publish_group_safe(sd, group_id, device, instance_id, cycle_id, cfg):
+    from .group_ledger import GroupSignalBarrier, route_groups_from_config
+    grp = route_groups_from_config(load_groups(cfg)).get(group_id) or {}
+    try:
+        GroupSignalBarrier(sd, group_id, grp.get("members") or [device]).publish_safe(
+            device, instance_id=instance_id, cycle_id=cycle_id)
+    except Exception:
+        pass
+
+
 def gate(device, instance_id=None, cycle_id=None, cfg=None):
     """True = pode iniciar NOVO ciclo; False = DPN bloqueia (o caller deve esperar/continuar).
 
@@ -94,10 +122,22 @@ def gate(device, instance_id=None, cycle_id=None, cfg=None):
     cfg = cfg or _cfg()
     if not cfg.get("dpn_routing_enabled", False):
         return True
+    sd = state_dir(cfg)
+    if v2_enabled(cfg):
+        group_id = resolve_route_group(device, cfg)
+        if not group_id:
+            return True
+        g = _group_state(cfg, group_id)
+        from .group_ledger import BLOCK_STATES as V2_BLOCK
+        limit = int(cfg.get("dpn_work_units_per_ip", 20) or 20)
+        blocked = g.get("state") in V2_BLOCK or int(g.get("accepted_work_units", 0)) >= limit
+        if blocked:
+            _publish_group_safe(sd, group_id, device, instance_id, cycle_id, cfg)
+            return False
+        return True
     dpn_id = resolve_dpn(device, cfg)
     if not dpn_id:
         return True
-    sd = state_dir(cfg)
     st = S.read_dpn_state(sd, dpn_id)
     if st.get("state") in BLOCK_STATES:
         try:
@@ -115,11 +155,24 @@ def on_terminal_cycle(device_id, instance_id, cycle_id, result, cfg=None):
         return None
     if result not in ("COMPLETED", "FAILED"):
         return None
+    sd = state_dir(cfg)
+    if v2_enabled(cfg):
+        group_id = resolve_route_group(device_id, cfg)
+        if not group_id:
+            return None
+        from .group_ledger import GroupLedgerStore, make_work_unit_event
+        ev = make_work_unit_event(
+            cfg.get("host_id") or os.environ.get("SLN_HOST_ID") or "host",
+            instance_id, device_id, cycle_id, result,
+            app_package=os.environ.get("SLN_APP_PACKAGE", ""),
+            route_group_id=group_id, source="worker")
+        ev["accepted_for_epoch_quota"] = None
+        GroupLedgerStore(sd).append_inbox(ev)
+        return ev
     dpn_id = resolve_dpn(device_id, cfg)
     if not dpn_id:
         return None
     limit = int(cfg.get("dpn_work_units_per_ip", 20) or 20)
-    sd = state_dir(cfg)
     r = S.account_cycle(sd, dpn_id, device_id, limit, cycle_id=cycle_id,
                         instance_id=instance_id, result=result)
     try:

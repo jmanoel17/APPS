@@ -225,6 +225,7 @@ profile_flag = {"name": "dev"}    # espelho thread-safe do perfil (lido pelos wo
 PROFILE_OVERLAYS = {
     "dev": None,
     "benchmark": "config_benchmark_sln_v2.json",
+    "e38b": "config_e38b_hidden_controls.json",
 }
 console_viewers = {}              # device_id -> Popen da janela de console
 
@@ -1231,6 +1232,8 @@ tk.Button(_dpn_bar, text="Rotacionar agora", command=lambda: _dpn_publish("rotat
           bg="#1565c0", fg="white").pack(side="left", padx=3)
 tk.Button(_dpn_bar, text="Resetar nó", command=lambda: _dpn_publish("reset_node_now"),
           bg="#c62828", fg="white").pack(side="left", padx=3)
+tk.Button(_dpn_bar, text="Refresh Rotas", command=lambda: _dpn_publish("refresh_routes_now"),
+          bg="#6a1b9a", fg="white").pack(side="left", padx=3)
 tk.Button(_dpn_bar, text="Iniciar Coordinator", command=_dpn_start_coordinator).pack(side="right", padx=3)
 tk.Button(_dpn_bar, text="Abrir Logs", command=_dpn_open_logs).pack(side="right", padx=3)
 
@@ -1322,4 +1325,40 @@ atualizar_lista()
 threading.Thread(target=monitor_devices_loop, daemon=True).start()
 threading.Thread(target=iniciar_com_sucesso, args=(scan_inicial_rede,), daemon=True).start()
 
+def _ui_autostart_e38b():
+    """Optional test hook: start one device through the normal interface worker."""
+    req = os.environ.get("SLN_UI_AUTOSTART_DEVICE", "").strip()
+    if not req:
+        return
+    prof = os.environ.get("SLN_UI_AUTOSTART_PROFILE", "").strip()
+    if prof in PROFILE_OVERLAYS:
+        combo_profile.set(prof)
+        profile_flag.update(name=prof)
+        print(f"[UI][AUTOSTART] profile={prof}")
+    apps_req = [x.strip() for x in os.environ.get("SLN_UI_AUTOSTART_APPS", "").split(",") if x.strip()]
+    if apps_req:
+        for k in app_vars:
+            app_vars[k].set(k in apps_req)
+        print(f"[UI][AUTOSTART] apps={apps_req}")
+    cycles_req = os.environ.get("SLN_UI_AUTOSTART_CYCLES", "").strip()
+    if cycles_req:
+        spin_cycles.delete(0, "end")
+        spin_cycles.insert(0, cycles_req)
+        print(f"[UI][AUTOSTART] cycles={cycles_req}")
+
+    def pick():
+        for i in range(lista_dispositivos.size()):
+            text = lista_dispositivos.get(i)
+            if req in text and "Nenhum" not in text:
+                lista_dispositivos.selection_clear(0, tk.END)
+                lista_dispositivos.selection_set(i)
+                print(f"[UI][AUTOSTART] device={req} starting")
+                iniciar_bot()
+                return
+        janela.after(2000, pick)
+
+    janela.after(3000, pick)
+
+
+janela.after(1000, _ui_autostart_e38b)
 janela.mainloop()

@@ -41,6 +41,7 @@ import uiautomator2 as u2
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config_sln_v2 as CONFIG
 from device_backend import make_backend, BackendError
+import hidden_controls as HIDDEN_CONTROLS
 
 _cv2 = None
 _np = None
@@ -75,6 +76,53 @@ rodadas = 0
 d = None
 BACKEND = None
 AGENT_BRIDGE = None
+
+
+def _backend_tap(x, y):
+    if BACKEND is not None:
+        return BACKEND.tap(x, y, 50).ok
+    d.click(float(x), float(y))
+    return True
+
+
+def _backend_key(key):
+    if BACKEND is not None and key in ("back", "home"):
+        return getattr(BACKEND, key)().ok
+    d.press(key)
+    return True
+
+
+def _backend_start_app(package_name):
+    if BACKEND is not None:
+        return BACKEND.start_app(package_name).ok
+    d.app_start(package_name)
+    return True
+
+
+def _backend_stop_app(package_name):
+    if BACKEND is not None and BACKEND.name == "agent":
+        return BACKEND.stop_app(package_name).ok
+    d.app_stop(package_name)
+    return True
+
+
+def _backend_swipe(x1, y1, x2, y2, duration_ms=500):
+    if BACKEND is not None:
+        return BACKEND.swipe(x1, y1, x2, y2, duration_ms).ok
+    d.swipe(float(x1), float(y1), float(x2), float(y2),
+            duration=float(duration_ms) / 1000.0)
+    return True
+
+
+def _e38_legacy_adb(operation, reason, n=1):
+    """Count explicit ADB subprocess reads that intentionally remain outside DeviceBackend."""
+    try:
+        from device_backend.e38_telemetry import get_telemetry
+        get_telemetry().record_legacy(operation, reason, mutation=False, adb=True, adb_count=n)
+    except Exception:
+        pass
+
+
 qtd_reset = 0
 total_ads = 0
 total_installs = 0
@@ -680,6 +728,7 @@ def screenshot_bytes():
         if BACKEND is None:
             try:
                 perf_inc("adb_subprocess_count")
+                _e38_legacy_adb("screencap_fallback", "legacy_screenshot_fallback", 1)
                 png = subprocess.check_output(f'adb -s {device} exec-out screencap -p', shell=True, timeout=10)
             except Exception:
                 png = None
@@ -1486,6 +1535,7 @@ class _FastCloseAdState:
         self.dump_ms = []
         self.ex = None   # estado do EXPERIMENTO top_control (None = desligado)
         self.flow = None  # fluxo VIDEO -> SKIP -> ENDCARD (None = desligado)
+        self.hc = HIDDEN_CONTROLS.HiddenControlsTracker(cfg, flog)
 
 
 def _fc_bounds(node):
@@ -1643,6 +1693,152 @@ def _fc_ponto_reveal(an, w, h):
     return None
 
 
+def _fc_hc_candidate(best):
+    if not best:
+        return None
+    return {"source": best.get("src"), "id": best.get("id"),
+            "desc": best.get("desc"), "text": best.get("text"),
+            "bounds": best.get("bounds"), "center": [best.get("cx"), best.get("cy")]}
+
+
+def _fc_hc_stage(st):
+    return str(((st.flow or {}).get("phase") or "applovin"))
+
+
+def _fc_hc_cycle_id():
+    try:
+        if _cycle is not None and _cycle.active:
+            return int(_cycle.cycle_id)
+    except Exception:
+        pass
+    return 0
+
+
+def _fc_hc_tap(x, y):
+    if BACKEND is not None:
+        r = BACKEND.tap(x, y, 50)
+        return {"status": r.status, "command_id": r.command_id, "error": r.error}
+    d.click(float(x), float(y))
+    return {"status": "success", "command_id": "", "error": ""}
+
+
+def _fc_hc_event(event):
+    try:
+        import device_backend.e38b_telemetry as T
+        T.record(event)
+    except Exception:
+        pass
+
+
+def _fc_hc_has_ui_control(an, w, h):
+    """Conservative history: a small clickable/CTA control proves this creative has UI chrome."""
+    if not bool(cfg.get("hidden_controls_use_ui_control_history", True)):
+        return False
+    max_area = 0.35 * w * h
+    for n in (an or {}).get("nodes", []):
+        b = _fc_bounds(n)
+        if not b:
+            continue
+        area = (b[2] - b[0]) * (b[3] - b[1])
+        if n.attrib.get("clickable") == "true" and area < max_area:
+            return True
+        if area < max_area and HIDDEN_CONTROLS.CTA_RE.search(
+                " ".join((n.attrib.get("resource-id", ""), n.attrib.get("text", ""),
+                          n.attrib.get("content-desc", "")))):
+            return True
+    return False
+
+
+def _fc_hidden_controls_update(st, an, root, raw, w, h, t, t0, best, allow_reveal=True):
+    """One watcher tick of E3.8B. handled=True only when reveal/observation owns this tick."""
+    if not bool(cfg.get("fast_close_hidden_controls_reveal_enabled", False)) or st.flow is None:
+        return {"handled": False}
+    fl = st.flow
+    sub = _fc_detectar_subad_close(root, w, h)
+    cb = _fc_find_close_btn(an, w, h)
+    cd_state = str((fl.get("cd") or {}).get("state") or "unknown")
+    countdown_visible = cd_state in ("candidate", "active", "ending", "completed")
+    visible = bool(best) or bool(sub.get("found")) or bool(cb and cb.get("onscreen")) or countdown_visible
+    evidence = bool(best) or bool(sub.get("found")) or cb is not None or countdown_visible
+    if evidence:
+        st.hc.mark_control(t)
+    elif _fc_hc_has_ui_control(an, w, h):
+        # CTA/chrome is historical evidence, not a visible close control: do not reset the
+        # hidden-controls absence clock.
+        st.hc.controls_seen = True
+    phase = str(fl.get("phase") or "")
+    transition = phase in ("skipping_to_endcard", "closing_endcard", "endcard",
+                           "store_after_skip")
+    eligible = bool(allow_reveal and not visible and not transition
+                    and cd_state in ("unknown", "lost")
+                    and not fl.get("reveal_waiting")
+                    and not fl.get("subad_pending")
+                    and not fl.get("store_after_skip"))
+    pt = {"safe": False, "reason": "not_evaluated"}
+    if allow_reveal and not visible:
+        pt = HIDDEN_CONTROLS.choose_reveal_point(an, w, h, cfg)
+    decision = st.hc.observe(_fc_hc_stage(st), t, visible, eligible, raw,
+                             _fc_hc_candidate(best), safe_point=pt.get("safe", False))
+    action = decision.get("action")
+    if action == "REVEAL":
+        x, y = pt["x"], pt["y"]
+        _fc_salvar_artefato(st, "hidden_controls_before", raw)
+        res = _fc_hc_tap(x, y)
+        st.hc.on_tap_result(res.get("status"), res.get("command_id"))
+        age = (t - st.hc.hidden_since) if st.hc.hidden_since is not None else 0.0
+        fg = ""
+        try:
+            cur = cur_app()
+            fg = "%s/%s" % (cur.get("package", ""), cur.get("activity", ""))
+        except Exception:
+            pass
+        event = {"event": "reveal", "cycle_id": _fc_hc_cycle_id(),
+                 "stage": _fc_hc_stage(st), "attempt": st.hc.attempts,
+                 "reason": decision.get("reason"), "x": x, "y": y,
+                 "foreground": fg, "elapsed_without_controls": round(age, 2),
+                 "command_id": res.get("command_id", ""), "result": res.get("status"),
+                 "error": res.get("error", ""), "before_tree_hash": st.hc.before_hash,
+                 "candidate_before": st.hc.before_candidate, "safe_reason": pt.get("reason")}
+        _fc_hc_event(event)
+        flog("[FAST_CLOSE][REVEAL_CONTROLS] cycle_id=%d stage=%s attempt=%d reason=%s x=%d y=%d "
+             "foreground=%s elapsed_without_controls=%.2fs command_id=%s result=%s" % (
+                 event["cycle_id"], event["stage"], event["attempt"], event["reason"], x, y,
+                 fg or "-", age, event["command_id"] or "-", event["result"]))
+        st.last_action, st.last_action_at = "reveal_controls", t
+        return {"handled": True, "action": action, "tap": res}
+    if action in ("REVEAL_SUCCESS", "REVEAL_NO_EFFECT"):
+        after_hash = HIDDEN_CONTROLS.tree_hash(raw)
+        out = st.hc.result_after(action == "REVEAL_SUCCESS", after_hash,
+                                 _fc_hc_candidate(best),
+                                 round((t - st.hc.last_control_at) * 1000, 0)
+                                 if st.hc.last_control_at else None)
+        _fc_salvar_artefato(st, "hidden_controls_after_reveal", raw)
+        if action == "REVEAL_SUCCESS":
+            _fc_salvar_artefato(st, "hidden_controls_after", raw)
+        _fc_hc_event({"event": "result", "cycle_id": _fc_hc_cycle_id(),
+                      "stage": _fc_hc_stage(st), "result": out["result"],
+                      "controls_reappeared": out["controls_reappeared"],
+                      "candidate_after": out["candidate_after"],
+                      "before_tree_hash": out["before_tree_hash"],
+                      "after_tree_hash": out["after_tree_hash"],
+                      "time_to_controls_ms": out["time_to_controls_ms"]})
+        flog("[FAST_CLOSE][REVEAL_RESULT] controls_reappeared=%s candidate=%s time_ms=%s" % (
+            str(out["controls_reappeared"]).lower(),
+            (out["candidate_after"] or {}).get("id", "-"),
+            out["time_to_controls_ms"]))
+        return {"handled": action == "REVEAL_SUCCESS", "action": action, "result": out}
+    if action == "REVEAL_PENDING":
+        return {"handled": True, "action": action, "reason": decision.get("reason")}
+    if action in ("BLOCKED_UNCERTAIN", "BLOCKED_MAX"):
+        return {"handled": True, "action": action, "reason": decision.get("reason")}
+    if action == "NONE" and decision.get("reason") in ("NO_SAFE_POINT", "NO_HISTORY"):
+        last = getattr(st, "_hc_skip_reason", None)
+        if last != decision.get("reason"):
+            st._hc_skip_reason = decision.get("reason")
+            flog("[FAST_CLOSE][REVEAL_CONTROLS_SKIPPED] reason=%s" % decision.get("reason"))
+    return {"handled": False, "action": action, "reason": decision.get("reason")}
+
+
 def _fc_salvar_artefato(st, evento, raw_xml=None, prefixo="fastclose"):
     """PNG + XML em errors/ (ANTES de qualquer force-stop/escape). Limitado por evento/anúncio."""
     if not cfg.get("save_errors", True):
@@ -1762,8 +1958,10 @@ def _fc_bloqueadores(an, w, h):
         if not b:
             continue
         area = (b[2] - b[0]) * (b[3] - b[1])
+        # CTA text only blocks on a button-like area. A full-screen video/error label
+        # ("Não foi possível abrir a mídia") must not hide the entire top reveal band.
         if ((n.attrib.get("clickable") == "true" and area < _FC_BLOCKER_MAX_AREA * area_tela)
-                or _FC_CTA_RE.search(_fc_palavras(n))):
+                or (area < _FC_BLOCKER_MAX_AREA * area_tela and _FC_CTA_RE.search(_fc_palavras(n)))):
             blockers.append(b)
     return blockers
 
@@ -2738,6 +2936,7 @@ def _fc_ler_formato_logcat():
     t0 = time.perf_counter()
     perf_inc("format_lookup_count")
     perf_inc("adb_subprocess_count", 3)   # date + pidof + logcat
+    _e38_legacy_adb("logcat_format_bundle", "format_logcat_read", 3)
     piso = None
     try:
         agora = subprocess.run(["adb", "-s", device, "shell", "date '+%m-%d %H:%M:%S'"],
@@ -3136,6 +3335,7 @@ def _fc_eventos_pid(t0_perf):
     except Exception as e:
         return {"error": type(e).__name__}
     perf_inc("adb_subprocess_count", 3)   # pidof + date + logcat
+    _e38_legacy_adb("logcat_events_bundle", "events_logcat_read", 3)
     piso = None
     if _fc_fmt_session_perf is not None and agora:
         try:
@@ -3542,6 +3742,19 @@ def fast_close_watcher_applovin(tipo_future=None, tipo_inicial=("unknown", "", "
                     fl_handled, fl_skip = _fc_fluxo_applovin(st, an, root, raw, w, h, t_parse, t0, armed, ad_type)
                     skip_sleep = skip_sleep or fl_skip
                     _fc_diag_rewarded_sem_countdown(st, an, w, h, raw, t_parse, t0, ad_type)
+                hc_res = _fc_hidden_controls_update(
+                    st, an, root, raw, w, h, t_parse, t0, best,
+                    allow_reveal=(not fl_handled and not best))
+                if hc_res.get("handled"):
+                    st.history.append({
+                        "n": n, "t": f"{el:.2f}", "dump": int(dump_ms), "state": state,
+                        "x": bool(best), "cands": len(an["cands"]), "armed": armed,
+                        "miss": st.x_miss_count, "transient": st.transient_x_mode,
+                        "action": "hc:" + str(hc_res.get("action"))})
+                    prev_state = state
+                    if not skip_sleep:
+                        _fc_dormir(ts, _fc_tick_eff(st, ad_type, tick_s, burst))
+                    continue
                 if fl_handled:
                     pass  # endcard / ação do fluxo neste tick: X genérico e transient não rodam
                 elif best:

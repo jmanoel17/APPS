@@ -36,6 +36,7 @@ from dpn.coordinator import DPNCoordinator
 from dpn.barrier import SignalBarrier
 from dpn.provider_factory import build_provider, UnknownProviderError
 from dpn.locks import InterProcessFileLock
+from dpn.console_log import DPNConsoleLog
 
 HOST_LOCK = "coordinator_host.lock"
 
@@ -74,6 +75,9 @@ class Runner:
         self._lock = threading.Lock()
         self._access_cache = {}
         self._access_refresh_s = float(self.cfg.get("dpn_status_access_refresh_s", 15) or 15)
+        self.console_log = DPNConsoleLog(
+            base_dir, enabled=bool(self.cfg.get("dpn_console_log_enabled", True)),
+            log_fn=self.log)
         self._agent_hub = None
         self._owns_hub = False
         os.makedirs(self.state_dir, exist_ok=True)
@@ -126,6 +130,8 @@ class Runner:
         self.log("[DPN][HUB] agents_online=%d/%d" % (online, len(want)))
 
     def _build(self):
+        if bool(self.cfg.get("dpn_group_ledger_v2_enabled", False)):
+            return self._build_v2()
         limit = int(self.cfg.get("dpn_work_units_per_ip", 20) or 20)
         for dpn_id, grp in self.groups.items():
             if str(dpn_id).startswith("_"):
@@ -169,12 +175,57 @@ class Runner:
                 self._errs[dpn_id] = "reconcile:%s" % type(e).__name__
             self.dpns[dpn_id] = entry
 
+    def _build_v2(self):
+        from dpn.group_ledger import (GroupLedgerCoordinator, GroupLedgerStore,
+                                      GroupSignalBarrier, route_groups_from_config)
+        from dpn.availability import NullAvailabilityProbe
+        store = GroupLedgerStore(self.state_dir)
+        for gid, grp in route_groups_from_config(self.groups).items():
+            if not grp.get("enabled", True):
+                continue
+            controller = grp.get("controller") or {}
+            try:
+                provider = build_provider(grp.get("provider"), controller,
+                                          dpn_id=grp.get("controller_id") or gid,
+                                          agent_hub=self._agent_hub)
+                barrier = GroupSignalBarrier(self.state_dir, gid, grp.get("members") or [],
+                                             alive_fn=self.alive_fn, now_fn=self.now_fn)
+                coord = GroupLedgerCoordinator(
+                    self.state_dir, grp, provider, self.cfg, store=store,
+                    barrier=barrier, probe=NullAvailabilityProbe(),
+                    now_fn=self.now_fn, sleep_fn=time.sleep, log_fn=self.log,
+                    console_log_fn=self._console_emit)
+                self.dpns[gid] = {"dpn_id": gid, "v2": True, "group": grp,
+                                  "coord": coord, "provider": provider,
+                                  "barrier": barrier, "devices": grp.get("members") or [],
+                                  "error": None}
+            except Exception as e:
+                self.dpns[gid] = {"dpn_id": gid, "v2": True, "group": grp,
+                                  "error": "provider_build:%s" % type(e).__name__}
+                self._errs[gid] = self.dpns[gid]["error"]
+                self.log("[DPN][ERROR] group=%s provider=%s" % (gid, type(e).__name__))
+
     # ---- ticks ----
+    def _console_emit(self, group_id, members, event, **fields):
+        try:
+            self.console_log.emit(group_id, members, event, **fields)
+        except Exception:
+            pass
+
     def _track(self, dpn_id):
         cur = S.read_dpn_state(self.state_dir, dpn_id).get("state")
         if self._prev.get(dpn_id) != cur:
             self._prev[dpn_id] = cur
             self._last_trans[dpn_id] = self.now_fn()
+            try:
+                e = self.dpns.get(dpn_id) or {}
+                st = S.read_dpn_state(self.state_dir, dpn_id)
+                self._console_emit(
+                    dpn_id, e.get("devices") or [], "STATE", state=cur,
+                    ip=st.get("current_ip"), units=st.get("current_ip_work_units"),
+                    limit=int(self.cfg.get("dpn_work_units_per_ip", 20) or 20))
+            except Exception:
+                pass
 
     def tick_one(self, dpn_id):
         e = self.dpns.get(dpn_id)
@@ -182,7 +233,8 @@ class Runner:
             return
         try:
             e["coord"].tick()
-            self._track(dpn_id)
+            if not e.get("v2"):
+                self._track(dpn_id)
             with self._lock:
                 self._errs.pop(dpn_id, None)
         except Exception as ex:
@@ -243,6 +295,8 @@ class Runner:
         with self._lock:
             errs = dict(self._errs)
         limit = int(self.cfg.get("dpn_work_units_per_ip", 20) or 20)
+        if any(e.get("v2") for e in self.dpns.values()):
+            return self._snapshot_v2(errs, limit)
         dpns = {}
         for dpn_id, e in self.dpns.items():
             if "coord" not in e:
@@ -286,6 +340,26 @@ class Runner:
         return {"updated_at": self.now_fn(), "runner_pid": os.getpid(),
                 "host_id": host_id(self.cfg), "dpns": dpns}
 
+    def _snapshot_v2(self, errs, limit):
+        dpns = {}
+        for gid, e in self.dpns.items():
+            c = e.get("coord")
+            if c is None:
+                dpns[gid] = {"state": "ERROR", "current_ip": None, "work_units": 0,
+                             "limit": limit, "last_error": e.get("error"),
+                             "group_id": gid, "v2": True}
+                continue
+            s = c.snapshot()
+            s.update({"node_id": None, "work_units": s.get("accepted_work_units", 0),
+                      "limit": limit, "duplicate_rotations": 0,
+                      "last_error": errs.get(gid) or s.get("last_error"),
+                      "tunnels": [], "smart_devices": [], "disabled_devices": [],
+                      "blackhole_devices": [], "totals": {"online": 0, "total": 0},
+                      "v2": True})
+            dpns[gid] = s
+        return {"updated_at": self.now_fn(), "runner_pid": os.getpid(),
+                "host_id": host_id(self.cfg), "dpns": dpns}
+
     def publish_status(self):
         S.atomic_write_json(os.path.join(self.state_dir, "status.json"), self.snapshot())
 
@@ -303,6 +377,20 @@ class Runner:
         if not e or "coord" not in e:
             raise ValueError("unknown dpn %r" % (dpn_id,))
         c = e["coord"]
+        if e.get("v2"):
+            if action == "pause":
+                c.pause()
+            elif action == "resume":
+                c.resume()
+            elif action == "rotate_now":
+                c.rotate_now()
+            elif action == "refresh_routes_now":
+                c.refresh_routes_now()
+            elif action == "reset_node_now":
+                c.reset_node_now()
+            else:
+                raise ValueError("invalid action %r" % (action,))
+            return
         if action == "pause":
             c.pause()
         elif action == "resume":
@@ -381,6 +469,9 @@ class Runner:
     def run(self, duration=0, use_threads=True):
         stop = threading.Event()
         threads = []
+        v2_mode = any(e.get("v2") for e in self.dpns.values())
+        if v2_mode:
+            use_threads = False
         if use_threads:
             for dpn_id, e in self.dpns.items():
                 if "coord" in e:
@@ -392,6 +483,11 @@ class Runner:
             while not stop.is_set():
                 if duration and (time.time() - t0) >= duration:
                     break
+                if not use_threads:
+                    try:
+                        self.step_all()
+                    except Exception as ex:
+                        self.log("[DPN][ERROR] tick %s: %s" % (type(ex).__name__, ex))
                 try:
                     self.process_commands()
                 except Exception as ex:

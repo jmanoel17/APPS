@@ -169,3 +169,20 @@ Explicar abaixo está o que cada etapa significa: observar sem tocar, medir ante
   MAIN confirmada é que completa (ver `ad_session.py`).
 - Não cobre o compact ">|" (VISIBLE_NOT_IN_XML; o reveal resolve) nem a variante ALRTB
   `resource-id=close_button`. Não usar o XPath `content/FrameLayout` como botão (é container).
+
+
+## MULTI-APP / RUN_APPS
+
+- `main_sln_v2.py` usa `SLN_APP_PACKAGE` (default `com.flixdigital.dramaclassic`) e
+  `SLN_APP_LABEL`. Nao hardcodar novo package: use a env e mantenha o default.
+- Apps atuais: `1` Mx MotosV2, `2` cas (`com.flixdigital.dramaclassic`), `3` Puxo No Grau,
+  `4` Bike Mx, `5` Grau Bahia, `6` Bikes Mil Grau.
+- Interface: "Apps a rodar" marca todos por default; **1 app** roda `main_sln_v2.py` direto;
+  **2+** usam `run_apps.py` (raiz do repo). "Anuncios/app" e "por passo" sao quota/passo
+  aleatorios; `Grandes=0` e loop infinito com reset de ID entre grandes ciclos.
+- `run_apps.py` aceita chaves/package/label/`all`, `--cycles-min/max`, `--chunk-min/max`,
+  `--rounds`, `--runtime`, `--delay`, `--mode`, `--list`. Logs em
+  `logs/apps_<package>_<timestamp>.log`; no-fill aborta cedo; watchdog de 60s no 1o anuncio.
+- Console do bot fecha quando o processo termina (limite/quota/falha), nao por crash automatico;
+  `Headless` desmarcado abre console por device.
+- `auto_reward.py` e helper de abertura/clique no botao 1, nao substitui o bot completo.

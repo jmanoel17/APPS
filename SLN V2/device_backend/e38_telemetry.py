@@ -116,12 +116,12 @@ class E38Telemetry:
         if need_save:
             self.save()
 
-    def record_legacy(self, operation, reason, mutation=False, adb=False):
+    def record_legacy(self, operation, reason, mutation=False, adb=False, adb_count=None):
         callsite = _callsite()
         with self.lock:
             self.data["legacy_mutations" if mutation else "legacy_reads"] += 1
             if adb:
-                self.data["adb_subprocesses"] += 1
+                self.data["adb_subprocesses"] += int(adb_count or 1)
             rec = {"operation": str(operation), "callsite": callsite,
                    "reason": str(reason), "mutation": bool(mutation), "adb": bool(adb)}
             self.data["legacy_fallbacks"].append(rec)

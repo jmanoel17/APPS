@@ -571,3 +571,56 @@ RESET forçado em `.124`: `pm clear` `Success` em 844 ms, `total_reset_cycle_ms=
 - Limitacoes: seletores/xpath, `swipe_ext`, power e force-stop periodico ainda u2 direto; sem
   logcat/eventos; nenhum ciclo completo via Agent. Veredito: **PASS_DEFAULT_ADB_CONTRACT**.
   Doc: `docs/E37_DEVICE_BACKEND.md`; report: `state/device_agents/e37_report.json`.
+
+## 30. E3.8 - AGENT FULL CYCLE (2026-11-20)
+
+- Perfil `config_e38_agent_single.json` (`agent/live`), 1 device, max 3 ciclos/900s. Preflight
+  real PASS: Agent online, Accessibility, Shizuku READY/UID 2000, 10/10 capabilities.
+- Teste A: 1 started/1 accounted/1 COMPLETED (68,7s); 5 mutacoes Agent; sem erros/uncertain.
+- Teste B (IA server aberto): 3 started/3 accounted, 1 COMPLETED + 2 FAILED; ambos FAILED por
+  timeout de criativo (IA no_detection/deteccao rejeitada), recovery esgotada. Um timeout foi
+  recuperado por `anonymous_top_right` e retornou a MAIN.
+- Backend B1: 989 reads/13 mutations (START_APP/TAP/BACK/HOME/STOP_APP), todas success; 0
+  uncertain/erros/reconnects/duplicatas. Legacy 10 leituras de logcat (30 subprocessos ADB),
+  0 mutacoes ADB. IA server `/health` OK/model loaded; 2 consultas.
+- Accounting cumulativo 7/7, sem double-count; reset/clear 0. Invariantes: sem duplicata,
+  fallback silencioso, reset repetido, pending orfao ou reconnect storm.
+- Veredito **E3.8_AGENT_BACKEND_PARTIAL**: backend PASS, funcional parcial, ciclo ainda depende
+  de leitura ADB de FORMAT/eventos. Nao declarar ADB-free. Doc:
+  `docs/E38_AGENT_FULL_CYCLE.md`; reports: `e38_report.json`, `e38_commands.json`,
+  `e38_legacy_fallbacks.json`.
+
+## 31. MULTI-APP / RUN_APPS (2026-11-20)
+
+- `main_sln_v2.py` usa `SLN_APP_PACKAGE` (default `com.flixdigital.dramaclassic`) e
+  `SLN_APP_LABEL`; `package` alimenta deteccao de MAIN, seletores e filtros. Sem env, comportamento
+  identico ao Drama Classic.
+- Interface: “Apps a rodar” com 6 apps (`Mx MotosV2`, `cas`, `Puxo No Grau`, `Bike Mx`,
+  `Grau Bahia`, `Bikes Mil Grau`), todos marcados por default. 1 app -> `main_sln_v2.py` direto;
+  2+ -> runner `run_apps.py` na raiz.
+- Campos da interface: quota min/max de anuncios por app (default 5..15), passo min/max
+  (1..3), grandes ciclos (`0`=infinito), delay. Apos cada grande ciclo o runner faz reset de ID
+  (`force-stop` + `pm clear`). Cada passo roda o bot com `SLN_TEST_MAX_CYCLES=chunk`.
+- `run_apps.py`: seletores `1..6`/package/label/`all`; `--cycles-min/max`, `--chunk-min/max`,
+  `--rounds`, `--runtime`, `--delay`, `--mode`, `--list`. Logs
+  `logs/apps_<package>_<timestamp>.log`; aborta no-fill cedo e tem watchdog de 60s no primeiro
+  anuncio. Console fecha quando o processo termina (limite), nao por crash automatico.
+- `auto_reward.py` (raiz) e um helper separado que lista os mesmos apps e clica no botao
+  `ASSISTIR ANUNCIO`; nao e o bot completo. `exe.bat` inicia interface + IA.
+- Pendente: validacao funcional de quota/passos/reset no device para os 6 apps.
+
+
+## 32. DPN E2.6 - GROUP LEDGER / EGRESS EPOCH (2026-11-20)
+
+- Flag `dpn_group_ledger_v2_enabled=false`. Contador agregado por route_group + egress epoch;
+  WorkUnitEvent idempotente por host|instance|cycle no inbox; coordinator e single writer.
+- Inbox `work_unit_events.jsonl`; ledger/export `group_ledger.json`, `epochs.json`,
+  `route_generations.json`, `work_units.jsonl`; ip_history global preservado.
+- Threshold usa `dpn_work_units_per_ip` como work units por epoch; gate bloqueia todos os membros;
+  ciclos ativos terminam; overshoot fica fora da quota; DRAIN_TIMEOUT explicito.
+- Candidate ledger por generation; reject same IP/cooldown/unavailable; availability probe
+  `AVAILABLE/UNAVAILABLE/INCONCLUSIVE` com retries; refresh de rotas separado de reset node;
+  `refreshTunnel` mapeado para refresh_route_set; max refresh -> DEGRADED.
+- Runner v2 integrado, status compativel com UI e botao ?Refresh Rotas?. Console: cada transicao DPN e anexada ao log de cada device do grupo e a `logs/dpn_<group>.log` (`dpn_console_log_enabled=true`). Testes novos:
+  group ledger 13, route generation 5, availability 3; suite DPN **136/136 OK**. Smoke real Deeper
+  pendente. Doc: `docs/DPN_GROUP_LEDGER_V2.md`.

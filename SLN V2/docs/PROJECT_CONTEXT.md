@@ -355,3 +355,21 @@ sessão" (NO_FILL/FAILED_TO_LOAD antes de abrir) **NÃO** consomem. Idempotente 
   != ACCOUNTING_FAILURE:** device sem anúncio (0 AD_SESSION) é `INVENTORY_COVERAGE`, não falha de
   contagem. Cobertura medida em eixos separados: `devices_requested / with_session / with_accounted /
   with_tree / no_inventory`. Semântica **congelada** (sem alteração funcional sem evidência de regressão).
+
+
+## 21. MULTI-APP / RUN_APPS (2026-11-20)
+
+O bot deixou de ser exclusivo do Drama Classic. `main_sln_v2.py` le `SLN_APP_PACKAGE` (default
+`com.flixdigital.dramaclassic`) e `SLN_APP_LABEL`; o package din?mico alimenta deteccao de MAIN,
+seletores e filtros. Sem as envs, o comportamento e identico ao anterior.
+
+A interface ganhou "Apps a rodar" com 6 pacotes (Mx MotosV2, cas, Puxo No Grau, Bike Mx, Grau
+Bahia, Bikes Mil Grau), todos marcados por default. Um app selecionado roda `main_sln_v2.py`
+direto; dois ou mais usam `run_apps.py` na raiz do repo.
+
+`run_apps.py`: quota aleatoria por app (`--cycles-min/max`, default 5..15), passos aleatorios
+(`--chunk-min/max`, default 1..3), grandes ciclos (`--rounds`; 0 = infinito, reset de ID entre
+eles), runtime, delay e modo. Cada passo chama o bot com `SLN_TEST_MAX_CYCLES=chunk`; logs em
+`logs/apps_<package>_<timestamp>.log`. No-fill aborta o app cedo; watchdog avisa a cada 60s sem
+fechar o primeiro anuncio. O console do bot fecha quando o processo termina, nao por crash
+automatico. `auto_reward.py` e um helper separado de abertura/clique no botao 1.

@@ -954,3 +954,98 @@ Smoke real: ADB 74 nodes/1080x2280 read-only; Agent 5 nodes/screenshot, 7 mutaco
 UNCERTAIN nao reexecuta automaticamente. Ciclo completo via Agent nao executado. Veredito
 **PASS_DEFAULT_ADB_CONTRACT**. Doc: `docs/E37_DEVICE_BACKEND.md`; report:
 `state/device_agents/e37_report.json`.
+
+## 29. E3.8 - AGENT FULL CYCLE (2026-11-20)
+
+Ciclo real com `config_e38_agent_single.json` (`agent/live`, 1 device): preflight PASS/UID 2000/
+10 caps. Teste A 1/1 COMPLETED. Teste B reexecutado com IA server aberto: 3 started/3 accounted,
+1 COMPLETED, 2 FAILED por timeout de criativo (IA sem deteccao/rejeitada), nao por backend.
+AgentBackend: 989 reads/13 mutations, todas success, 0 uncertain/erros/reconnects/duplicatas.
+Legacy: 10 leituras ADB de logcat/30 subprocessos, 0 mutacoes ADB; sem uiautomator2 no ciclo.
+Reset/clear 0. Veredito **E3.8_AGENT_BACKEND_PARTIAL** (backend PASS; funcional parcial; gap
+read-only de logcat). Doc: `docs/E38_AGENT_FULL_CYCLE.md`; reports:
+`state/device_agents/e38_report.json`, `e38_commands.json`, `e38_legacy_fallbacks.json`.
+
+## 30. MULTI-APP + RUN_APPS (2026-11-20)
+
+O bot deixou de ser hardcoded no Drama Classic. `main_sln_v2.py` agora usa:
+
+```text
+SLN_APP_PACKAGE (default: com.flixdigital.dramaclassic)
+SLN_APP_LABEL   (apenas label/log)
+```
+
+Todos os seletores `resource-id` do app, estado MAIN e filtros de package passam a usar
+`package`. O default continua o mesmo de antes; nada muda quando as envs nao sao passadas.
+
+### Interface
+
+- Aba Bots -> **“Apps a rodar”**: 6 apps, todos marcados por default:
+  1. `com.MW.MxMotosV2` (Mx MotosV2)
+  2. `com.flixdigital.dramaclassic` (cas)
+  3. `com.MW.MxPuxouNoGrau` (Puxo No Grau)
+  4. `com.ManecoGames.MxBikesGrau` (Bike Mx)
+  5. `com.Wg.GrauBahia` (Grau Bahia)
+  6. `com.ManecoGames.BikesMilGrau` (Bikes Mil Grau)
+- **1 app selecionado:** a interface chama `main_sln_v2.py` diretamente, com
+  `SLN_APP_PACKAGE`/`SLN_APP_LABEL`.
+- **2+ apps:** chama `run_apps.py` na raiz do repo.
+- Controles da interface:
+  - `Anuncios/app (quota)`: min/max da quota sorteada por app no grande ciclo;
+  - `por passo`: min/max de anuncios por passo;
+  - `Grandes`: numero de grandes ciclos; `0` = infinito, com reset de ID/`pm clear` entre eles.
+- Default de `Anuncios/app` = **5..15**, `por passo` = **1..3**, `Grandes` = **0 (infinito)**.
+- A interface usa `CREATE_NO_WINDOW` (headless); desmarque **Headless** para abrir o console
+  por device. O console fecha quando o processo termina (quota/limite/erro), nao por crash
+  automatico.
+
+### run_apps.py
+
+Runner de apps na raiz (`C:\AndroidProjects\APPS\run_apps.py`):
+
+```text
+python run_apps.py 2 --device 192.168.1.124:5555
+python run_apps.py all --device 192.168.1.124:5555 --cycles-min 5 --cycles-max 15
+python run_apps.py 1 3 --device ... --chunk-min 1 --chunk-max 3 --rounds 0 --delay 2
+```
+
+- `apps`: chaves (`1..6`), package/label ou `all`; sem args pergunta interativamente.
+- `--cycles-min/--cycles-max`: quota de anuncios por app sorteada no inicio de cada grande ciclo.
+- `--chunk-min/--chunk-max`: quantos anuncios executar por passo aleatorio.
+- `--rounds`: `0` = infinito; a cada grande ciclo faz reset de ID (`force-stop` + `pm clear`).
+- `--runtime`: limite por passo; `0/None` = `cycles*90 + 120`s.
+- `--delay`: pausa entre apps; default 3s; interface usa 2s.
+- `--mode`: modo repassado ao `main_sln_v2.py`.
+- Cada passo chama `main_sln_v2.py` com `SLN_TEST_MAX_CYCLES=chunk` e
+  `SLN_TEST_MAX_RUNTIME_S=runtime`.
+- Logs por app: `logs/apps_<package>_<timestamp>.log`; console agrupa o ciclo em uma linha.
+- No-fill: aborta cedo o app se nenhum anuncio abrir, sem esperar o runtime inteiro.
+- Watchdog: avisa a cada 60s sem fechar o primeiro anuncio.
+- O runner faz `force-stop` antes/depois de cada app e reset de ID entre grandes ciclos.
+
+### auto_reward.py / exe.bat
+
+- `auto_reward.py` (raiz) lista os mesmos 6 apps, abre o app e clica no botao 1
+  (`ASSISTIR ANUNCIO`); nao e o bot completo.
+- `exe.bat` inicia a interface com o Python do venv e o IA server com o Python do sistema (`py`).
+- Validacao funcional multi-app em device com quota/passos/reset ainda **pendente**; a
+  implementacao foi apenas integrada/pullada.
+
+## 31. DPN E2.6 - GROUP LEDGER / EGRESS EPOCH (2026-11-20)
+
+Camada DPN v2 opt-in (`dpn_group_ledger_v2_enabled=false` por default). Contador agregado
+por `route_group_id + epoch` (nao por device), WorkUnitEvent idempotente no inbox, epoch novo
+por egress aceito, drain com safe barrier, candidate ledger por route generation, validacao
+de IP/cooldown, availability probe tipado, refresh de rotas separado de reset node e estado
+DEGRADED apos `dpn_max_route_refreshes`. `refreshTunnel` do Deeper mapeado como
+`refresh_route_set`, nunca reset_node. Runner e UI tem comando manual “Refresh Rotas”.
+Com `dpn_console_log_enabled=true`, cada transicao (`DRAINING`, `ROTATING`, `VERIFYING_EGRESS`,
+`RUNNING`, rejects) e escrita no log/console de cada device do grupo e em
+`logs/dpn_<group_id>.log`.
+
+Testes novos: `test_dpn_group_ledger.py` (13), `test_dpn_route_generation.py` (4),
+`test_dpn_availability.py` (3); suite DPN **136/136 OK**. Smoke foi mock/offline (IP1 aceito,
+IP2 unavailable, IP3 cooldown, refresh, IP5 aceito, epoch 0); smoke real Deeper pendente.
+Veredito **OFFLINE_PASS / REAL_PROVIDER_SMOKE_PENDING**. Doc:
+`docs/DPN_GROUP_LEDGER_V2.md`; estado: `state/dpn/group_ledger.json`, `epochs.json`,
+`route_generations.json`, `work_units.jsonl`.
