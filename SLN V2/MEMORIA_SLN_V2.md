@@ -624,3 +624,15 @@ RESET forçado em `.124`: `pm clear` `Success` em 844 ms, `total_reset_cycle_ms=
 - Runner v2 integrado, status compativel com UI e botao ?Refresh Rotas?. Console: cada transicao DPN e anexada ao log de cada device do grupo e a `logs/dpn_<group>.log` (`dpn_console_log_enabled=true`). Testes novos:
   group ledger 13, route generation 5, availability 3; suite DPN **136/136 OK**. Smoke real Deeper
   pendente. Doc: `docs/DPN_GROUP_LEDGER_V2.md`.
+
+## 33. E3.10A/B - UNIFIED DPN AGENT + TRANSPORT POOL (2026-11-22)
+
+- Device Agent APK 0.4: DpnOps read-only em `DpnClient.kt` (identity/status/tunnels/mode/
+  nodeLbMode/access-control); credenciais AtomOS no Keystore; Provision debug aceita
+  atomos_url/fp/password sem logar senha. Protocolo Python e capabilities atualizados.
+- Heartbeat inclui `dpn_presence` (reachable, physical_dpn_id, latency, authenticated,
+  capabilities, observed_at_ms) a cada ~20s, probe assincrono; server aceita PresenceRegistry.
+- `dpn/transport_pool.py`: pool por physical_dpn_id, preferencia deterministico por latencia,
+  stale/offline/capability filter, read failover pre-dispatch, UNCERTAIN sem retry.
+- APK BUILD SUCCESSFUL; suite 252/252. Checkpoint real bloqueado: Device Agent nao instalado em
+  .50/.99/.127 e os tres DPNs sao distintos; nenhuma mutation. Flag OFF; sem alteracao Fast Close.

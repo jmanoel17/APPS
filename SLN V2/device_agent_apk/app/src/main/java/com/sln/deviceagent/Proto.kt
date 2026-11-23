@@ -2,7 +2,7 @@ package com.sln.deviceagent
 
 object Proto {
     const val VERSION = "sln-device/1"
-    const val AGENT_VERSION = "0.3"
+    const val AGENT_VERSION = "0.4"
 
     const val HELLO = "hello"
     const val HELLO_OK = "hello_ok"
@@ -32,9 +32,18 @@ object Proto {
     const val STOP_APP = "STOP_APP"
     const val CLEAR_APP_DATA = "CLEAR_APP_DATA"
 
+    const val GET_DPN_IDENTITY = "GET_DPN_IDENTITY"
+    const val GET_DPN_STATUS = "GET_DPN_STATUS"
+    const val LIST_DPN_TUNNELS = "LIST_DPN_TUNNELS"
+    const val GET_DPN_MODE = "GET_DPN_MODE"
+    const val GET_DPN_NODE_LB_MODE = "GET_DPN_NODE_LB_MODE"
+    const val LIST_DPN_ACCESS_CONTROL = "LIST_DPN_ACCESS_CONTROL"
+
     val READ_OPS = setOf(PING, GET_STATUS, GET_DEVICE_INFO, GET_NETWORK_INFO,
         GET_FOREGROUND_APP, GET_ACCESSIBILITY_STATE, GET_UI_TREE, CAPTURE_SCREEN,
         GET_PRIVILEGED_BRIDGE_STATUS, REQUEST_SHIZUKU_PERMISSION)
+    val DPN_READ_OPS = setOf(GET_DPN_IDENTITY, GET_DPN_STATUS, LIST_DPN_TUNNELS,
+        GET_DPN_MODE, GET_DPN_NODE_LB_MODE, LIST_DPN_ACCESS_CONTROL)
     val MUTATING = setOf(START_APP, BACK, HOME, TAP, SWIPE, STOP_APP, CLEAR_APP_DATA)
-    val OPS = READ_OPS + MUTATING
+    val OPS = READ_OPS + DPN_READ_OPS + MUTATING
 }

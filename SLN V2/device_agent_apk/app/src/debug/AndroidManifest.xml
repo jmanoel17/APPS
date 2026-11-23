@@ -6,6 +6,11 @@
             android:exported="true"
             android:label="SLN QA Gestures (debug)" />
         <activity
+            android:name=".DpnCheckActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+        <activity
             android:name=".ProvisionActivity"
             android:exported="true"
             android:excludeFromRecents="true"

@@ -12,6 +12,7 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import org.json.JSONObject
+import java.util.concurrent.Executors
 import kotlin.math.min
 
 class WsClient(private val ctx: Context, private val prefs: Prefs) {
@@ -32,6 +33,10 @@ class WsClient(private val ctx: Context, private val prefs: Prefs) {
     @Volatile private var lastDisplay = ""
     @Volatile private var lastBridge = ""
     @Volatile var lastCommandStatus = ""
+    @Volatile private var dpnPresence: JSONObject? = null
+    @Volatile private var dpnProbeAt = 0L
+    @Volatile private var dpnProbeInFlight = false
+    private val dpnProbePool = Executors.newSingleThreadExecutor()
 
     private val heartbeat = object : Runnable {
         override fun run() {
@@ -232,6 +237,8 @@ class WsClient(private val ctx: Context, private val prefs: Prefs) {
         val gestures = acc && DeviceStatus.displayValid(ctx)
         val o = JSONObject()
         for (op in Proto.READ_OPS) o.put(op, true)
+        val dpnReady = !prefs.atomosPassword.isNullOrBlank()
+        for (op in Proto.DPN_READ_OPS) o.put(op, dpnReady)
         o.put(Proto.START_APP, true)
         o.put(Proto.BACK, acc)
         o.put(Proto.HOME, acc)
@@ -259,10 +266,52 @@ class WsClient(private val ctx: Context, private val prefs: Prefs) {
                 lastBridge = bridge
                 sendRaw(hello(prefs.token ?: ""))
             }
+            val info = DeviceStatus.status(ctx, lastCommandStatus)
+            dpnPresence?.let { info.put("dpn_presence", it) }
+            maybeProbeDpn()
             sendRaw(JSONObject().put("protocol", Proto.VERSION).put("type", Proto.HEARTBEAT)
                 .put("agent_id", prefs.agentId)
-                .put("info", DeviceStatus.status(ctx, lastCommandStatus)))
+                .put("info", info))
         } catch (_: Exception) {}
+    }
+
+    private fun maybeProbeDpn() {
+        if (!prefs.dpnAutoProbe || prefs.atomosPassword.isNullOrBlank()) return
+        val now = System.currentTimeMillis()
+        val interval = if (dpnPresence?.optBoolean("reachable") == true) 300_000L else 900_000L
+        if (dpnProbeInFlight || now - dpnProbeAt < interval) return
+        dpnProbeInFlight = true
+        dpnProbeAt = now
+        dpnProbePool.execute {
+            val presence = try {
+                val id = DpnClient(prefs).identity()
+                JSONObject()
+                    .put("reachable", true)
+                    .put("physical_dpn_id", id.optString("physical_dpn_id"))
+                    .put("latency_ms", id.optLong("latency_ms"))
+                    .put("authenticated", true)
+                    .put("capabilities", org.json.JSONArray().apply {
+                        for (op in Proto.DPN_READ_OPS) put(op)
+                    })
+                    .put("observed_at_ms", System.currentTimeMillis())
+            } catch (e: DpnError) {
+                JSONObject().put("reachable", false)
+                    .put("physical_dpn_id", dpnPresence?.optString("physical_dpn_id") ?: "")
+                    .put("authenticated", false)
+                    .put("error", e.code)
+                    .put("capabilities", org.json.JSONArray())
+                    .put("observed_at_ms", System.currentTimeMillis())
+            } catch (e: Exception) {
+                JSONObject().put("reachable", false)
+                    .put("physical_dpn_id", dpnPresence?.optString("physical_dpn_id") ?: "")
+                    .put("authenticated", false)
+                    .put("error", e.javaClass.simpleName)
+                    .put("capabilities", org.json.JSONArray())
+                    .put("observed_at_ms", System.currentTimeMillis())
+            }
+            dpnPresence = presence
+            dpnProbeInFlight = false
+        }
     }
 
     private fun sendRaw(o: JSONObject) { try { ws?.send(o.toString()) } catch (_: Exception) {} }

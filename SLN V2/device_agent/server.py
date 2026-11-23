@@ -39,7 +39,7 @@ class DeviceAgentServer:
     def __init__(self, store, registry=None, pairing=None, queue_cap=32,
                  heartbeat_stale_s=45.0, heartbeat_offline_s=120.0,
                  duplicate_policy="takeover", allowed_packages=None,
-                 allowed_privileged_packages=None):
+                 allowed_privileged_packages=None, presence_registry=None):
         self.store = store
         self.registry = registry or AgentRegistry(store)
         self.pairing = pairing or PairingManager(store)
@@ -49,6 +49,7 @@ class DeviceAgentServer:
         self.duplicate_policy = duplicate_policy
         self.allowed_packages = frozenset(allowed_packages or ())
         self.allowed_privileged_packages = frozenset(allowed_privileged_packages or ())
+        self.presence_registry = presence_registry
         self.connections = {}
         self.pending = {}
         self._pending_agent = {}
@@ -106,6 +107,17 @@ class DeviceAgentServer:
                 self.hearts[aid] = (info, time.time())
                 self.store.update_agent_meta(aid, last_seen=time.time(),
                                              display=info.get("display"))
+                if self.presence_registry is not None:
+                    pres = info.get("dpn_presence") or {}
+                    if pres.get("physical_dpn_id"):
+                        self.presence_registry.upsert(
+                            aid, device_id=aid,
+                            physical_dpn_id=pres.get("physical_dpn_id", ""),
+                            latency_ms=pres.get("latency_ms", 0),
+                            authenticated=bool(pres.get("authenticated")),
+                            capabilities=set(pres.get("capabilities") or ()),
+                            connection_state=("ONLINE" if pres.get("reachable") else "OFFLINE"),
+                            last_seen=time.time())
             elif mtype == P.RESULT:
                 self._handle_result(aid, msg)
             else:

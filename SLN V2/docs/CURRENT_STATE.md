@@ -1049,3 +1049,16 @@ IP2 unavailable, IP3 cooldown, refresh, IP5 aceito, epoch 0); smoke real Deeper 
 Veredito **OFFLINE_PASS / REAL_PROVIDER_SMOKE_PENDING**. Doc:
 `docs/DPN_GROUP_LEDGER_V2.md`; estado: `state/dpn/group_ledger.json`, `epochs.json`,
 `route_generations.json`, `work_units.jsonl`.
+
+## 32. E3.10A/B - UNIFIED DPN AGENT + TRANSPORT POOL (2026-11-22)
+
+Device Agent APK 0.4 recebeu DpnOps read-only (`GET_DPN_IDENTITY`, status, tunnels, mode,
+nodeLbMode, access-control) via `DpnClient.kt`; AtomOS credenciais no Keystore e nunca logadas.
+Heartbeat publica `info.dpn_presence` a cada ~20 s (assincrono); server pode indexar em
+`PresenceRegistry`. `dpn/transport_pool.py` seleciona leitura por physical_dpn_id, latencia,
+capability, online/auth/heartbeat e faz failover somente pre-dispatch; UNCERTAIN nao reenvia.
+APK debug BUILD SUCCESSFUL; suite **252/252 OK** (pool 7, presence 4). Checkpoint real BLOQUEADO:
+APK nao instalado em .50/.99/.127 e esses tres serials pertencem a DPNs distintas, nao a 3 Agents
+da mesma DPN; nenhuma mutation executada. Flag default OFF; Fast Close/accounting intocados.
+Veredito **E3.10A_B_OFFLINE_PASS_REAL_BLOCKED**. Doc: `docs/E310_UNIFIED_DPN_AGENT.md`;
+report: `state/device_agents/e310_report.json`.

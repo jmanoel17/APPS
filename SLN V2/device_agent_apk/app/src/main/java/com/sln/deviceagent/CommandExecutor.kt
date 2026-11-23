@@ -119,10 +119,12 @@ object CommandExecutor {
             var data: JSONObject? = null
             var error = ""
             try {
-                data = runOp(ctx, op, msg.optJSONObject("params") ?: JSONObject(), received, deadline)
+                data = runOp(ctx, prefs, op, msg.optJSONObject("params") ?: JSONObject(), received, deadline)
             } catch (e: OpError) {
                 status = e.status; error = e.code
             } catch (e: PerceptionError) {
+                status = "failure"; error = e.code
+            } catch (e: DpnError) {
                 status = "failure"; error = e.code
             } catch (e: Exception) {
                 status = "failure"; error = e.javaClass.simpleName
@@ -138,7 +140,7 @@ object CommandExecutor {
     }
 
     @Suppress("DEPRECATION")
-    private fun runOp(ctx: Context, op: String, params: JSONObject,
+    private fun runOp(ctx: Context, prefs: Prefs, op: String, params: JSONObject,
                       receivedAt: Long, deadline: Long): JSONObject {
         return when (op) {
             Proto.PING -> JSONObject().put("pong", true)
@@ -153,6 +155,12 @@ object CommandExecutor {
             Proto.STOP_APP -> privilegedStop(ctx, params)
             Proto.CLEAR_APP_DATA -> privilegedClear(ctx, params)
             Proto.GET_ACCESSIBILITY_STATE -> JSONObject().put("enabled", DeviceAccessibilityService.instance != null)
+            Proto.GET_DPN_IDENTITY -> DpnClient(prefs).identity()
+            Proto.GET_DPN_STATUS -> DpnClient(prefs).status()
+            Proto.LIST_DPN_TUNNELS -> JSONObject().put("tunnels", DpnClient(prefs).tunnels())
+            Proto.GET_DPN_MODE -> DpnClient(prefs).mode()
+            Proto.GET_DPN_NODE_LB_MODE -> DpnClient(prefs).nodeLbMode()
+            Proto.LIST_DPN_ACCESS_CONTROL -> DpnClient(prefs).accessControl()
             Proto.START_APP -> startApp(ctx, params)
             Proto.BACK, Proto.HOME -> action(op)
             Proto.TAP -> tap(ctx, params, receivedAt, deadline)

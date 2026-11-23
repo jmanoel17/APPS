@@ -34,6 +34,7 @@ class AgentService : Service() {
     override fun onCreate() {
         super.onCreate()
         prefs = Prefs(this)
+        DpnMigration.importIfNeeded(applicationContext, prefs)
         PrivilegedBridge.ensureInit(applicationContext)
         createChannel()
         startForeground(1, notification())

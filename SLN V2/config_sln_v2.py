@@ -302,6 +302,12 @@ DEFAULTS = {
     "dpn_route_refresh_settle_s": 5,
     "dpn_route_refresh_backoff_s": 10,
     "dpn_console_log_enabled": True,
+    # ===== E3.10 UNIFIED DEVICE AGENT + DPN TRANSPORT POOL (default OFF) =====
+    "device_agent_dpn_ops_enabled": False,
+    "dpn_agent_pool_enabled": False,
+    "dpn_presence_interval_s": 20,
+    "dpn_presence_stale_s": 60,
+    "dpn_mutation_lease_s": 30,
     # ===== DEVICE BACKEND ABSTRACTION (default ADB; agent must be opt-in) =====
     "device_backend": "adb",
     "execution_mode": "normal",

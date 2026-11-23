@@ -70,4 +70,20 @@ class Prefs(context: Context) {
     var token: String?
         get() = getSecret("token")
         set(v) = putSecret("token", v)
+
+    var atomosUrl: String
+        get() = sp.getString("atomos_url", "https://34.34.34.34") ?: "https://34.34.34.34"
+        set(v) { sp.edit().putString("atomos_url", v).apply() }
+
+    var atomosFp: String
+        get() = sp.getString("atomos_fp", "") ?: ""
+        set(v) { sp.edit().putString("atomos_fp", v).apply() }
+
+    var atomosPassword: String?
+        get() = getSecret("atomos_password")
+        set(v) = putSecret("atomos_password", v)
+
+    var dpnAutoProbe: Boolean
+        get() = sp.getBoolean("dpn_auto_probe", false)
+        set(v) { sp.edit().putBoolean("dpn_auto_probe", v).apply() }
 }
