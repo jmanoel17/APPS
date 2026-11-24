@@ -11,6 +11,7 @@ Sem shell/SCREENSHOT/STOP_APP nesta fase.
 """
 from __future__ import annotations
 
+import ipaddress
 import re
 import time
 import uuid
@@ -51,14 +52,19 @@ LIST_DPN_TUNNELS = "LIST_DPN_TUNNELS"
 GET_DPN_MODE = "GET_DPN_MODE"
 GET_DPN_NODE_LB_MODE = "GET_DPN_NODE_LB_MODE"
 LIST_DPN_ACCESS_CONTROL = "LIST_DPN_ACCESS_CONTROL"
+DPN_SWITCH_NODE = "DPN_SWITCH_NODE"
+DPN_REFRESH_ROUTE_SET = "DPN_REFRESH_ROUTE_SET"
 DPN_READ_OPS = (GET_DPN_IDENTITY, GET_DPN_STATUS, LIST_DPN_TUNNELS,
                 GET_DPN_MODE, GET_DPN_NODE_LB_MODE, LIST_DPN_ACCESS_CONTROL)
+DPN_MUTATING_OPS = (DPN_SWITCH_NODE, DPN_REFRESH_ROUTE_SET)
 
 OPS = (PING, GET_STATUS, GET_DEVICE_INFO, GET_NETWORK_INFO, GET_FOREGROUND_APP,
        GET_ACCESSIBILITY_STATE, START_APP, BACK, HOME, TAP, SWIPE,
        GET_UI_TREE, CAPTURE_SCREEN, GET_PRIVILEGED_BRIDGE_STATUS,
-       REQUEST_SHIZUKU_PERMISSION, STOP_APP, CLEAR_APP_DATA, *DPN_READ_OPS)
-MUTATING_OPS = frozenset((START_APP, BACK, HOME, TAP, SWIPE, STOP_APP, CLEAR_APP_DATA))
+       REQUEST_SHIZUKU_PERMISSION, STOP_APP, CLEAR_APP_DATA, *DPN_READ_OPS,
+       *DPN_MUTATING_OPS)
+MUTATING_OPS = frozenset((START_APP, BACK, HOME, TAP, SWIPE, STOP_APP, CLEAR_APP_DATA) +
+                         DPN_MUTATING_OPS)
 
 TAP_MIN_MS, TAP_MAX_MS = 10, 1000
 SWIPE_MIN_MS, SWIPE_MAX_MS = 10, 3000
@@ -132,9 +138,31 @@ def valid_package(pkg):
     return bool(re.match(r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$", pkg))
 
 
+def _valid_dpn_tunnel(value):
+    return isinstance(value, str) and bool(re.match(r"^[A-Za-z0-9_-]{1,16}$", value))
+
+
+def _valid_dpn_ip(value):
+    try:
+        ipaddress.ip_address(str(value))
+        return True
+    except Exception:
+        return False
+
+
 def validate_params(op, params, display=None):
     if not isinstance(params, dict):
         return "params inválido"
+
+    if op in DPN_MUTATING_OPS:
+        expected = params.get("expected_dpn_id")
+        if not isinstance(expected, str) or not expected.strip() or len(expected) > 200:
+            return "expected_dpn_id obrigatorio"
+        if not _valid_dpn_tunnel(params.get("tunnel_code")):
+            return "tunnel_code invalido"
+        if op == DPN_SWITCH_NODE and not _valid_dpn_ip(params.get("current_ip")):
+            return "current_ip invalido"
+
     if op == GET_UI_TREE:
         for key, lo, hi in (("max_depth", 1, 64), ("max_nodes", 1, 3000),
                             ("max_text_length", 0, 500),

@@ -49,6 +49,7 @@ from .atomos_ops import (
 )
 from .transport_direct import DirectAtomOS
 from .agent_transport import AgentAtomOS
+from .agent_pool_transport import AgentPoolAtomOS
 
 DEFAULT_TLS = "insecure"
 
@@ -138,7 +139,7 @@ class DeeperConnectProvider(DPNProvider):
     """Provedor real da Deeper Connect (AtomOS). Sessão/login lazy e isolados por unidade."""
 
     def __init__(self, controller_cfg=None, client_factory=None, password=None,
-                 log_fn=None, env=None, agent_hub=None):
+                 log_fn=None, env=None, agent_hub=None, agent_pool=None):
         c = controller_cfg or {}
         self.cfg = c
         self.address = str(c.get("address") or "").strip()
@@ -156,6 +157,7 @@ class DeeperConnectProvider(DPNProvider):
         self.expected_dpn_id = c.get("expected_dpn_id")
         self.android_serial = c.get("android_serial")
         self._agent_hub = agent_hub
+        self._agent_pool = agent_pool
         self._client_factory = client_factory
         self.transport = self._resolve_transport(c)
 
@@ -168,7 +170,7 @@ class DeeperConnectProvider(DPNProvider):
 
     def _resolve_transport(self, c):
         t = str(c.get("transport") or "").strip().lower()
-        if t in ("agent", "direct"):
+        if t in ("agent", "agent_pool", "direct"):
             return t
         # default do ambiente = agent; porém client_factory injetado (testes/legado) => direct
         return "direct" if self._client_factory is not None else "agent"
@@ -180,6 +182,10 @@ class DeeperConnectProvider(DPNProvider):
     def set_agent_hub(self, hub):
         """Injeta o AgentHub (transporte agent) após a construção; reseta a sessão."""
         self._agent_hub = hub
+        self._client = None
+
+    def set_agent_pool(self, pool):
+        self._agent_pool = pool
         self._client = None
 
     # ---------------------------------------------------------------- infra
@@ -206,6 +212,12 @@ class DeeperConnectProvider(DPNProvider):
         return val
 
     def _make_client(self):
+        if self.transport == "agent_pool":
+            if self._agent_pool is None:
+                raise ProviderConnectionError("agent_pool nao injetado")
+            return AgentPoolAtomOS(self._agent_pool, self.expected_dpn_id,
+                                   self.tunnel_code, timeout=self.request_timeout,
+                                   log_fn=self._log)
         if self.transport == "agent":
             return AgentAtomOS(self._agent_hub, self.agent_id,
                                expected_dpn_id=self.expected_dpn_id,
@@ -244,7 +256,7 @@ class DeeperConnectProvider(DPNProvider):
         with self._lock:
             if self._client is None:
                 # transport=agent: senha/cookies ficam no Android Keystore/agente (NÃO resolver local)
-                if self.transport != "agent":
+                if self.transport not in ("agent", "agent_pool"):
                     self._resolve_password()
                 self._client = self._make_client()
                 self._login(self._client)
@@ -466,6 +478,10 @@ class DeeperConnectProvider(DPNProvider):
             except AtomOSConnectionError as e:
                 raise ProviderConnectionError(str(e))
 
+            if isinstance(resp, dict) and str(resp.get("result") or "") == "IP_NOT_CHANGED":
+                self._refresh_tunnel()
+                return RotationResult(RotationStatus.REFRESH_REQUESTED, str(current), None,
+                                      self.tunnel_code, "ipNotChanged")
             new_ip = resp.get("activeIp") if isinstance(resp, dict) else None
             if new_ip and str(new_ip) != str(current):
                 return RotationResult(RotationStatus.OK, str(current), str(new_ip),

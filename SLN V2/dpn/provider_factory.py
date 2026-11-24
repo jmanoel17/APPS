@@ -31,7 +31,8 @@ def available():
     return sorted(_REGISTRY.keys())
 
 
-def build_provider(controller_type, controller_cfg=None, dpn_id=None, agent_hub=None):
+def build_provider(controller_type, controller_cfg=None, dpn_id=None, agent_hub=None,
+                   agent_pool=None):
     cls = _REGISTRY.get(controller_type)
     if cls is None:
         raise UnknownProviderError(
@@ -43,4 +44,6 @@ def build_provider(controller_type, controller_cfg=None, dpn_id=None, agent_hub=
     prov = cls.from_config(cfg)
     if agent_hub is not None and hasattr(prov, "set_agent_hub"):
         prov.set_agent_hub(agent_hub)
+    if agent_pool is not None and hasattr(prov, "set_agent_pool"):
+        prov.set_agent_pool(agent_pool)
     return prov

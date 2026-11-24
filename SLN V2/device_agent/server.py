@@ -118,6 +118,10 @@ class DeviceAgentServer:
                             capabilities=set(pres.get("capabilities") or ()),
                             connection_state=("ONLINE" if pres.get("reachable") else "OFFLINE"),
                             last_seen=time.time())
+                    else:
+                        # A known Agent can stay in the pool without re-authenticating
+                        # AtomOS on every heartbeat; only its liveness is refreshed.
+                        self.presence_registry.touch(aid, last_seen=time.time())
             elif mtype == P.RESULT:
                 self._handle_result(aid, msg)
             else:

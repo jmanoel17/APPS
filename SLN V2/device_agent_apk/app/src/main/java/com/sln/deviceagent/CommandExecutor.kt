@@ -125,7 +125,8 @@ object CommandExecutor {
             } catch (e: PerceptionError) {
                 status = "failure"; error = e.code
             } catch (e: DpnError) {
-                status = "failure"; error = e.code
+                status = DpnMutationRules.statusForDpnError(e.code)
+                error = e.code
             } catch (e: Exception) {
                 status = "failure"; error = e.javaClass.simpleName
             }
@@ -161,6 +162,11 @@ object CommandExecutor {
             Proto.GET_DPN_MODE -> DpnClient(prefs).mode()
             Proto.GET_DPN_NODE_LB_MODE -> DpnClient(prefs).nodeLbMode()
             Proto.LIST_DPN_ACCESS_CONTROL -> DpnClient(prefs).accessControl()
+            Proto.DPN_SWITCH_NODE -> DpnClient(prefs).switchNode(
+                params.optString("expected_dpn_id"), params.optString("tunnel_code"),
+                params.optString("current_ip"))
+            Proto.DPN_REFRESH_ROUTE_SET -> DpnClient(prefs).refreshRouteSet(
+                params.optString("expected_dpn_id"), params.optString("tunnel_code"))
             Proto.START_APP -> startApp(ctx, params)
             Proto.BACK, Proto.HOME -> action(op)
             Proto.TAP -> tap(ctx, params, receivedAt, deadline)

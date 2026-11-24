@@ -24,6 +24,7 @@ import random
 import ctypes
 import hashlib
 import threading
+import uuid
 import subprocess
 import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk, scrolledtext, Entry
@@ -1008,7 +1009,7 @@ class ScannerTab:
 # ==================== INTERFACE PRINCIPAL ====================
 janela = tk.Tk()
 janela.title("SLN V2 - Drama Classic Studio")
-janela.geometry("600x800")
+janela.geometry("1000x800")
 
 notebook = ttk.Notebook(janela)
 notebook.pack(fill="both", expand=True)
@@ -1191,8 +1192,9 @@ def _dpn_status_path():
     return os.path.join(_dpn_state_dir(), "status.json")
 
 
-def _dpn_publish(action):
-    sel = _dpn_tree.selection()
+def _dpn_publish(action, tree=None):
+    tree = tree or _dpn_tree
+    sel = tree.selection()
     if not sel:
         messagebox.showwarning("DPN", "Selecione uma DPN na tabela.")
         return
@@ -1238,17 +1240,19 @@ tk.Button(_dpn_bar, text="Iniciar Coordinator", command=_dpn_start_coordinator).
 tk.Button(_dpn_bar, text="Abrir Logs", command=_dpn_open_logs).pack(side="right", padx=3)
 
 
-def _dpn_apply_status(status):
+def _dpn_apply_status(status, tree=None, label=None):
     try:
         import dpn.ui_model as UI
+        tree = tree or _dpn_tree
+        label = label or _lbl_coord
         online = UI.coordinator_online(status, stale_s=8.0)
-        _lbl_coord.config(text="Status Coordinator: %s" % ("ONLINE" if online else "OFFLINE"),
-                          fg=("#2e7d32" if online else "#b71c1c"))
-        for iid in _dpn_tree.get_children(""):
-            _dpn_tree.delete(iid)
+        label.config(text="Status Coordinator: %s" % ("ONLINE" if online else "OFFLINE"),
+                     fg=("#2e7d32" if online else "#b71c1c"))
+        for iid in tree.get_children(""):
+            tree.delete(iid)
         for r in UI.tree_rows(status):
             parent = r.get("parent") or ""
-            _dpn_tree.insert(parent, "end", iid=r["iid"], text=r["name"], values=(
+            tree.insert(parent, "end", iid=r["iid"], text=r["name"], values=(
                 r.get("state", ""), r.get("tunnel", ""), r.get("tunnel_ip", ""),
                 r.get("online", ""), r.get("total", ""), r.get("route_mode", ""),
                 r.get("lan_ip", "")))
@@ -1279,6 +1283,371 @@ def _dpn_reader_loop():
 
 
 threading.Thread(target=_dpn_reader_loop, daemon=True).start()
+
+# ==================== AGENTES DPN (CONTROLLER UNIFICADO) ====================
+# Controller embutido nesta tela. A interface e cliente do snapshot e do command bus;
+# nenhuma credencial DPN passa pelo Tkinter.
+tab_agents = ttk.Frame(notebook)
+notebook.add(tab_agents, text="Agentes DPN")
+
+_agent_nb = ttk.Notebook(tab_agents)
+_agent_nb.pack(fill="both", expand=True, padx=4, pady=4)
+
+_tab_agent_overview = ttk.Frame(_agent_nb)
+_tab_agent_list = ttk.Frame(_agent_nb)
+_tab_agent_dpns = ttk.Frame(_agent_nb)
+_tab_agent_manual = ttk.Frame(_agent_nb)
+_tab_agent_cmds = ttk.Frame(_agent_nb)
+_agent_nb.add(_tab_agent_overview, text="Visao geral")
+_agent_nb.add(_tab_agent_list, text="Agentes")
+_agent_nb.add(_tab_agent_dpns, text="DPNs fisicas")
+_agent_nb.add(_tab_agent_manual, text="DPN Control manual")
+_agent_nb.add(_tab_agent_cmds, text="Comandos")
+
+_agent_ov = tk.Frame(_tab_agent_overview)
+_agent_ov.pack(fill="x", padx=12, pady=12)
+_lbl_agent_ov = tk.Label(_agent_ov, text="Agent Controller: OFFLINE", fg="#b71c1c",
+                         font=("Arial", 11, "bold"), anchor="w", justify="left",
+                         wraplength=900)
+_lbl_agent_ov.pack(fill="x", pady=(0, 8))
+_lbl_agent_ov2 = tk.Label(_agent_ov, text="", anchor="w", justify="left")
+_lbl_agent_ov2.pack(fill="x", pady=2)
+
+_agent_cols = ("dpn", "status", "auth", "ready", "latency", "seen", "error")
+_agent_tree = ttk.Treeview(_tab_agent_list, columns=_agent_cols, show="tree headings", height=16)
+_agent_tree.heading("#0", text="Agent")
+_agent_tree.column("#0", width=300, anchor="w")
+for _c, _h, _w in (("dpn", "DPN fisico", 240), ("status", "Status", 80),
+                   ("auth", "Auth", 55), ("ready", "DPN ready", 75),
+                   ("latency", "Latencia", 75), ("seen", "Visto", 80),
+                   ("error", "Info", 160)):
+    _agent_tree.heading(_c, text=_h)
+    _agent_tree.column(_c, width=_w, anchor="w")
+_agent_tree.pack(fill="both", expand=True, padx=8, pady=6)
+
+_dpn_agent_cols = ("agents", "online", "auth", "best", "latency")
+_agent_dpn_tree = ttk.Treeview(_tab_agent_dpns, columns=_dpn_agent_cols,
+                               show="tree headings", height=14)
+_agent_dpn_tree.heading("#0", text="DPN fisica")
+_agent_dpn_tree.column("#0", width=390, anchor="w")
+for _c, _h, _w in (("agents", "Agents", 75), ("online", "Online", 70),
+                   ("auth", "Auth", 65), ("best", "Best Agent", 310),
+                   ("latency", "Latencia", 80)):
+    _agent_dpn_tree.heading(_c, text=_h)
+    _agent_dpn_tree.column(_c, width=_w, anchor="w")
+_agent_dpn_tree.pack(fill="both", expand=True, padx=8, pady=6)
+
+_agent_manual_tree = ttk.Treeview(_tab_agent_manual, columns=_dpn_cols,
+                                   show="tree headings", height=15)
+_agent_manual_tree.heading("#0", text="Nome")
+_agent_manual_tree.column("#0", width=230, anchor="w")
+for _c, _h, _w in (("state", "Estado", 110), ("tunnel", "Tunnel", 70),
+                   ("tip", "Tunnel IP", 120), ("online", "Online", 60),
+                   ("total", "Total", 55), ("mode", "RouteMode", 90),
+                   ("lan", "LAN IP", 120)):
+    _agent_manual_tree.heading(_c, text=_h)
+    _agent_manual_tree.column(_c, width=_w, anchor="w")
+_agent_manual_tree.pack(fill="both", expand=True, padx=8, pady=6)
+_agent_manual_bar = tk.Frame(_tab_agent_manual)
+_agent_manual_bar.pack(fill="x", padx=8, pady=4)
+_lbl_manual_coord = tk.Label(_agent_manual_bar, text="Status Coordinator: OFFLINE",
+                             fg="#b71c1c", font=("Arial", 9, "bold"))
+_lbl_manual_coord.pack(side="left", padx=6)
+tk.Button(_agent_manual_bar, text="Pausar",
+          command=lambda: _dpn_publish("pause", _agent_manual_tree)).pack(side="left", padx=2)
+tk.Button(_agent_manual_bar, text="Retomar",
+          command=lambda: _dpn_publish("resume", _agent_manual_tree)).pack(side="left", padx=2)
+tk.Button(_agent_manual_bar, text="Rotacionar",
+          command=lambda: _dpn_publish("rotate_now", _agent_manual_tree),
+          bg="#1565c0", fg="white").pack(side="left", padx=2)
+tk.Button(_agent_manual_bar, text="Resetar no",
+          command=lambda: _dpn_publish("reset_node_now", _agent_manual_tree),
+          bg="#c62828", fg="white").pack(side="left", padx=2)
+tk.Button(_agent_manual_bar, text="Refresh rotas",
+          command=lambda: _dpn_publish("refresh_routes_now", _agent_manual_tree),
+          bg="#6a1b9a", fg="white").pack(side="left", padx=2)
+tk.Button(_agent_manual_bar, text="Iniciar coordinator",
+          command=_dpn_start_coordinator).pack(side="right", padx=2)
+
+_agent_cmd_bar = tk.Frame(_tab_agent_cmds)
+_agent_cmd_bar.pack(fill="x", padx=8, pady=4)
+tk.Button(_agent_cmd_bar, text="Atualizar comandos",
+          command=lambda: _agent_refresh_commands()).pack(side="left")
+_agent_cmd_text = scrolledtext.ScrolledText(_tab_agent_cmds, height=16, wrap="none")
+_agent_cmd_text.pack(fill="both", expand=True, padx=8, pady=6)
+
+_agent_bar = tk.Frame(tab_agents)
+_agent_bar.pack(fill="x", padx=8, pady=4)
+_lbl_agent_ctrl = tk.Label(_agent_bar, text="Agent Controller: OFFLINE", fg="#b71c1c",
+                           font=("Arial", 9, "bold"), anchor="w", justify="left",
+                           wraplength=900)
+_lbl_agent_ctrl.pack(fill="x", padx=6, pady=(0, 2))
+
+_agent_runtime = None
+_agent_runtime_lock = threading.Lock()
+
+
+def _agent_status_path():
+    return os.path.join(_dpn_state_dir(), "agents_status.json")
+
+
+def _agent_runtime_alive():
+    rt = _agent_runtime
+    t = getattr(rt, "_thread", None) if rt is not None else None
+    return bool(rt is not None and t is not None and t.is_alive()
+                and getattr(rt, "ready", None) is not None and rt.ready.is_set()
+                and not getattr(rt, "start_error", ""))
+
+
+def _agent_command(action, **fields):
+    try:
+        sd = _dpn_state_dir()
+        cdir = os.path.join(sd, "agent_commands")
+        os.makedirs(cdir, exist_ok=True)
+        cid = uuid.uuid4().hex
+        cmd = {"command_id": cid, "action": action, "created_at": time.time()}
+        cmd.update(fields)
+        path = os.path.join(cdir, cid + ".json")
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(cmd, f)
+        os.replace(tmp, path)
+        return cid
+    except Exception as e:
+        messagebox.showerror("Agentes DPN", "Falha ao publicar comando: %s" % e)
+        return None
+
+
+def _agent_start_controller():
+    global _agent_runtime
+    try:
+        import dpn.ui_model as UI
+        st = UI.read_status(_agent_status_path(), default=None)
+        if isinstance(st, dict) and UI.agent_controller_online(st, stale_s=8.0):
+            messagebox.showinfo("Agentes DPN", "Controller ja esta ONLINE. Use as abas internas.")
+            return
+        with _agent_runtime_lock:
+            if _agent_runtime_alive():
+                messagebox.showinfo("Agentes DPN", "Controller ja esta em execucao nesta tela.")
+                return
+            from dpn_agent_controller import ControllerRuntime
+            cfg = CONFIG.load_config()
+            sd = _dpn_state_dir()
+            store = os.path.join(SCRIPT_DIR, cfg.get("device_agent_state_dir", "state/device_agents"))
+            rt = ControllerRuntime(cfg, SCRIPT_DIR, sd, store)
+            _agent_runtime = rt
+        def boot():
+            ok = rt.start()
+            def apply():
+                if ok:
+                    _lbl_agent_ctrl.config(text="Agent Controller: ONLINE", fg="#2e7d32")
+                    print("[AGENT][UI] controller interno ONLINE")
+                else:
+                    _lbl_agent_ctrl.config(text="Agent Controller: ERROR", fg="#b71c1c")
+                    messagebox.showerror("Agentes DPN", "Falha ao iniciar controller: %s" %
+                                         (rt.start_error or "porta/certificado"))
+            try:
+                janela.after(0, apply)
+            except Exception:
+                pass
+        threading.Thread(target=boot, daemon=True, name="agent-controller-ui").start()
+        _lbl_agent_ctrl.config(text="Agent Controller: INICIANDO", fg="#f9a825")
+        print("[AGENT][UI] controller interno iniciado")
+    except Exception as e:
+        messagebox.showerror("Agentes DPN", "Falha ao iniciar controller: %s" % e)
+
+
+def _agent_stop_controller():
+    global _agent_runtime
+    with _agent_runtime_lock:
+        rt = _agent_runtime
+        _agent_runtime = None
+    if rt is None:
+        messagebox.showinfo("Agentes DPN", "Nao ha controller interno para parar.")
+        return
+    def stop():
+        rt.stop()
+        try:
+            janela.after(0, lambda: _lbl_agent_ctrl.config(
+                text="Agent Controller: OFFLINE", fg="#b71c1c"))
+        except Exception:
+            pass
+    threading.Thread(target=stop, daemon=True, name="agent-controller-stop").start()
+
+
+def _agent_refresh_identities():
+    try:
+        max_agents = int(CONFIG.load_config().get("dpn_agent_refresh_max", 8) or 8)
+    except Exception:
+        max_agents = 8
+    if not messagebox.askyesno(
+            "Agentes DPN",
+            "Consultar a identidade AtomOS de ate %d Agents online?\n"
+            "Isso autentica no AtomOS e pode sofrer throttle se repetido." % max_agents):
+        return
+    if _agent_command("refresh_identities", max_agents=max_agents):
+        print("[AGENT][UI] refresh_identities solicitado")
+
+
+def _agent_open_pairing():
+    cid = _agent_command("open_pairing", intent="interface", ttl_s=300)
+    if not cid:
+        return
+    done = os.path.join(_dpn_state_dir(), "agent_commands_done", cid + ".json")
+
+    def wait_result():
+        for _ in range(20):
+            try:
+                with open(done, "r", encoding="utf-8") as f:
+                    res = json.load(f)
+                code = res.get("pairing_code")
+                if code:
+                    try:
+                        os.unlink(done)
+                    except Exception:
+                        pass
+                    janela.after(0, lambda c=code: messagebox.showinfo(
+                        "Pareamento DPN",
+                        "Codigo temporario (300s):\n%s\n\nUse no Provision do Agent." % c))
+                    return
+            except Exception:
+                pass
+            time.sleep(0.5)
+        janela.after(0, lambda: messagebox.showwarning(
+            "Pareamento DPN", "Controller sem resposta. Inicie o Agent Controller."))
+
+    threading.Thread(target=wait_result, daemon=True).start()
+
+
+def _agent_refresh_commands():
+    try:
+        base = os.path.join(_dpn_state_dir(), "agent_commands_done")
+        names = []
+        if os.path.isdir(base):
+            names = [os.path.join(base, n) for n in os.listdir(base) if n.endswith(".json")]
+        names.sort(key=lambda p: os.path.getmtime(p), reverse=True)
+        lines = []
+        for path in names[:40]:
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    r = json.load(f)
+                if r.get("action") == "open_pairing":
+                    continue
+                when = time.strftime("%H:%M:%S", time.localtime(float(r.get("at") or 0)))
+                err = (r.get("error") or "")[:80]
+                lines.append("%s  %-20s %-8s %s" % (
+                    when, str(r.get("action") or ""), str(r.get("status") or ""), err))
+            except Exception:
+                pass
+        _agent_cmd_text.configure(state="normal")
+        _agent_cmd_text.delete("1.0", "end")
+        _agent_cmd_text.insert("end", "\n".join(lines) if lines else "(sem comandos)")
+        _agent_cmd_text.configure(state="disabled")
+    except Exception:
+        pass
+
+
+def _agent_apply_status(status):
+    try:
+        import dpn.ui_model as UI
+        online = UI.agent_controller_online(status, stale_s=8.0)
+        rows = UI.agent_rows(status)
+        dpns = UI.agent_dpn_rows(status)
+        n_on = sum(1 for r in rows if r["status"].upper() == "ONLINE")
+        n_auth = sum(1 for r in rows if r["authenticated"])
+        n_id = sum(1 for r in rows if r["physical_dpn_id"])
+        label = "Agent Controller: %s | agents=%d/%d | online=%d | identidade=%d | auth=%d" % (
+            "ONLINE" if online else "OFFLINE", n_on, len(rows), n_on, n_id, n_auth)
+        _lbl_agent_ctrl.config(text=label, fg=("#2e7d32" if online else "#b71c1c"))
+        _lbl_agent_ov.config(text=label, fg=("#2e7d32" if online else "#b71c1c"))
+        try:
+            upd = time.strftime("%H:%M:%S", time.localtime(float(status.get("updated_at") or 0)))
+            srv = status.get("server") or {}
+            _lbl_agent_ov2.config(
+                text="Atualizado: %s   Connections: %s   Pending: %s   DPNs: %d" % (
+                    upd, srv.get("connections", 0), srv.get("pending", 0), len(dpns)))
+        except Exception:
+            _lbl_agent_ov2.config(text="")
+        for iid in _agent_tree.get_children(""):
+            _agent_tree.delete(iid)
+        for r in rows:
+            seen = r.get("last_seen") or 0
+            seen_s = time.strftime("%H:%M:%S", time.localtime(seen)) if seen else ""
+            _agent_tree.insert("", "end", iid=r["agent_id"], text=r["agent_id"], values=(
+                r.get("physical_dpn_id") or "(identidade pendente)",
+                r.get("status", ""), "yes" if r.get("authenticated") else "no",
+                "yes" if r.get("dpn_ready") else "no",
+                ("%sms" % r.get("latency_ms")) if r.get("latency_ms") else "",
+                seen_s, r.get("error", "")))
+        for iid in _agent_dpn_tree.get_children(""):
+            _agent_dpn_tree.delete(iid)
+        for d in dpns:
+            _agent_dpn_tree.insert("", "end", iid=d["physical_dpn_id"],
+                                   text=d["physical_dpn_id"], values=(
+                                       d["agents"], d["online"], d["authenticated"],
+                                       d["best_agent_id"], d["latency_ms"]))
+    except Exception:
+        pass
+
+
+def _agent_manual_apply(status):
+    _dpn_apply_status(status, _agent_manual_tree, _lbl_manual_coord)
+
+
+def _agent_manual_reader_loop():
+    import dpn.ui_model as UI
+    path = _dpn_status_path()
+    while True:
+        try:
+            st = UI.read_status(path, default=None)
+            if isinstance(st, dict):
+                try:
+                    janela.after(0, lambda s=st: _agent_manual_apply(s))
+                except Exception:
+                    pass
+            else:
+                try:
+                    janela.after(0, lambda: _lbl_manual_coord.config(
+                        text="Status Coordinator: OFFLINE", fg="#b71c1c"))
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        time.sleep(1.5)
+
+
+def _agent_reader_loop():
+    import dpn.ui_model as UI
+    path = _agent_status_path()
+    while True:
+        try:
+            st = UI.read_status(path, default=None)
+            if isinstance(st, dict):
+                try:
+                    janela.after(0, lambda s=st: _agent_apply_status(s))
+                except Exception:
+                    pass
+            else:
+                try:
+                    janela.after(0, lambda: _lbl_agent_ctrl.config(
+                        text="Agent Controller: OFFLINE", fg="#b71c1c"))
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        time.sleep(1.5)
+
+
+tk.Button(_agent_bar, text="Iniciar", command=_agent_start_controller,
+          bg="#2e7d32", fg="white").pack(side="left", padx=2)
+tk.Button(_agent_bar, text="Parar", command=_agent_stop_controller,
+          bg="#c62828", fg="white").pack(side="left", padx=2)
+tk.Button(_agent_bar, text="Identidades", command=_agent_refresh_identities).pack(side="left", padx=2)
+tk.Button(_agent_bar, text="Codigo", command=_agent_open_pairing).pack(side="left", padx=2)
+tk.Button(_agent_bar, text="Logs", command=_dpn_open_logs).pack(side="right", padx=2)
+
+threading.Thread(target=_agent_reader_loop, daemon=True).start()
+threading.Thread(target=_agent_manual_reader_loop, daemon=True).start()
 
 # ============ SCAN INICIAL DE REDE (1-254) ============
 def scan_inicial_rede():

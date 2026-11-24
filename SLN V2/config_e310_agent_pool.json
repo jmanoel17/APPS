@@ -1,0 +1,7 @@
+{
+  "dpn_routing_enabled": true,
+  "dpn_group_ledger_v2_enabled": true,
+  "dpn_embed_agent_pool_coordinator": true,
+  "dpn_groups_file": "dpn_groups_e310_agent_pool.json",
+  "dpn_max_route_refreshes": 1
+}

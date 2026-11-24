@@ -239,6 +239,7 @@ class WsClient(private val ctx: Context, private val prefs: Prefs) {
         for (op in Proto.READ_OPS) o.put(op, true)
         val dpnReady = !prefs.atomosPassword.isNullOrBlank()
         for (op in Proto.DPN_READ_OPS) o.put(op, dpnReady)
+        for (op in Proto.DPN_MUTATING_OPS) o.put(op, dpnReady)
         o.put(Proto.START_APP, true)
         o.put(Proto.BACK, acc)
         o.put(Proto.HOME, acc)

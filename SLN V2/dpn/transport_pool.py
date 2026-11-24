@@ -103,6 +103,22 @@ class PresenceRegistry:
         return [c for c in self._candidates.values()
                 if c.physical_dpn_id == str(physical_dpn_id)]
 
+    def touch(self, agent_id, last_seen=None, connection_state="ONLINE"):
+        """Refresh a known Agent without changing its physical DPN identity."""
+        c = self._candidates.get(str(agent_id))
+        if c is None:
+            return None
+        c.last_seen = float(last_seen if last_seen is not None else time.time())
+        c.connection_state = str(connection_state or "ONLINE").upper()
+        self._save()
+        return c
+
+    def mark_failure(self, agent_id):
+        c = self._candidates.get(str(agent_id))
+        if c is not None:
+            c.last_failure_at = time.time()
+            self._save()
+
 
 class DPNTransportPool:
     def __init__(self, registry=None, state_dir=None, stale_s=60.0, now_fn=time.time,
@@ -112,6 +128,25 @@ class DPNTransportPool:
         self.now_fn = now_fn
         self.log = log_fn or (lambda *a, **k: None)
         self.failovers = []
+
+    def get_candidates(self, physical_dpn_id, capability=None):
+        now = self.now_fn()
+        out = []
+        for c in self.registry.by_dpn(physical_dpn_id):
+            if not c.online(now, self.stale_s):
+                continue
+            if not c.authenticated:
+                continue
+            if capability and capability not in c.capabilities:
+                continue
+            out.append(c)
+        out.sort(key=lambda c: (float(c.latency_ms), -float(c.last_success_at),
+                                c.agent_id))
+        return out
+
+    def select_mutation_transport(self, physical_dpn_id, required_capability):
+        candidates = self.get_candidates(physical_dpn_id, required_capability)
+        return candidates[0] if candidates else None
 
     def select_read_transport(self, physical_dpn_id, capability=None):
         now = self.now_fn()
@@ -141,6 +176,49 @@ class DPNTransportPool:
         for idx, c in enumerate(candidates):
             try:
                 result = call_fn(c)
+                c.last_success_at = self.now_fn()
+                c.connection_state = "ONLINE"
+                self.registry._save()
+                return result, c
+            except TransportUncertain:
+                c.last_failure_at = self.now_fn()
+                raise
+            except Exception as e:
+                c.last_failure_at = self.now_fn()
+                last_exc = e
+                nxt = candidates[idx + 1] if idx + 1 < len(candidates) else None
+                self.failovers.append({"physical_dpn_id": physical_dpn_id,
+                                       "operation": operation, "from_agent": c.agent_id,
+                                       "to_agent": nxt.agent_id if nxt else None,
+                                       "reason": type(e).__name__})
+                if nxt is not None:
+                    self.log("[DPN][FAILOVER] dpn=%s op=%s from=%s to=%s reason=%s" % (
+                        physical_dpn_id, operation, c.agent_id, nxt.agent_id,
+                        type(e).__name__))
+                continue
+        if last_exc is not None:
+            raise last_exc
+        raise ReadFailover("NO_READ_TRANSPORT")
+
+
+    async def read_async(self, physical_dpn_id, operation, call_fn, capability=None):
+        """Async read failover; call_fn is a coroutine function taking a Candidate.
+
+        Safe failures (not dispatched) try the next Agent. TransportUncertain is
+        propagated immediately and never retried.
+        """
+        candidates = []
+        now = self.now_fn()
+        for c in self.registry.by_dpn(physical_dpn_id):
+            if c.online(now, self.stale_s) and c.authenticated and (
+                    not capability or capability in c.capabilities):
+                candidates.append(c)
+        candidates.sort(key=lambda c: (float(c.latency_ms), -float(c.last_success_at),
+                                       c.agent_id))
+        last_exc = None
+        for idx, c in enumerate(candidates):
+            try:
+                result = await call_fn(c)
                 c.last_success_at = self.now_fn()
                 c.connection_state = "ONLINE"
                 self.registry._save()

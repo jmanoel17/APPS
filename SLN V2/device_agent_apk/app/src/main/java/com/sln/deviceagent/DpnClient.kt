@@ -155,4 +155,68 @@ FwIDAQAB
     fun accessControl(): JSONObject { login(); return getJson("/api/accessControl/list") }
     fun mode(): JSONObject { return get("/api/smartRoute/getDpnMode") }
     fun nodeLbMode(): JSONObject { return get("/api/smartRoute/nodeLbMode") }
+
+    private fun validTunnel(code: String): Boolean = DpnMutationRules.validTunnel(code)
+
+    private fun validIp(ip: String): Boolean = DpnMutationRules.validIp(ip)
+
+    private fun mutationResponse(path: String, body: JSONObject): JSONObject {
+        val req = Request.Builder().url(baseUrl() + path)
+            .post(body.toString().toRequestBody(JSON)).build()
+        val resp = try {
+            client.newCall(req).execute()
+        } catch (e: Exception) {
+            throw DpnError("DPN_UNCERTAIN", e.javaClass.simpleName)
+        }
+        resp.use {
+            val text = it.body?.string() ?: ""
+            if (it.code == 401 || it.code == 403) {
+                if (text.contains("tooManyAttempts", ignoreCase = true))
+                    throw DpnError("DPN_AUTH_BACKOFF", "HTTP ${it.code}: tooManyAttempts")
+                throw DpnError("DPN_UNAUTHORIZED", "HTTP ${it.code}")
+            }
+            if (it.code >= 500) throw DpnError("DPN_UNCERTAIN", "HTTP ${it.code}")
+            if (it.code >= 400) {
+                if (DpnMutationRules.isIpNotChanged(text))
+                    return JSONObject().put("result", "IP_NOT_CHANGED")
+                throw DpnError("DPN_FAILURE", "HTTP ${it.code}: ${text.take(120)}")
+            }
+            val data = try { if (text.isBlank()) JSONObject() else JSONObject(text) }
+            catch (_: Exception) { JSONObject() }
+            val reason = data.optString("reason", "")
+            if (data.optBoolean("success", true) == false) {
+                if (DpnMutationRules.isIpNotChanged(reason))
+                    return JSONObject().put("result", "IP_NOT_CHANGED")
+                throw DpnError("DPN_FAILURE", reason.ifBlank { "success=false" })
+            }
+            return data
+        }
+    }
+
+    private fun checkExpected(expected: String) {
+        if (expected.isBlank()) throw DpnError("DPN_BAD_PARAMS", "expected_dpn_id ausente")
+        val actual = identity().optString("physical_dpn_id", "")
+        if (actual.isBlank() || actual != expected)
+            throw DpnError("DPN_IDENTITY_MISMATCH", "expected=${expected.take(64)} actual=${actual.take(64)}")
+    }
+
+    fun switchNode(expectedDpnId: String, tunnelCode: String, currentIp: String): JSONObject {
+        if (!validTunnel(tunnelCode)) throw DpnError("DPN_BAD_PARAMS", "tunnel_code invalido")
+        if (!validIp(currentIp)) throw DpnError("DPN_BAD_PARAMS", "current_ip invalido")
+        checkExpected(expectedDpnId)
+        val out = mutationResponse("/api/smartRoute/switchNode",
+            JSONObject().put("tunnelCode", tunnelCode).put("currentIp", currentIp))
+        if (out.optString("result") == "IP_NOT_CHANGED") return out
+        out.put("result", "REQUESTED").put("tunnel_code", tunnelCode)
+            .put("current_ip", currentIp)
+        return out
+    }
+
+    fun refreshRouteSet(expectedDpnId: String, tunnelCode: String): JSONObject {
+        if (!validTunnel(tunnelCode)) throw DpnError("DPN_BAD_PARAMS", "tunnel_code invalido")
+        checkExpected(expectedDpnId)
+        mutationResponse("/api/smartRoute/refreshTunnel",
+            JSONObject().put("tunnelCode", tunnelCode))
+        return JSONObject().put("result", "REQUESTED").put("tunnel_code", tunnelCode)
+    }
 }

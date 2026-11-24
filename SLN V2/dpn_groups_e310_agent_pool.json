@@ -1,0 +1,24 @@
+{
+  "DPN_POOL_TEST": {
+    "group_id": "DPN_POOL_TEST",
+    "provider": "deeper_connect",
+    "controller_id": "DPN_POOL_TEST",
+    "tunnel_code": "BR",
+    "expected_dpn_id": "Deeper-Wire-HW-17bf3b402b4a|e6960e1a4882b589",
+    "members": [],
+    "enabled": true,
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent_pool",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "BR",
+      "node_lb_mode": "none",
+      "expected_dpn_id": "Deeper-Wire-HW-17bf3b402b4a|e6960e1a4882b589",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  }
+}

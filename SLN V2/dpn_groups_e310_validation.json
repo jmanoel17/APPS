@@ -1,0 +1,28 @@
+{
+  "DPN_VALIDATE": {
+    "group_id": "DPN_VALIDATE",
+    "provider": "deeper_connect",
+    "controller_id": "DPN_VALIDATE",
+    "tunnel_code": "BR",
+    "expected_dpn_id": "Deeper-Wire-HW-17bf3b402b4a|e6960e1a4882b589",
+    "members": [
+      "192.168.1.105:5555",
+      "192.168.1.132:5555",
+      "192.168.1.36:5555"
+    ],
+    "enabled": true,
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent_pool",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "BR",
+      "node_lb_mode": "none",
+      "expected_dpn_id": "Deeper-Wire-HW-17bf3b402b4a|e6960e1a4882b589",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  }
+}

@@ -59,7 +59,7 @@ class Runner:
     """Autoridade DPN por host. Importável para testes (step/publish/process sem threads)."""
 
     def __init__(self, cfg, groups, base_dir, state_dir, tick_s=1.0, log_fn=print,
-                 now_fn=time.time, alive_fn=None, agent_hub=None):
+                 now_fn=time.time, alive_fn=None, agent_hub=None, agent_pool=None):
         self.cfg = cfg
         self.groups = groups if isinstance(groups, dict) else {}
         self.base_dir = base_dir
@@ -79,6 +79,7 @@ class Runner:
             base_dir, enabled=bool(self.cfg.get("dpn_console_log_enabled", True)),
             log_fn=self.log)
         self._agent_hub = None
+        self._agent_pool = agent_pool
         self._owns_hub = False
         os.makedirs(self.state_dir, exist_ok=True)
         self._prepare_hub(agent_hub)
@@ -144,7 +145,8 @@ class Runner:
             entry = {"dpn_id": dpn_id, "devices": devices, "error": None}
             try:
                 provider = build_provider(ctype, controller, dpn_id=dpn_id,
-                                          agent_hub=self._agent_hub)
+                                          agent_hub=self._agent_hub,
+                                          agent_pool=self._agent_pool)
             except UnknownProviderError:
                 entry["error"] = "unknown_provider:%s" % ctype
                 self.dpns[dpn_id] = entry
@@ -187,7 +189,8 @@ class Runner:
             try:
                 provider = build_provider(grp.get("provider"), controller,
                                           dpn_id=grp.get("controller_id") or gid,
-                                          agent_hub=self._agent_hub)
+                                          agent_hub=self._agent_hub,
+                                          agent_pool=self._agent_pool)
                 barrier = GroupSignalBarrier(self.state_dir, gid, grp.get("members") or [],
                                              alive_fn=self.alive_fn, now_fn=self.now_fn)
                 coord = GroupLedgerCoordinator(

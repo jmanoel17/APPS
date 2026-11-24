@@ -174,3 +174,48 @@ def tree_rows(status):
             for i, x in enumerate(ds):
                 out.append(_dev_row("%s:%d" % (biid, i), biid, x, bnode, bnode.lower()))
     return out
+
+
+def agent_controller_online(status, now=None, stale_s=8.0):
+    return coordinator_online(status, now=now, stale_s=stale_s)
+
+
+def agent_rows(status):
+    """Rows for the unified Device Agent pool tab (never raises)."""
+    if not isinstance(status, dict) or not isinstance(status.get("agents"), list):
+        return []
+    out = []
+    for a in status["agents"]:
+        if not isinstance(a, dict):
+            continue
+        out.append({
+            "agent_id": str(a.get("agent_id") or ""),
+            "physical_dpn_id": str(a.get("physical_dpn_id") or ""),
+            "status": str(a.get("status") or ""),
+            "authenticated": bool(a.get("authenticated")),
+            "dpn_ready": bool(a.get("dpn_ready")),
+            "latency_ms": a.get("latency_ms") or 0,
+            "last_seen": a.get("last_seen") or 0,
+            "error": a.get("error") or "",
+        })
+    out.sort(key=lambda r: (r["physical_dpn_id"], r["agent_id"]))
+    return out
+
+
+def agent_dpn_rows(status):
+    """Summary rows physical_dpn_id -> Agents/online/authenticated/latency."""
+    if not isinstance(status, dict) or not isinstance(status.get("dpns"), dict):
+        return []
+    out = []
+    for dpn_id, d in sorted(status["dpns"].items()):
+        if not isinstance(d, dict):
+            continue
+        out.append({
+            "physical_dpn_id": dpn_id,
+            "agents": int(d.get("agents") or 0),
+            "online": int(d.get("online") or 0),
+            "authenticated": int(d.get("authenticated") or 0),
+            "best_agent_id": d.get("best_agent_id") or "",
+            "latency_ms": d.get("latency_ms") or 0,
+        })
+    return out

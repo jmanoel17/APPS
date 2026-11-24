@@ -1,0 +1,17 @@
+{
+  "dpn_routing_enabled": true,
+  "dpn_group_ledger_v2_enabled": true,
+  "dpn_embed_agent_pool_coordinator": true,
+  "dpn_auto_register_enabled": false,
+  "dpn_groups_file": "dpn_groups_e310_validation.json",
+  "dpn_work_units_per_ip": 3,
+  "dpn_agent_controller_port": 8766,
+  "dpn_agent_controller_host": "0.0.0.0",
+  "dpn_mutation_lease_s": 30,
+  "dpn_auth_backoff_s": 300,
+  "dpn_pool_stale_s": 60,
+  "dpn_agent_request_timeout_s": 25,
+  "dpn_drain_timeout_s": 20,
+  "dpn_route_refresh_settle_s": 5,
+  "dpn_console_log_enabled": true
+}
