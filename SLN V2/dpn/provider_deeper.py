@@ -294,6 +294,11 @@ class DeeperConnectProvider(DPNProvider):
         for t in _normalize_tunnels(data):
             if isinstance(t, dict) and t.get("tunnelCode") == self.tunnel_code:
                 return t
+        if not self.tunnel_code:
+            # Auto-registro: sem tunnel_code no catálogo => usa o primeiro túnel ativo.
+            for t in _normalize_tunnels(data):
+                if isinstance(t, dict) and t.get("activeIp"):
+                    return t
         return None
 
     # ---------------------------------------------------------------- contrato

@@ -156,17 +156,25 @@ object CommandExecutor {
             Proto.STOP_APP -> privilegedStop(ctx, params)
             Proto.CLEAR_APP_DATA -> privilegedClear(ctx, params)
             Proto.GET_ACCESSIBILITY_STATE -> JSONObject().put("enabled", DeviceAccessibilityService.instance != null)
-            Proto.GET_DPN_IDENTITY -> DpnClient(prefs).identity()
-            Proto.GET_DPN_STATUS -> DpnClient(prefs).status()
-            Proto.LIST_DPN_TUNNELS -> JSONObject().put("tunnels", DpnClient(prefs).tunnels())
-            Proto.GET_DPN_MODE -> DpnClient(prefs).mode()
-            Proto.GET_DPN_NODE_LB_MODE -> DpnClient(prefs).nodeLbMode()
-            Proto.LIST_DPN_ACCESS_CONTROL -> DpnClient(prefs).accessControl()
-            Proto.DPN_SWITCH_NODE -> DpnClient(prefs).switchNode(
+            Proto.GET_DPN_IDENTITY -> DpnClient.session(prefs).identity()
+            Proto.GET_DPN_STATUS -> DpnClient.session(prefs).status()
+            Proto.LIST_DPN_TUNNELS -> JSONObject().put("tunnels", DpnClient.session(prefs).tunnels())
+            Proto.GET_DPN_MODE -> DpnClient.session(prefs).mode()
+            Proto.GET_DPN_NODE_LB_MODE -> DpnClient.session(prefs).nodeLbMode()
+            Proto.LIST_DPN_ACCESS_CONTROL -> DpnClient.session(prefs).accessControl()
+            Proto.DPN_SWITCH_NODE -> DpnClient.session(prefs).switchNode(
                 params.optString("expected_dpn_id"), params.optString("tunnel_code"),
                 params.optString("current_ip"))
-            Proto.DPN_REFRESH_ROUTE_SET -> DpnClient(prefs).refreshRouteSet(
+            Proto.DPN_REFRESH_ROUTE_SET -> DpnClient.session(prefs).refreshRouteSet(
                 params.optString("expected_dpn_id"), params.optString("tunnel_code"))
+            Proto.DPN_ADD_TUNNEL -> DpnClient.session(prefs).addTunnel(params.optString("tunnel_code"))
+            Proto.DPN_DELETE_TUNNEL -> DpnClient.session(prefs).deleteTunnel(params.optString("tunnel_code"))
+            Proto.DPN_ACCESS_CONTROL_MODE -> DpnClient.session(prefs).accessControlMode(
+                params.optString("mode"))
+            Proto.DPN_ACCESS_CONTROL_ADD_DEVICE -> DpnClient.session(prefs).accessControlAddDevice(
+                params.optString("name"), params.optString("mac"))
+            Proto.DPN_ACCESS_CONTROL_REMOVE_DEVICE -> DpnClient.session(prefs).accessControlRemoveDevice(
+                params.optString("mac"))
             Proto.START_APP -> startApp(ctx, params)
             Proto.BACK, Proto.HOME -> action(op)
             Proto.TAP -> tap(ctx, params, receivedAt, deadline)

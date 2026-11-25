@@ -165,7 +165,7 @@ class AgentPoolClient:
             self._metric(physical_dpn_id, "auth_backoff")
             self.log("[DPN_AUTH][BACKOFF] dpn=%s reason=blocked" % physical_dpn_id)
             raise AuthBackoff("AUTH_BACKOFF:%s" % physical_dpn_id)
-        candidates = self.pool.get_candidates(physical_dpn_id, required_capability)
+        candidates = self.pool.get_candidates(physical_dpn_id, None)
         if not candidates:
             raise ReadFailover("NO_MUTATION_TRANSPORT")
         last = None

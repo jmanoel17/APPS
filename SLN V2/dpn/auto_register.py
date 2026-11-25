@@ -42,11 +42,12 @@ def _serial(lan_ip):
     return ip if ":" in ip else ip + ":5555"
 
 
-def build_groups(status, catalog):
+def build_groups(status, catalog, auto_enable=False):
     """Build agent_pool groups from current pool status.
 
     Known physical IDs inherit tunnel/address from the catalog; unknown IDs are
-    registered as disabled so they are visible but never mutated blindly.
+    registered as disabled (or enabled when `auto_enable`) so they are visible
+    but never mutated blindly.
     """
     catalog_map = _catalog_by_expected(catalog)
     seen = {}
@@ -63,13 +64,13 @@ def build_groups(status, catalog):
                 ctl = copy.deepcopy(spec.get("controller") or {})
                 gid = str(spec.get("group_id") or key)
                 tunnel = str(ctl.get("tunnel_code") or spec.get("tunnel_code") or "")
-                enabled = bool(tunnel)
+                enabled = bool(tunnel) or bool(auto_enable)
                 meta["known"] += 1
             else:
                 gid = "DPN_" + _safe_suffix(pid)
                 tunnel = ""
                 ctl = {}
-                enabled = False
+                enabled = bool(auto_enable)
                 meta["unknown"] += 1
             ctl.pop("agent_id", None)
             ctl.pop("android_serial", None)

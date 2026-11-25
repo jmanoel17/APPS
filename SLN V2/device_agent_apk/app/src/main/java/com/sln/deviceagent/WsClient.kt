@@ -285,7 +285,7 @@ class WsClient(private val ctx: Context, private val prefs: Prefs) {
         dpnProbeAt = now
         dpnProbePool.execute {
             val presence = try {
-                val id = DpnClient(prefs).identity()
+                val id = DpnClient.session(prefs).identity()
                 JSONObject()
                     .put("reachable", true)
                     .put("physical_dpn_id", id.optString("physical_dpn_id"))

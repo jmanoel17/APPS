@@ -41,6 +41,23 @@ FwIDAQAB
         private fun sha256(bytes: ByteArray): String =
             MessageDigest.getInstance("SHA-256").digest(bytes)
                 .joinToString("") { "%02x".format(it) }
+
+        @Volatile private var shared: DpnClient? = null
+        @Volatile private var sharedKey: String = ""
+
+        fun session(prefs: Prefs): DpnClient {
+            val key = prefs.atomosUrl + "|" + (prefs.atomosPassword ?: "")
+            val cur = shared
+            if (cur != null && key == sharedKey) return cur
+            synchronized(this) {
+                val cur2 = shared
+                if (cur2 != null && key == sharedKey) return cur2
+                val n = DpnClient(prefs)
+                shared = n
+                sharedKey = key
+                return n
+            }
+        }
     }
 
     private val cookies = ConcurrentHashMap<String, Cookie>()
@@ -77,6 +94,7 @@ FwIDAQAB
     }
 
     @Volatile private var loggedIn = false
+    @Volatile private var authRetried = false
 
     private fun baseUrl(): String = prefs.atomosUrl.trimEnd('/')
 
@@ -96,7 +114,15 @@ FwIDAQAB
         else b.get()
         client.newCall(b.build()).execute().use { resp ->
             val text = resp.body?.string() ?: ""
-            if (resp.code == 401 || resp.code == 403) throw DpnError("DPN_UNAUTHORIZED", "HTTP ${resp.code}: ${text.take(160)}")
+            if (resp.code == 401 || resp.code == 403) {
+                if (!authRetried) {
+                    authRetried = true
+                    loggedIn = false
+                    login()
+                    return request(method, path, body)
+                }
+                throw DpnError("DPN_UNAUTHORIZED", "HTTP ${resp.code}: ${text.take(160)}")
+            }
             if (resp.code >= 400) throw DpnError("DPN_HTTP", "HTTP ${resp.code}")
             return text
         }
@@ -120,6 +146,7 @@ FwIDAQAB
             throw DpnError("DPN_AUTH_FAILED", "login recusado")
         }
         loggedIn = true
+        authRetried = false
     }
 
     private fun get(path: String): JSONObject { login(); return getJson(path) }
@@ -161,6 +188,7 @@ FwIDAQAB
     private fun validIp(ip: String): Boolean = DpnMutationRules.validIp(ip)
 
     private fun mutationResponse(path: String, body: JSONObject): JSONObject {
+        login()
         val req = Request.Builder().url(baseUrl() + path)
             .post(body.toString().toRequestBody(JSON)).build()
         val resp = try {
@@ -218,5 +246,44 @@ FwIDAQAB
         mutationResponse("/api/smartRoute/refreshTunnel",
             JSONObject().put("tunnelCode", tunnelCode))
         return JSONObject().put("result", "REQUESTED").put("tunnel_code", tunnelCode)
+    }
+
+    fun addTunnel(tunnelCode: String): JSONObject {
+        if (!validTunnel(tunnelCode)) throw DpnError("DPN_BAD_PARAMS", "tunnel_code invalido")
+        val out = mutationResponse("/api/smartRoute/addTunnel",
+            JSONObject().put("tunnelCode", tunnelCode))
+        return out.put("result", out.optString("result", "REQUESTED")).put("tunnel_code", tunnelCode)
+    }
+
+    fun deleteTunnel(tunnelCode: String): JSONObject {
+        if (!validTunnel(tunnelCode)) throw DpnError("DPN_BAD_PARAMS", "tunnel_code invalido")
+        val out = mutationResponse("/api/smartRoute/deleteTunnel",
+            JSONObject().put("tunnelCode", tunnelCode))
+        return out.put("result", out.optString("result", "REQUESTED")).put("tunnel_code", tunnelCode)
+    }
+
+    fun accessControlMode(mode: String): JSONObject {
+        if (mode !in setOf("open", "restrict", "off")) {
+            throw DpnError("DPN_BAD_PARAMS", "mode invalido")
+        }
+        val out = mutationResponse("/api/accessControl/setMode",
+            JSONObject().put("mode", mode))
+        return out.put("result", out.optString("result", "REQUESTED")).put("mode", mode)
+    }
+
+    fun accessControlAddDevice(name: String, mac: String): JSONObject {
+        if (name.isBlank() || mac.isBlank()) {
+            throw DpnError("DPN_BAD_PARAMS", "name/mac obrigatorio")
+        }
+        val out = mutationResponse("/api/accessControl/addDevice",
+            JSONObject().put("name", name).put("mac", mac))
+        return out.put("result", out.optString("result", "REQUESTED")).put("mac", mac)
+    }
+
+    fun accessControlRemoveDevice(mac: String): JSONObject {
+        if (mac.isBlank()) throw DpnError("DPN_BAD_PARAMS", "mac obrigatorio")
+        val out = mutationResponse("/api/accessControl/deleteDevice",
+            JSONObject().put("mac", mac))
+        return out.put("result", out.optString("result", "REQUESTED")).put("mac", mac)
     }
 }

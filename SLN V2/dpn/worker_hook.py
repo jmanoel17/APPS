@@ -148,6 +148,32 @@ def gate(device, instance_id=None, cycle_id=None, cfg=None):
     return True
 
 
+def ip_epoch(device_id, cfg=None):
+    """Identidade do IP atual da DPN do device (muda quando a unidade troca de IP).
+
+    Usado pelo main para, ao detectar mudanca de IP, resetar o ID de anuncio.
+    Retorna None quando DPN desligada/sem grupo/IP pronto."""
+    cfg = cfg or _cfg()
+    if not cfg.get("dpn_routing_enabled", False):
+        return None
+    if v2_enabled(cfg):
+        group_id = resolve_route_group(device_id, cfg)
+        if not group_id:
+            return None
+        g = _group_state(cfg, group_id)
+        ip = str(g.get("current_public_ip") or "")
+        ep = str(g.get("current_epoch_id") or g.get("route_generation_id") or "")
+        if not ip and not ep:
+            return None
+        return ip + "|" + ep
+    dpn_id = resolve_dpn(device_id, cfg)
+    if not dpn_id:
+        return None
+    st = S.read_dpn_state(state_dir(cfg), dpn_id)
+    ip = str(st.get("current_ip") or "")
+    return ip or None
+
+
 def on_terminal_cycle(device_id, instance_id, cycle_id, result, cfg=None):
     """Contabiliza UM ciclo terminal (COMPLETED/FAILED). Retorna o dict do account (ou None)."""
     cfg = cfg or _cfg()

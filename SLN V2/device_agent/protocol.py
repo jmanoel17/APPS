@@ -54,9 +54,17 @@ GET_DPN_NODE_LB_MODE = "GET_DPN_NODE_LB_MODE"
 LIST_DPN_ACCESS_CONTROL = "LIST_DPN_ACCESS_CONTROL"
 DPN_SWITCH_NODE = "DPN_SWITCH_NODE"
 DPN_REFRESH_ROUTE_SET = "DPN_REFRESH_ROUTE_SET"
+DPN_ADD_TUNNEL = "DPN_ADD_TUNNEL"
+DPN_DELETE_TUNNEL = "DPN_DELETE_TUNNEL"
+DPN_ACCESS_CONTROL_MODE = "DPN_ACCESS_CONTROL_MODE"
+DPN_ACCESS_CONTROL_ADD_DEVICE = "DPN_ACCESS_CONTROL_ADD_DEVICE"
+DPN_ACCESS_CONTROL_REMOVE_DEVICE = "DPN_ACCESS_CONTROL_REMOVE_DEVICE"
 DPN_READ_OPS = (GET_DPN_IDENTITY, GET_DPN_STATUS, LIST_DPN_TUNNELS,
                 GET_DPN_MODE, GET_DPN_NODE_LB_MODE, LIST_DPN_ACCESS_CONTROL)
-DPN_MUTATING_OPS = (DPN_SWITCH_NODE, DPN_REFRESH_ROUTE_SET)
+DPN_MUTATING_OPS = (DPN_SWITCH_NODE, DPN_REFRESH_ROUTE_SET,
+                    DPN_ADD_TUNNEL, DPN_DELETE_TUNNEL,
+                    DPN_ACCESS_CONTROL_MODE, DPN_ACCESS_CONTROL_ADD_DEVICE,
+                    DPN_ACCESS_CONTROL_REMOVE_DEVICE)
 
 OPS = (PING, GET_STATUS, GET_DEVICE_INFO, GET_NETWORK_INFO, GET_FOREGROUND_APP,
        GET_ACCESSIBILITY_STATE, START_APP, BACK, HOME, TAP, SWIPE,
@@ -142,6 +150,12 @@ def _valid_dpn_tunnel(value):
     return isinstance(value, str) and bool(re.match(r"^[A-Za-z0-9_-]{1,16}$", value))
 
 
+def _valid_dpn_mac(value):
+    if not isinstance(value, str):
+        return False
+    return bool(re.match(r"^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", value))
+
+
 def _valid_dpn_ip(value):
     try:
         ipaddress.ip_address(str(value))
@@ -158,8 +172,21 @@ def validate_params(op, params, display=None):
         expected = params.get("expected_dpn_id")
         if not isinstance(expected, str) or not expected.strip() or len(expected) > 200:
             return "expected_dpn_id obrigatorio"
-        if not _valid_dpn_tunnel(params.get("tunnel_code")):
-            return "tunnel_code invalido"
+        if op in (DPN_ACCESS_CONTROL_MODE, DPN_ACCESS_CONTROL_ADD_DEVICE,
+                  DPN_ACCESS_CONTROL_REMOVE_DEVICE):
+            if op == DPN_ACCESS_CONTROL_MODE and params.get("mode") not in ("open", "restrict", "off"):
+                return "mode invalido"
+            if op == DPN_ACCESS_CONTROL_ADD_DEVICE:
+                if not isinstance(params.get("name"), str) or not params.get("name").strip():
+                    return "name obrigatorio"
+                if not _valid_dpn_mac(params.get("mac")):
+                    return "mac invalido"
+            if op == DPN_ACCESS_CONTROL_REMOVE_DEVICE:
+                if not _valid_dpn_mac(params.get("mac")):
+                    return "mac invalido"
+        else:
+            if not _valid_dpn_tunnel(params.get("tunnel_code")):
+                return "tunnel_code invalido"
         if op == DPN_SWITCH_NODE and not _valid_dpn_ip(params.get("current_ip")):
             return "current_ip invalido"
 

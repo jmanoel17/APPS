@@ -63,5 +63,120 @@
       "request_timeout_s": 10,
       "connect_timeout_s": 5
     }
+  },
+  "DPN_ffd908feeb": {
+    "devices": [
+      "192.168.1.87:5555",
+      "192.168.1.112:5555",
+      "192.168.1.88:5555",
+      "192.168.1.65:5555",
+      "192.168.1.83:5555",
+      "192.168.1.66:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "expected_dpn_id": "Deeper-Wire-HW-01fab8a45aa9|8cfea0ffd908feeb",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_c254181476": {
+    "devices": [
+      "192.168.100.149:5555",
+      "192.168.100.147:5555",
+      "192.168.100.150:5555",
+      "192.168.100.148:5555",
+      "192.168.100.151:5555",
+      "192.168.100.152:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "expected_dpn_id": "Deeper-Wire-HW-5afe5e7c09c8|611d70c254181476",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_ef10bc7dd8": {
+    "devices": [
+      "192.168.8.188:5555",
+      "192.168.8.179:5555",
+      "192.168.8.198:5555",
+      "192.168.8.122:5555",
+      "192.168.8.216:5555",
+      "192.168.8.248:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "expected_dpn_id": "Deeper-Wire-HW-745c92e33340|33f4e8ef10bc7dd8",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_9dde961d24": {
+    "devices": [
+      "192.168.100.219:5555",
+      "192.168.100.146:5555",
+      "192.168.100.220:5555",
+      "192.168.100.15:5555",
+      "192.168.100.207:5555",
+      "192.168.100.12:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "expected_dpn_id": "Deeper-Wire-HW-9fbe2eb7c619|39c7479dde961d24",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
+  },
+  "DPN_587c8a4462": {
+    "devices": [
+      "192.168.100.107:5555",
+      "192.168.100.101:5555",
+      "192.168.100.105:5555",
+      "192.168.100.106:5555",
+      "192.168.100.100:5555",
+      "192.168.100.102:5555"
+    ],
+    "controller": {
+      "type": "deeper_connect",
+      "transport": "agent",
+      "expected_dpn_id": "Deeper-Wire-HW-bc9f4b42ca34|748a16587c8a4462",
+      "address": "34.34.34.34",
+      "port": 443,
+      "username": "admin",
+      "tls_mode": "insecure",
+      "tunnel_code": "UB",
+      "node_lb_mode": "none",
+      "request_timeout_s": 25,
+      "connect_timeout_s": 5
+    }
   }
 }

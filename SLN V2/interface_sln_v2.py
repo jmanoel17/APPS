@@ -1159,6 +1159,8 @@ app_scan = ScannerTab(tab_scan)
 # state/dpn/commands/. NUNCA consulta a DPN diretamente nem bloqueia a thread do Tkinter.
 tab_dpn = ttk.Frame(notebook)
 notebook.add(tab_dpn, text="🌐 DPN")
+if os.environ.get("SLN_UI_START_TAB", "").strip().lower() == "dpn":
+    janela.after(200, lambda: notebook.select(tab_dpn))
 
 _dpn_cols = ("state", "tunnel", "tip", "online", "total", "mode", "lan")
 _dpn_tree = ttk.Treeview(tab_dpn, columns=_dpn_cols, show="tree headings", height=16)

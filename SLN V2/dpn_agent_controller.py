@@ -217,7 +217,9 @@ class ControllerRuntime:
             stable = 0
             groups, meta = {}, {}
             while not self._coord_stop.is_set() and time.time() < deadline:
-                groups, meta = build_groups(self._client.status(), catalog)
+                groups, meta = build_groups(self._client.status(), catalog,
+                                            auto_enable=bool(
+                                                self.cfg.get("dpn_auto_register_enabled", False)))
                 sig = tuple(sorted((gid, tuple(g.get("members") or []))
                                    for gid, g in groups.items()))
                 # Wait for all currently discoverable known groups and for a
@@ -403,6 +405,17 @@ class ControllerRuntime:
             params = {"expected_dpn_id": physical, "tunnel_code": tunnel}
             if action == "switch_node":
                 params["current_ip"] = str(cmd.get("current_ip") or "")
+            data, chosen = await self._client.execute_mutation(
+                physical, op, params, op, command_id=cmd.get("command_id"))
+            return {"physical_dpn_id": physical, "op": op,
+                    "agent_id": chosen.agent_id, "data": data}
+        if action == "mutation":
+            physical = str(cmd.get("physical_dpn_id") or "")
+            op = str(cmd.get("op") or "")
+            if not physical or op not in P.DPN_MUTATING_OPS:
+                raise ValueError("mutation exige physical_dpn_id e op mutating")
+            params = dict(cmd.get("params") or {})
+            params.setdefault("expected_dpn_id", physical)
             data, chosen = await self._client.execute_mutation(
                 physical, op, params, op, command_id=cmd.get("command_id"))
             return {"physical_dpn_id": physical, "op": op,

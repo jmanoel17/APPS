@@ -4692,6 +4692,43 @@ def reset_identity_and_app_state():
         f"total_reset_cycle_ms={total}")
     return True
 
+def ensure_app_installed(pkg):
+    """Instala o APK de apks/ (manifesto package->arquivo) se o pacote nao estiver instalado."""
+    import json as _json
+    try:
+        apks_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "apks")
+        apk_name = None
+        mpath = os.path.join(apks_dir, "manifest.json")
+        if os.path.isfile(mpath):
+            try:
+                with open(mpath, "r", encoding="utf-8") as f:
+                    apk_name = _json.load(f).get(pkg)
+            except Exception:
+                apk_name = None
+        if not apk_name:
+            return True   # sem mapeamento: nao instala
+        try:
+            out = subprocess.run(["adb", "-s", device, "shell", "pm", "path", pkg],
+                                 capture_output=True, text=True, timeout=20)
+            if "package:" in (out.stdout or ""):
+                return True
+        except Exception:
+            pass
+        apk_path = os.path.join(apks_dir, apk_name)
+        if not os.path.isfile(apk_path):
+            log(f"[INSTALL] APK ausente: {apk_path}")
+            return False
+        log(f"[INSTALL] {pkg} nao instalado -> instalando {apk_name} em {device}")
+        r = subprocess.run(["adb", "-s", device, "install", "-r", apk_path],
+                           capture_output=True, text=True, timeout=300)
+        ok = (r.returncode == 0) and ("Success" in (r.stdout or ""))
+        log(f"[INSTALL] {pkg} -> {'OK' if ok else 'FALHOU: ' + ((r.stdout or r.stderr or '')[:160])}")
+        return ok
+    except Exception as e:
+        log(f"[INSTALL][ERROR] {type(e).__name__}: {e}")
+        return False
+
+
 def verificar_e_corrigir_package():
     try:
         current_info = cur_app()
@@ -4732,26 +4769,56 @@ def tratar_consentimento_cas(d):
     dump = get_hierarchy_data()
     if dump is None:
         return False
-    textos = {}
+
+    def _bounds_center(node):
+        nums = list(map(int, re.findall(r"\d+", node.attrib.get("bounds", "") or "")))
+        if len(nums) != 4:
+            return None
+        x1, y1, x2, y2 = nums
+        if x2 <= x1 or y2 <= y1:
+            return None
+        return (x1, y1, x2, y2, (x2 - x1) * (y2 - y1))
+
+    por_texto = []
+    por_desc = []
+    tem_titulo = False
     for n in dump.iter("node"):
-        t = n.attrib.get("text", "").strip().upper()
-        if t in (_CONSENT_ACCEPT, _CONSENT_DECLINE, _CONSENT_TITLE):
-            textos[t] = n
-    if _CONSENT_ACCEPT not in textos or not (_CONSENT_TITLE in textos or _CONSENT_DECLINE in textos):
+        txt = (n.attrib.get("text", "") or "").strip().upper()
+        cd = (n.attrib.get("content-desc", "") or "").strip().upper()
+        if _CONSENT_TITLE in txt or _CONSENT_TITLE in cd:
+            tem_titulo = True
+        if acao == "decline":
+            if "NO, THANK YOU" in txt:
+                por_texto.append(n)
+            elif "NO, THANK YOU" in cd:
+                por_desc.append(n)
+        else:
+            if "I AGREE" in txt:
+                por_texto.append(n)
+            elif "I AGREE" in cd:
+                por_desc.append(n)
+    # prefere o TEXTO do botao; entre candidatos, o de MENOR area (botao, nao o container)
+    pool = por_texto or por_desc
+    alvo = None
+    best = None
+    for n in pool:
+        bc = _bounds_center(n)
+        if bc and (best is None or bc[4] < best[4]):
+            alvo, best = n, bc
+    if alvo is None:
+        if tem_titulo:
+            log("[CONSENT][CAS] titulo visivel, botao nao encontrado no dump (WebView?)")
         return False
-    alvo = textos.get(_CONSENT_ACCEPT)
-    nums = list(map(int, re.findall(r"\d+", alvo.attrib.get("bounds", "")))) if alvo is not None else []
-    if len(nums) != 4:
-        log(f"[CONSENT][CAS] detected action={acao} result=target_not_found")
-        return False
-    cx, cy = (nums[0] + nums[2]) // 2, (nums[1] + nums[3]) // 2
-    log(f"[CONSENT][CAS] detected signals={sorted(textos)} action={acao} click=({cx},{cy}) "
+    cx, cy = (best[0] + best[2]) // 2, (best[1] + best[3]) // 2
+    log(f"[CONSENT][CAS] detected action={acao} click=({cx},{cy}) "
+        f"text={alvo.attrib.get('text')!r} desc={alvo.attrib.get('content-desc')!r} "
         f"bounds={alvo.attrib.get('bounds')}")
     _backend_tap(cx, cy)
     time.sleep(1.5)
     dump2 = get_hierarchy_data()
     ainda = dump2 is not None and any(
-        n.attrib.get("text", "").strip().upper() == _CONSENT_ACCEPT
+        "I AGREE" in ((n.attrib.get("text", "") or n.attrib.get("content-desc", "") or "")
+                      .strip().upper())
         for n in dump2.iter("node"))
     log(f"[CONSENT][CAS] result={'still_visible' if ainda else 'dismissed'}")
     return not ainda
@@ -5244,11 +5311,14 @@ if __name__ == '__main__':
     rodadas_local = 0
     # AD SESSION / CYCLE: 1 clique "Assistir anúncio" = 1 ciclo (com N stages até a MAIN).
     _cycle = ad_session.CycleSession(device, log)
+    _dpn_last_epoch = None   # IP/epoch da DPN visto no último ciclo (reset de ID ao mudar)
     # Telemetria de escala: um resumo [PERF] a cada ~60s (não loga por tick)
     threading.Thread(target=_perf_loop, daemon=True).start()
     # Ticker de heartbeat (só relevante com heartbeat_enabled): progresso legítimo + dump travado.
     if cfg.get("heartbeat_enabled", False):
         threading.Thread(target=_hb_loop, daemon=True).start()
+    # Garante o app instalado (instala de apks/ se faltar) antes de rodar.
+    ensure_app_installed(package)
     while True:
         try:
             _hb_cycle_start = time.monotonic()
@@ -5265,6 +5335,23 @@ if __name__ == '__main__':
                         continue
                 except Exception as _dpn_e:
                     log(f"[DPN][ERROR] gate: {type(_dpn_e).__name__}: {_dpn_e}")
+            # DPN: se o IP da unidade MUDOU (rotação concluída), resetar o ID de anúncio
+            # ANTES do próximo ciclo (regra: troca IP -> troca ID logo depois).
+            if DPN_ENABLED and dpn_worker is not None \
+                    and not (_cycle is not None and _cycle.active) \
+                    and not _reset_pending and not _clear_pending:
+                try:
+                    _ep = dpn_worker.ip_epoch(device)
+                except Exception:
+                    _ep = None
+                if _ep:
+                    if _dpn_last_epoch is None:
+                        _dpn_last_epoch = _ep
+                    elif _ep != _dpn_last_epoch:
+                        _dpn_last_epoch = _ep
+                        log(f"[DPN][IP_CHANGED] {_ep} -> RESET ID (pm clear)")
+                        if not reset_identity_and_app_state():
+                            continue
             # QA REALISTIC (camada de agendamento; NÃO toca a state machine do anúncio):
             # delay + decisão de reset APENAS ENTRE CICLOS (nunca com ad-session ativa).
             if qa_scheduler is not None and not (_cycle is not None and _cycle.active):
