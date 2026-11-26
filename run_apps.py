@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import random
 import re
@@ -38,6 +39,65 @@ def adb(device, *args, timeout=30):
         return out.stdout or ""
     except subprocess.TimeoutExpired:
         return ""
+
+
+APK_DIRS = [
+    os.path.join(ROOT, "SLN V2", "Apks"),
+    os.path.join(ROOT, "SLN V2", "apks"),
+    os.path.join(ROOT, "apks"),
+]
+
+
+def apk_manifest():
+    for d in APK_DIRS:
+        mpath = os.path.join(d, "manifest.json")
+        if os.path.isfile(mpath):
+            try:
+                with open(mpath, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if isinstance(data, dict):
+                    return d, {str(k): str(v) for k, v in data.items()}
+            except Exception:
+                pass
+    return (APK_DIRS[0], {})
+
+
+def install_missing_apps(device, packages):
+    adir, manifest = apk_manifest()
+    before = installed_packages(device)
+    if not before:
+        return before
+    for pkg in packages:
+        if pkg in before:
+            continue
+        name = manifest.get(pkg)
+        if not name:
+            print("[INSTALL] {} sem APK no manifesto - ignorado".format(pkg))
+            continue
+        path = os.path.join(adir, name)
+        if not os.path.isfile(path):
+            print("[INSTALL] APK ausente: {}".format(path))
+            continue
+        print("[INSTALL] {} -> {}".format(pkg, name))
+        try:
+            r = subprocess.run(["adb", "-s", device, "install", "-r", path],
+                               capture_output=True, text=True, timeout=300,
+                               creationflags=CREATION_FLAGS)
+            out = (r.stdout or r.stderr or "").strip().splitlines()
+            print("[INSTALL] {} -> {}".format(pkg, out[-1] if out else r.returncode))
+        except Exception as e:
+            print("[INSTALL] {} falhou: {}".format(pkg, type(e).__name__))
+    return installed_packages(device)
+
+
+def installed_packages(device):
+    out = adb(device, "shell", "pm list packages", timeout=30)
+    pkgs = set()
+    for line in (out or "").splitlines():
+        line = line.strip()
+        if line.startswith("package:"):
+            pkgs.add(line.split(":", 1)[1].strip())
+    return pkgs
 
 
 def force_stop(device, package):
@@ -304,6 +364,24 @@ def main():
 
     if args.cycles_max < args.cycles_min or args.chunk_max < args.chunk_min:
         print("ERRO: max < min (quota ou passo)")
+        return 1
+
+    # N?o tentar reset/clear/launch de apps ausentes: isso gerava pm clear
+    # Failed e deixava o device em pend?ncia, sem executar o fluxo.
+    installed = install_missing_apps(args.device, [pkg for pkg, _ in targets])
+    skipped = []
+    if installed:
+        kept = []
+        for pkg, lbl in targets:
+            if pkg in installed:
+                kept.append((pkg, lbl))
+            else:
+                skipped.append((pkg, lbl))
+        targets = kept
+        for pkg, lbl in skipped:
+            print("[APP] {} ({}) n?o instalado ? ignorado neste device".format(lbl, pkg))
+    if not targets:
+        print("ERRO: nenhum dos apps selecionados est? instalado neste device")
         return 1
 
     print("=" * 70)

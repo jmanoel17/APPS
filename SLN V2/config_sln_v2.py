@@ -325,18 +325,27 @@ DEFAULTS = {
     # ===== DEVICE BACKEND ABSTRACTION (default ADB; agent must be opt-in) =====
     "device_backend": "adb",
     "execution_mode": "normal",
+    "app_profiles": {},
 }
 
 
-def load_config():
-    """Layering de config: DEFAULTS -> base (SLN_CONFIG_FILE ou config_sln_v2.json)
-    -> overlay (SLN_CONFIG_OVERLAY). O overlay só sobrescreve o que declara, preservando
-    os valores de desenvolvimento que ele NÃO toca (ex.: download_apps_pct)."""
+def load_config(app_package=None):
+    """Layering de config: DEFAULTS -> base -> overlay -> perfil do package atual.
+
+    O perfil em app_profiles[package] sobrescreve apenas as chaves que declara,
+    preservando o restante da configuracao global."""
     cfg = dict(DEFAULTS)
     _merge(_read_json(_resolve_config_file()), cfg)
     overlay = _resolve_overlay_file()
     if overlay:
         _merge(_read_json(overlay), cfg)
+    pkg = app_package or os.environ.get("SLN_APP_PACKAGE")
+    profiles = cfg.get("app_profiles") or {}
+    profile = profiles.get(pkg) if pkg and isinstance(profiles, dict) else None
+    if isinstance(profile, dict):
+        for k, v in profile.items():
+            if k != "app_profiles" and (k in DEFAULTS or k in cfg):
+                cfg[k] = v
     env_backend = os.environ.get("SLN_DEVICE_BACKEND")
     if env_backend:
         cfg["device_backend"] = env_backend

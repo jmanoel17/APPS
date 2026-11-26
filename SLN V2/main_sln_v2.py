@@ -131,7 +131,7 @@ total_escapes = 0
 falhas_consecutivas = 0
 SESS = requests.Session()
 
-cfg = CONFIG.load_config()
+cfg = CONFIG.load_config(package)
 
 
 def _backend_tap(x, y, duration_ms=50):
@@ -294,14 +294,20 @@ SELECTORS = [
     "com.android.vending:id/close_btn", "close", "com.android.vending:id/0_resource_name_obfuscated",
     "inmobi_close_btn", "com.inmobi.rendering.inmobi_close_btn", "com.google.android.gms:id/close_button",
     "close_button", "btn_close", "btnClose", "iv_close", "m-playable-close", "m-playable-skip",
+    "com.unity3d.services:id/closeButton", "vungle_close_button",
+    "interstitial_close_button", "skipBtnImg", "skip-button",
+    "mbridge_rl_playing_close", "bigo_ad_btn_close", "ia_iv_close_button", "ia_fl_close_button",
+    "com.emaphoto.pic:id/mbridge_rl_playing_close",
+    "com.flx.duplicate.files.clean:id/thinkup_myoffer_btn_close_id",
+    "com.best.quick.browser:id/i",
 ]
 
 TEXTS = ["Close", "AGORA NÃO", "FECHAR", "Fechar",
-         "Skip Ad", "Ignorar", "x", "X", "CLOSE",
+         "Skip Ad", "Skip", "Ignorar", "x", "X", "CLOSE",
          "Cerrar", "NO THANKS", "No Thanks", "no thanks", "Cancelar"]
 
 DESCRIPTIONS = ["IACloseButton", "Close", "Fechar", "No Thanks", "no thanks", "NO THANKS", "Skip All",
-                "Fechar planilha", "Cancelar", "close", "Close"]
+                "Interstitial close button", "Fechar planilha", "Cancelar", "close", "Close"]
 
 XPATHS_PERSONALIZADOS = [
     '//*[@content-desc="Close"]',
@@ -313,6 +319,7 @@ XPATHS_PERSONALIZADOS = [
     '//*[@text="Skip Ad"]',
     '//*[@resource-id="com.android.vending:id/close_btn"]',
     '//*[@resource-id="unityads-btn-close"]',
+    '//*[@content-desc="Skip"]',
 ]
 
 FORCAR_VOLTAR_KEYWORDS = [
@@ -320,6 +327,37 @@ FORCAR_VOLTAR_KEYWORDS = [
     "browser", "com.android.chrome", "sg.bigo.ads", "OpenUrlActivity", "AdActivity"
 ]
 IGNORAR_PACKAGES = ["com.best.quick.browser"]
+APP_SELECTOR_OVERLAYS = {
+    "com.lkss.oraculodigital": {
+        "selectors": [
+            "com.lkss.oraculodigital:id/inmobi_close_btn",
+            "com.lkss.oraculodigital:id/ia_clickable_close_button",
+            "com.lkss.oraculodigital:id/ia_iv_close_button",
+            "com.lkss.oraculodigital:id/ia_fl_close_button",
+            "com.lkss.oraculodigital:id/ia_tv_skip",
+            "com.lkss.oraculodigital:id/ad_close",
+            "com.lkss.oraculodigital:id/iv_ad_close",
+            "com.lkss.oraculodigital:id/mbridge_windwv_close",
+            "com.lkss.oraculodigital:id/mbridge_iv_close",
+            "com.lkss.oraculodigital:id/mbridge_rl_playing_close",
+            "com.lkss.oraculodigital:id/bigo_ad_btn_close",
+            "com.lkss.oraculodigital:id/mbridge_video_common_alertview_confirm_button",
+        ],
+        "xpaths": [
+            '//*[@resource-id="com.lkss.oraculodigital:id/ia_tv_skip"]',
+            '//*[@resource-id="com.lkss.oraculodigital:id/ia_clickable_close_button"]',
+            '//*[@resource-id="com.lkss.oraculodigital:id/mbridge_iv_close"]',
+            '//*[@content-desc="An\u00fancio fechado"]',
+        ],
+    },
+}
+_overlay = APP_SELECTOR_OVERLAYS.get(package) or {}
+for _v in _overlay.get("selectors", []):
+    if _v not in SELECTORS:
+        SELECTORS.append(_v)
+for _v in _overlay.get("xpaths", []):
+    if _v not in XPATHS_PERSONALIZADOS:
+        XPATHS_PERSONALIZADOS.append(_v)
 STORE_PACKAGES = ["com.android.vending"]
 
 # ==================== HELPERS ====================
@@ -4490,42 +4528,176 @@ def tratar_play_store(d):
 
 # ==================== LOOP PRINCIPAL ====================
 
+_RESET_OPTIONS = (
+    "Redefinir ID de publicidade", "Redefinir c?digo de publicidade",
+    "Repor ID de publicidade", "Reset advertising ID", "Reset Advertising ID",
+    "Restablecer ID de publicidad", "Restablecer identificador de publicidad",
+)
+_RESET_CONFIRM_TEXTS = ("redefinir", "reset", "sim", "yes", "ok")
+_RESET_ID_RE = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
+                          r"[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
+def _reset_node_center(node):
+    try:
+        nums = list(map(int, re.findall(r"\d+", node.attrib.get("bounds", "") or "")))
+        if len(nums) == 4 and nums[2] > nums[0] and nums[3] > nums[1]:
+            return (nums[0] + nums[2]) // 2, (nums[1] + nums[3]) // 2, \
+                   (nums[2] - nums[0]) * (nums[3] - nums[1])
+    except Exception:
+        pass
+    return None
+
+
+def _reset_find_text(root, texts, exact=True):
+    if root is None:
+        return None
+    best = None
+    wanted = [t.casefold() for t in texts]
+    for n in root.iter("node"):
+        txt = (n.attrib.get("text") or "").strip().casefold()
+        desc = (n.attrib.get("content-desc") or "").strip().casefold()
+        if not txt and not desc:
+            continue
+        hit = any((txt == w or desc == w) if exact else (w in txt or w in desc)
+                  for w in wanted)
+        if not hit:
+            continue
+        bc = _reset_node_center(n)
+        if bc is None:
+            continue
+        # menor ?rea = texto/bot?o, n?o o container de tela inteira
+        if best is None or bc[2] < best[1][2]:
+            best = (n, bc)
+    return best
+
+
+def _reset_ads_id(root):
+    if root is None:
+        return ""
+    for n in root.iter("node"):
+        for key in ("text", "content-desc"):
+            v = n.attrib.get(key, "") or ""
+            m = _RESET_ID_RE.search(v)
+            if m:
+                return m.group(0).lower()
+    return ""
+
+
 def reset_id():
-    """/ Reset de ID de publicidade (Google Ads Privacy). Retorna True se o reset foi concluído.
-    Valida retornando à home (o fluxo seguinte exige app parado antes do pm clear)."""
+    """Redefine o ID de publicidade e valida a mudan?a real.
+
+    N?o clica em android:id/button1 fora de um di?logo de confirma??o; em alguns
+    aparelhos esse id pertence ao menu de 3 pontos da tela.
+    """
     log("[RESET][INFO] Iniciando reset de ID de publicidade...")
     try:
         d.shell("am start -a com.google.android.gms.settings.ADS_PRIVACY")
         time.sleep(2)
-        clicou = False
-        for option in ["Redefinir ID de publicidade", "Redefinir código de publicidade",
-                       "Repor ID de publicidade", "Reset advertising ID", "Reset Advertising ID"]:
+        dump = None
+        target = None
+        for _ in range(4):
+            dump = get_hierarchy_data()
+            target = _reset_find_text(dump, _RESET_OPTIONS, exact=True)
+            if target is not None:
+                break
+            time.sleep(1.0)
+        old_id = _reset_ads_id(dump)
+        if target is not None:
+            node, (cx, cy, area) = target
+            log(f"[RESET][ID] target text={node.attrib.get('text')!r} "
+                f"bounds={node.attrib.get('bounds')} click=({cx},{cy}) area={area}")
+            _backend_tap(cx, cy)
+        else:
+            # Some firmwares load the page but the first XML dump only has the
+            # top help overlay. Try the accessibility selector before falling
+            # back to a coordinate, never to the header overflow button.
+            clicked = False
             try:
-                if d(text=option).exists:
-                    log(f"[RESET][ID] Clicando em '{option}'...")
-                    d(text=option).click()
-                    clicou = True
-                    break
-            except Exception:
-                continue
-        time.sleep(2)
-        if d(resourceId="android:id/button1").exists(timeout=1):
-            d(resourceId="android:id/button1").click()
-        time.sleep(1)
-        # confirma retorno à home (reset concluído / saiu da tela de publicidade)
-        _backend_key("home")
-        time.sleep(1)
-        if not clicou:
-            # Sem ação real de reset não há reset: falha IDENTIFICÁVEL (nunca success silencioso).
-            log("[RESET][ERROR] stage=id_reset reason=reset_action_not_found "
-                "(nenhuma opção de reset encontrada; home pressionado sem conclusão real)")
-            try:
-                salvar_error_screenshot("reset_id_not_found")
+                for option in _RESET_OPTIONS:
+                    if d(text=option).exists(timeout=0.5):
+                        log(f"[RESET][ID] target_selector text={option!r}")
+                        d(text=option).click()
+                        clicked = True
+                        break
             except Exception:
                 pass
-            return False
-        log("[RESET][ID] success")
-        return True
+            if not clicked:
+                page_text = " ".join(
+                    ((n.attrib.get("text") or "") + " " + (n.attrib.get("content-desc") or ""))
+                    for n in (dump.iter("node") if dump is not None else [])).casefold()
+                if dump is not None and "com.google.android.gms" in ET.tostring(
+                        dump, encoding="unicode").casefold() \
+                        and ("an?ncios" in page_text or "anuncios" in page_text
+                             or "ajuda e feedback" in page_text
+                             or "help and feedback" in page_text
+                             or "ads by google" in page_text
+                             or "reset advertising" in page_text):
+                    try:
+                        w, h = d.window_size()
+                    except Exception:
+                        w, h = 1080, 2220
+                    cx, cy = int(w * 0.29), int(h * 0.127)
+                    log(f"[RESET][ID] target_text_missing; fallback_row click=({cx},{cy})")
+                    _backend_tap(cx, cy)
+                    clicked = True
+            if not clicked:
+                log("[RESET][ERROR] stage=id_reset reason=reset_action_not_found "
+                    "target_text_missing")
+                try:
+                    salvar_error_screenshot("reset_id_not_found")
+                except Exception:
+                    pass
+                return False
+        time.sleep(1.5)
+
+        # S? confirma se houver um di?logo real. O bot?o deve ser achado por
+        # texto (Redefinir/Reset/OK/Sim), nunca por button1 ?s cegas.
+        confirmed = False
+        for _ in range(3):
+            dlg = get_hierarchy_data()
+            confirm = _reset_find_text(dlg, _RESET_CONFIRM_TEXTS, exact=True)
+            title = _reset_find_text(
+                dlg, ("redefinir id de publicidade?", "reset advertising id?",
+                      "tem certeza", "isso redefinir?", "restablecer id de publicidad?",
+                      "?est?s seguro?", "esto reemplazar?"), exact=False)
+            if confirm is not None and title is not None:
+                cn, (bx, by, ba) = confirm
+                log(f"[RESET][ID] confirm text={cn.attrib.get('text')!r} "
+                    f"bounds={cn.attrib.get('bounds')} click=({bx},{by})")
+                _backend_tap(bx, by)
+                confirmed = True
+                break
+            time.sleep(0.7)
+        if not confirmed:
+            log("[RESET][ID] no_confirmation_dialog; checking direct reset result")
+
+        time.sleep(1.5)
+        # Reabre a p?gina e exige ID diferente quando o ID antigo era leg?vel.
+        d.shell("am start -a com.google.android.gms.settings.ADS_PRIVACY")
+        time.sleep(1.5)
+        final_dump = get_hierarchy_data()
+        new_id = _reset_ads_id(final_dump)
+        if old_id and new_id:
+            if old_id == new_id:
+                log(f"[RESET][ERROR] stage=id_reset reason=id_unchanged "
+                    f"old={old_id} new={new_id} confirmed={confirmed}")
+                try:
+                    salvar_error_screenshot("reset_id_unchanged")
+                except Exception:
+                    pass
+                return False
+            log(f"[RESET][ID] success old={old_id} new={new_id} confirmed={confirmed}")
+            return True
+        if confirmed:
+            log("[RESET][ID] success confirmed=true (id not read on this firmware)")
+            return True
+        log("[RESET][ERROR] stage=id_reset reason=not_confirmed")
+        try:
+            salvar_error_screenshot("reset_id_not_confirmed")
+        except Exception:
+            pass
+        return False
     except Exception as e:
         log(f"[RESET][ERROR] stage=id_reset {type(e).__name__}: {e}")
         return False
@@ -4696,15 +4868,25 @@ def ensure_app_installed(pkg):
     """Instala o APK de apks/ (manifesto package->arquivo) se o pacote nao estiver instalado."""
     import json as _json
     try:
-        apks_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "apks")
+        here = os.path.dirname(os.path.abspath(__file__))
+        apks_dirs = [
+            os.path.join(os.path.dirname(here), "apks"),
+            os.path.join(here, "Apks"),
+            os.path.join(here, "apks"),
+        ]
+        apks_dir = next((d for d in apks_dirs if os.path.isdir(d)), apks_dirs[0])
         apk_name = None
-        mpath = os.path.join(apks_dir, "manifest.json")
-        if os.path.isfile(mpath):
-            try:
-                with open(mpath, "r", encoding="utf-8") as f:
-                    apk_name = _json.load(f).get(pkg)
-            except Exception:
-                apk_name = None
+        for d in apks_dirs:
+            mpath = os.path.join(d, "manifest.json")
+            if os.path.isfile(mpath):
+                try:
+                    with open(mpath, "r", encoding="utf-8") as f:
+                        apk_name = _json.load(f).get(pkg)
+                except Exception:
+                    apk_name = None
+                if apk_name:
+                    apks_dir = d
+                    break
         if not apk_name:
             return True   # sem mapeamento: nao instala
         try:

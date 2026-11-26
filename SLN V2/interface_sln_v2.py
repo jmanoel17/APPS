@@ -30,6 +30,12 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog, ttk, scrolledtext, Entry
 import connect
 import config_sln_v2 as CONFIG
+import sln_proc
+try:
+    from dpn.regions import region_label, country_label
+except Exception:
+    def region_label(code): return code or '?'
+    def country_label(code): return code or '?'
 
 # ==================== CONFIG ====================
 SCRIPT_DIR = os.getcwd()
@@ -80,6 +86,7 @@ if os.name == 'nt':
 os.makedirs(LOGS_DIR, exist_ok=True)
 processos_ativos = {}
 paused_devices = set()
+stopping_devices = set()
 last_groups_cache = {}
 last_devices_cache = []
 last_running_cache = set()
@@ -345,20 +352,43 @@ def run_script(device_id):
     threading.Thread(target=worker, daemon=True).start()
 
 def stop_script(device_id):
-    if device_id in processos_ativos:
-        try:
-            proc = processos_ativos[device_id]
-            proc.terminate()
-            del processos_ativos[device_id]
-            _fechar_console_log(device_id)
-            last_running_cache.discard(device_id)
-            paused_devices.discard(device_id)
-            print(f"[INFO] Bot parado: {device_id}")
-            janela.after(0, lambda: atualizar_lista_ui(use_cache=True))
-        except Exception as e:
-            print(f"[ERRO] Falha ao parar {device_id}: {e}")
-    else:
-        print(f"[AVISO] Nenhum processo ativo para {device_id}")
+    """Stop the whole device bot tree, including run_apps children and logcat."""
+    stopping_devices.add(device_id)
+    proc = processos_ativos.pop(device_id, None)
+    try:
+        import psutil
+        # Kill the exact main_sln_v2.py workers for this device, plus logcat.
+        result = sln_proc.terminate_worker_verified(device_id, timeout=10.0,
+                                                    kill_logcat=True)
+        # Also kill the run_apps.py wrapper/process object if it remains.
+        if proc is not None:
+            try:
+                p = proc if hasattr(proc, "children") else psutil.Process(proc.pid)
+                for child in p.children(recursive=True):
+                    try:
+                        child.terminate()
+                    except Exception:
+                        pass
+                try:
+                    p.terminate()
+                except Exception:
+                    pass
+            except Exception:
+                pass
+        if not result.get("ok"):
+            # One final verified pass; never report stopped while workers live.
+            sln_proc.terminate_worker_verified(device_id, timeout=5.0,
+                                               kill_logcat=True)
+        _fechar_console_log(device_id)
+        last_running_cache.discard(device_id)
+        paused_devices.discard(device_id)
+        print(f"[INFO] Bot parado: {device_id} (ok={result.get('ok')})")
+    except Exception as e:
+        print(f"[ERRO] Falha ao parar {device_id}: {e}")
+    finally:
+        stopping_devices.discard(device_id)
+    janela.after(0, lambda: atualizar_lista_ui(use_cache=True))
+
 
 def toggle_pause_script(device_id):
     if device_id not in processos_ativos:
@@ -439,10 +469,16 @@ def monitor_devices_loop():
     while True:
         try:
             devs = listar_dispositivos_safe()
-            last_devices_cache = devs
+            if devs is not None:
+                for d in list(processos_ativos.keys()):
+                    if d not in devs:
+                        devs.append(d)
+                last_devices_cache = devs
             running_map = get_running_devices()
             last_running_cache = set(running_map.keys())
             for dev_id, pid in running_map.items():
+                if dev_id in stopping_devices:
+                    continue
                 if dev_id not in processos_ativos:
                     try:
                         import psutil
@@ -471,13 +507,14 @@ def listar_dispositivos_safe():
         si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
         creationflags = 0x08000000 if os.name == 'nt' else 0
         result = subprocess.check_output(
-            "adb devices", shell=True, text=True, timeout=5,
+            "adb devices", shell=True, text=True, timeout=20,
             startupinfo=si, creationflags=creationflags
         )
         lines = result.strip().split("\n")[1:]
         return [line.split("\t")[0] for line in lines if "device" in line]
     except Exception:
-        return []
+        # Timeout/ADB busy must not clear the device list while bots are running.
+        return None
 
 def listar_dispositivos():
     return listar_dispositivos_safe()
@@ -563,8 +600,9 @@ def atualizar_lista():
     global _last_ui_hash
     def worker():
         devs = listar_dispositivos_safe()
+        if devs is not None:
+            last_devices_cache[:] = devs
         active = get_running_devices()
-        last_devices_cache[:] = devs
         last_running_cache.clear()
         last_running_cache.update(active.keys())
         force_reload_groups()
@@ -591,7 +629,9 @@ def iniciar_bot():
 def iniciar_todos_os_bots():
     dispositivos = last_devices_cache
     if not dispositivos:
-        dispositivos = listar_dispositivos_safe()
+        refreshed = listar_dispositivos_safe()
+        if refreshed:
+            dispositivos = sorted(set(list(dispositivos) + list(refreshed)))
         if not dispositivos:
             messagebox.showinfo("Aviso", "Nenhum dispositivo encontrado")
             return
@@ -648,7 +688,7 @@ def parar_selecao():
             continue
 
 def parar_todos():
-    # adota na hora bots em execução que a interface não iniciou (outra sessão / USB)
+    # Adota bots j? em execu??o que esta interface ainda n?o conhece.
     try:
         import psutil
         for dev_id, pid in get_running_devices().items():
@@ -659,10 +699,38 @@ def parar_todos():
     if not processos_ativos:
         messagebox.showinfo("Aviso", "Nenhum bot rodando")
         return
-    if messagebox.askyesno("Confirmar", f"Parar todos os {len(processos_ativos)} bots?"):
-        for dev_id in list(processos_ativos.keys()):
+    if not messagebox.askyesno("Confirmar", f"Parar todos os {len(processos_ativos)} bots?"):
+        return
+    devices = list(processos_ativos.keys())
+    stopping_devices.update(devices)
+    janela.after(0, lambda: messagebox.showinfo(
+        "Parando", f"Parando {len(devices)} bot(s); aguarde a confirma??o final."))
+
+    def worker():
+        for dev_id in devices:
             stop_script(dev_id)
-        messagebox.showinfo("Sucesso", "Todos parados")
+            # stop_script clears stopping_devices for this device; keep it until done
+            stopping_devices.discard(dev_id)
+        left = []
+        try:
+            left = list(get_running_devices().keys())
+        except Exception:
+            pass
+        for dev_id in left:
+            try:
+                stopping_devices.add(dev_id)
+                sln_proc.terminate_worker_verified(dev_id, timeout=8.0, kill_logcat=True)
+            except Exception:
+                pass
+            finally:
+                stopping_devices.discard(dev_id)
+        janela.after(0, lambda: messagebox.showinfo(
+            "Parar Todos",
+            "Todos parados." if not left else
+            "Solicita??o conclu?da; ainda h? %d worker(s) para verificar." % len(left)))
+
+    threading.Thread(target=worker, daemon=True).start()
+
 
 def toggle_pause_selection():
     sel = lista_dispositivos.curselection()
@@ -1290,7 +1358,7 @@ threading.Thread(target=_dpn_reader_loop, daemon=True).start()
 # Controller embutido nesta tela. A interface e cliente do snapshot e do command bus;
 # nenhuma credencial DPN passa pelo Tkinter.
 tab_agents = ttk.Frame(notebook)
-notebook.add(tab_agents, text="Agentes DPN")
+# Agentes DPN legado mantido oculto; DPN Control centraliza as fun??es
 
 _agent_nb = ttk.Notebook(tab_agents)
 _agent_nb.pack(fill="both", expand=True, padx=4, pady=4)
@@ -1431,6 +1499,12 @@ def _agent_start_controller():
         with _agent_runtime_lock:
             if _agent_runtime_alive():
                 messagebox.showinfo("Agentes DPN", "Controller ja esta em execucao nesta tela.")
+                return
+            # A start may still be in progress (ready event not set yet).
+            _pending = _agent_runtime
+            _pending_thread = getattr(_pending, "_thread", None) if _pending is not None else None
+            if _pending_thread is not None and _pending_thread.is_alive():
+                _lbl_agent_ctrl.config(text="Agent Controller: INICIANDO", fg="#f9a825")
                 return
             from dpn_agent_controller import ControllerRuntime
             cfg = CONFIG.load_config()
@@ -1651,7 +1725,573 @@ tk.Button(_agent_bar, text="Logs", command=_dpn_open_logs).pack(side="right", pa
 threading.Thread(target=_agent_reader_loop, daemon=True).start()
 threading.Thread(target=_agent_manual_reader_loop, daemon=True).start()
 
+# ==================== DPN CONTROL (AGENT POOL) ====================
+# Layout inspirado no DPN Control desktop: lista de unidades ? esquerda e
+# painel da unidade selecionada ? direita. Fonte: Device Agent Controller novo.
+tab_dpn_control = ttk.Frame(notebook)
+notebook.add(tab_dpn_control, text="DPN Control")
+
+_dc_outer = tk.Frame(tab_dpn_control, bg="#20232b")
+_dc_outer.pack(fill="both", expand=True)
+_dc_left = tk.Frame(_dc_outer, width=300, bg="#20232b")
+_dc_left.pack(side="left", fill="y")
+_dc_left.pack_propagate(False)
+_dc_right = tk.Frame(_dc_outer, bg="#20232b")
+_dc_right.pack(side="left", fill="both", expand=True)
+
+tk.Label(_dc_left, text="DPN Control", bg="#20232b", fg="#e5e7eb",
+         font=("Arial", 12, "bold"), anchor="w").pack(fill="x", padx=8, pady=(8, 4))
+_dc_left_buttons = tk.Frame(_dc_left, bg="#20232b")
+_dc_left_buttons.pack(fill="x", padx=6, pady=4)
+tk.Button(_dc_left_buttons, text="Atualizar", command=lambda: _dc_refresh_units()).pack(side="left", padx=2)
+tk.Button(_dc_left_buttons, text="Verificar todas", command=lambda: _dc_refresh_units()).pack(side="left", padx=2)
+_dc_list = tk.Listbox(_dc_left, bg="#2b2f3a", fg="#d1d5db",
+                      selectbackground="#0b5cad", selectforeground="white",
+                      activestyle="none", exportselection=False, height=20)
+_dc_list.pack(fill="both", expand=True, padx=6, pady=4)
+_dc_left_note = tk.Label(_dc_left, text="Agents ONLINE e DPNs f?sicas",
+                         bg="#20232b", fg="#9ca3af", anchor="w", wraplength=280)
+_dc_left_note.pack(fill="x", padx=8, pady=4)
+_dc_ctrl_label = tk.Label(_dc_left, text="Controller: verificando...", bg="#20232b",
+                          fg="#f59e0b", anchor="w")
+_dc_ctrl_label.pack(fill="x", padx=8, pady=(2, 0))
+_dc_start_btn = tk.Button(_dc_left, text="Iniciar controller",
+                          command=lambda: _agent_start_controller())
+_dc_start_btn.pack(fill="x", padx=8, pady=4)
+
+_dc_header = tk.Label(_dc_right, text="Nenhuma unidade selecionada", bg="#1f2937",
+                      fg="#e5e7eb", anchor="w", font=("Arial", 10, "bold"),
+                      padx=10, pady=7)
+_dc_header.pack(fill="x", padx=4, pady=(4, 0))
+_dc_nb = ttk.Notebook(_dc_right)
+_dc_nb.pack(fill="both", expand=True, padx=4, pady=4)
+_tab_dc_unit = ttk.Frame(_dc_nb)
+_tab_dc_access = ttk.Frame(_dc_nb)
+_tab_dc_tunnels = ttk.Frame(_dc_nb)
+_tab_dc_agents = ttk.Frame(_dc_nb)
+_tab_dc_coord = ttk.Frame(_dc_nb)
+_dc_nb.add(_tab_dc_unit, text="Unidade")
+_dc_nb.add(_tab_dc_access, text="Access Control")
+_dc_nb.add(_tab_dc_tunnels, text="T?neis")
+_dc_nb.add(_tab_dc_agents, text="Agentes")
+_dc_nb.add(_tab_dc_coord, text="Coordinator")
+
+# Unidade
+_dc_u = tk.Frame(_tab_dc_unit, bg="#2b2f3a")
+_dc_u.pack(fill="both", expand=True, padx=8, pady=8)
+_dc_title = tk.Label(_dc_u, text="?", bg="#2b2f3a", fg="#e5e7eb",
+                     font=("Arial", 14, "bold"), anchor="w")
+_dc_title.pack(fill="x")
+_dc_status = tk.Label(_dc_u, text="", bg="#2b2f3a", fg="#22c55e", anchor="w")
+_dc_status.pack(fill="x", pady=(0, 6))
+_dc_conn = tk.Label(_dc_u, text="", bg="#2b2f3a", fg="#cbd5e1",
+                    anchor="w", justify="left", wraplength=780)
+_dc_conn.pack(fill="x", pady=3)
+_dc_identity = tk.Label(_dc_u, text="", bg="#2b2f3a", fg="#cbd5e1",
+                        anchor="w", justify="left", wraplength=780)
+_dc_identity.pack(fill="x", pady=3)
+_dc_validation = tk.Label(_dc_u, text="", bg="#2b2f3a", fg="#f59e0b",
+                          anchor="w", justify="left", wraplength=780)
+_dc_validation.pack(fill="x", pady=3)
+_dc_mode = tk.Label(_dc_u, text="Modo DPN: ?", bg="#2b2f3a", fg="#e5e7eb", anchor="w")
+_dc_mode.pack(fill="x", pady=(12, 3))
+_dc_tunnel_label = tk.Label(_dc_u, text="T?nel: ?", bg="#2b2f3a", fg="#e5e7eb", anchor="w")
+_dc_tunnel_label.pack(fill="x", pady=3)
+_dc_unit_actions = tk.Frame(_dc_u, bg="#2b2f3a")
+_dc_unit_actions.pack(fill="x", pady=12)
+tk.Button(_dc_unit_actions, text="Atualizar unidade", command=lambda: _dc_refresh_detail()).pack(side="left", padx=3)
+tk.Button(_dc_unit_actions, text="Atualizar t?neis", command=lambda: _dc_read("LIST_DPN_TUNNELS")).pack(side="left", padx=3)
+tk.Button(_dc_unit_actions, text="Atualizar Access Control", command=lambda: _dc_read("LIST_DPN_ACCESS_CONTROL")).pack(side="left", padx=3)
+_dc_last = tk.Label(_dc_u, text="?ltima a??o: ?", bg="#2b2f3a", fg="#9ca3af", anchor="w")
+_dc_last.pack(fill="x", pady=(8, 0))
+
+# Access Control
+_dc_access_bar = tk.Frame(_tab_dc_access)
+_dc_access_bar.pack(fill="x", padx=6, pady=4)
+tk.Label(_dc_access_bar, text="Dispositivos conectados (somente leitura no Agent)",
+         anchor="w").pack(side="left")
+tk.Button(_dc_access_bar, text="Atualizar", command=lambda: _dc_read("LIST_DPN_ACCESS_CONTROL")).pack(side="right")
+_dc_access = ttk.Treeview(_tab_dc_access, columns=("bucket", "mac", "name", "ip", "mode"),
+                          show="headings", height=14)
+for _c, _h, _w in (("bucket", "Online/Offline", 100), ("mac", "MAC", 150),
+                   ("name", "Nome", 170), ("ip", "IP", 140), ("mode", "Modo", 100)):
+    _dc_access.heading(_c, text=_h)
+    _dc_access.column(_c, width=_w, anchor="w")
+_dc_access.pack(fill="both", expand=True, padx=6, pady=4)
+
+# T?neis
+_dc_tun_bar = tk.Frame(_tab_dc_tunnels)
+_dc_tun_bar.pack(fill="x", padx=6, pady=4)
+tk.Button(_dc_tun_bar, text="Atualizar lista", command=lambda: _dc_read("LIST_DPN_TUNNELS")).pack(side="left")
+tk.Button(_dc_tun_bar, text="Switch active IP", command=lambda: _dc_switch_selected(),
+          bg="#1565c0", fg="white").pack(side="left", padx=4)
+tk.Button(_dc_tun_bar, text="Refresh", command=lambda: _dc_refresh_selected(),
+          bg="#6a1b9a", fg="white").pack(side="left")
+_dc_tun_status = tk.Label(_tab_dc_tunnels, text="", anchor="w")
+_dc_tun_status.pack(fill="x", padx=6)
+_dc_tun = ttk.Treeview(_tab_dc_tunnels, columns=("region", "country", "count", "ip"),
+                       show="headings", height=14)
+for _c, _h, _w in (("region", "Regi?o", 120), ("country", "Pa?s", 90),
+                   ("count", "# IPs ativos", 100), ("ip", "IP ativo", 160)):
+    _dc_tun.heading(_c, text=_h)
+    _dc_tun.column(_c, width=_w, anchor="w")
+_dc_tun.pack(fill="both", expand=True, padx=6, pady=4)
+
+_dc_agents_bar = tk.Frame(_tab_dc_agents)
+_dc_agents_bar.pack(fill="x", padx=6, pady=4)
+tk.Button(_dc_agents_bar, text="Atualizar agentes", command=lambda: _dc_refresh_units()).pack(side="left", padx=2)
+tk.Button(_dc_agents_bar, text="Identidades", command=lambda: _agent_refresh_identities()).pack(side="left", padx=2)
+tk.Button(_dc_agents_bar, text="Atualizar identidades", command=lambda: _dc_refresh_identities()).pack(side="left", padx=2)
+tk.Button(_dc_agents_bar, text="Gerar c?digo", command=lambda: _agent_open_pairing()).pack(side="left", padx=2)
+tk.Button(_dc_agents_bar, text="Iniciar controller", command=lambda: _agent_start_controller()).pack(side="right", padx=2)
+_dc_agents = ttk.Treeview(_tab_dc_agents,
+                          columns=("dpn", "status", "auth", "lat", "ip"),
+                          show="tree headings", height=14)
+_dc_agents.heading("#0", text="Agent")
+_dc_agents.column("#0", width=280, anchor="w")
+for _c, _h, _w in (("dpn", "DPN fisica", 250), ("status", "Status", 75),
+                   ("auth", "Auth", 55), ("lat", "Latencia", 75), ("ip", "LAN", 120)):
+    _dc_agents.heading(_c, text=_h)
+    _dc_agents.column(_c, width=_w, anchor="w")
+_dc_agents.pack(fill="both", expand=True, padx=6, pady=4)
+
+_dc_coord_bar = tk.Frame(_tab_dc_coord)
+_dc_coord_bar.pack(fill="x", padx=6, pady=4)
+_dc_coord_label = tk.Label(_dc_coord_bar, text="Status Coordinator: OFFLINE", anchor="w",
+                           font=("Arial", 9, "bold"))
+_dc_coord_label.pack(side="left", padx=4)
+tk.Button(_dc_coord_bar, text="Pausar",
+          command=lambda: _dpn_publish("pause", _dc_coord_tree)).pack(side="left", padx=2)
+tk.Button(_dc_coord_bar, text="Retomar",
+          command=lambda: _dpn_publish("resume", _dc_coord_tree)).pack(side="left", padx=2)
+tk.Button(_dc_coord_bar, text="Rotacionar",
+          command=lambda: _dpn_publish("rotate_now", _dc_coord_tree),
+          bg="#1565c0", fg="white").pack(side="left", padx=2)
+tk.Button(_dc_coord_bar, text="Refresh rotas",
+          command=lambda: _dpn_publish("refresh_routes_now", _dc_coord_tree),
+          bg="#6a1b9a", fg="white").pack(side="left", padx=2)
+_dc_coord_tree = ttk.Treeview(_tab_dc_coord, columns=_dpn_cols,
+                              show="tree headings", height=14)
+_dc_coord_tree.heading("#0", text="DPN / grupo")
+_dc_coord_tree.column("#0", width=250, anchor="w")
+for _c, _h, _w in (("state", "Estado", 100), ("tunnel", "Tunnel", 65),
+                   ("tip", "IP", 130), ("online", "Ativos", 60),
+                   ("total", "Members", 70), ("mode", "Modo", 80),
+                   ("lan", "Erro", 200)):
+    _dc_coord_tree.heading(_c, text=_h)
+    _dc_coord_tree.column(_c, width=_w, anchor="w")
+_dc_coord_tree.pack(fill="both", expand=True, padx=6, pady=4)
+
+_dc_history_frame = tk.LabelFrame(_dc_right, text="Hist?rico")
+_dc_history_frame.pack(fill="both", expand=False, padx=4, pady=(0, 4))
+_dc_history = ttk.Treeview(_dc_history_frame, columns=("when", "group", "action", "result"),
+                           show="headings", height=6)
+for _c, _h, _w in (("when", "Quando", 95), ("group", "Unidade", 100),
+                   ("action", "A??o", 170), ("result", "Resultado", 430)):
+    _dc_history.heading(_c, text=_h)
+    _dc_history.column(_c, width=_w, anchor="w")
+_dc_history.pack(fill="both", expand=True, padx=4, pady=4)
+
+_dc_sel_phys = ""
+_dc_sel_group = ""
+_dc_unit_rows = {}
+
+
+def _dc_controller_online():
+    try:
+        import dpn.ui_model as UI
+        st = UI.read_status(_agent_status_path(), default=None)
+        return bool(isinstance(st, dict) and UI.agent_controller_online(st, stale_s=8.0))
+    except Exception:
+        return False
+
+
+def _dc_controller_tick():
+    online = _dc_controller_online()
+    try:
+        _dc_ctrl_label.config(text="Controller: " + ("ONLINE" if online else "OFFLINE"),
+                              fg=("#22c55e" if online else "#f59e0b"))
+    except Exception:
+        pass
+
+
+def _dc_refresh_identities():
+    if not _dc_sel_phys:
+        messagebox.showinfo("DPN Control", "Selecione uma unidade.")
+        return
+    ag = _dc_load_json(_dc_agents_path(), {})
+    ids = []
+    for a in (ag.get("agents") or []):
+        if str(a.get("physical_dpn_id") or "") == _dc_sel_phys and str(a.get("status") or "").upper() == "ONLINE":
+            ids.append(str(a.get("agent_id") or ""))
+    ids = [x for x in ids if x][:8]
+    if not ids:
+        messagebox.showwarning("DPN Control", "Nenhum Agent ONLINE para esta DPN.")
+        return
+    cid = _agent_command("refresh_identities", agent_ids=ids, max_agents=len(ids))
+    if not cid:
+        return
+    _dc_set_last("refresh_identities (%d agents)" % len(ids))
+    done = os.path.join(_dpn_state_dir(), "agent_commands_done", cid + ".json")
+    def wait():
+        for _ in range(100):
+            r = _dc_load_json(done, None)
+            if isinstance(r, dict):
+                janela.after(0, _dc_refresh_units)
+                janela.after(0, lambda: _dc_tun_status.config(
+                    text="identidades: %s" % r.get("status")))
+                return
+            time.sleep(0.5)
+    threading.Thread(target=wait, daemon=True).start()
+
+
+def _dc_auto_start():
+    if _dc_controller_online():
+        return
+    _agent_start_controller()
+    janela.after(3000, _dc_auto_start)
+
+
+def _dc_state_path():
+    return os.path.join(_dpn_state_dir(), "status.json")
+
+
+def _dc_agents_path():
+    return os.path.join(_dpn_state_dir(), "agents_status.json")
+
+
+def _dc_auto_groups():
+    try:
+        with open(os.path.join(SCRIPT_DIR, "dpn_groups_auto.json"), "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _dc_load_json(path, default):
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return default
+
+
+def _dc_set_last(text):
+    _dc_last.config(text="?ltima a??o: " + str(text))
+
+
+def _dc_refresh_units():
+    global _dc_unit_rows
+    st = _dc_load_json(_dc_state_path(), {})
+    ag = _dc_load_json(_dc_agents_path(), {})
+    auto = _dc_auto_groups()
+    by_phys = {}
+    for gid, g in auto.items():
+        if isinstance(g, dict):
+            by_phys[str(g.get("expected_dpn_id") or "")] = (gid, g)
+    prev = _dc_sel_phys
+    _dc_list.delete(0, "end")
+    _dc_unit_rows = {}
+    for phys, d in (ag.get("dpns") or {}).items():
+        gid, spec = by_phys.get(phys, ("", {}))
+        g = ((st.get("dpns") or {}).get(gid) if gid else {}) or {}
+        auth = int(d.get("authenticated") or 0)
+        name = gid or ("DPN_" + str(phys).split("|")[-1][-10:])
+        online = g.get("state") or "SEM GRUPO"
+        label = "%s  (%s)\n%s  |  auth=%d" % (name, phys[-12:], online, auth)
+        _dc_list.insert("end", label)
+        _dc_unit_rows[str(phys)] = {"gid": gid, "group": g, "agents": d,
+                                    "spec": spec, "index": _dc_list.size() - 1}
+        if str(phys) == prev:
+            _dc_list.selection_set(_dc_list.size() - 1)
+    try:
+        for iid in _dc_agents.get_children(""):
+            _dc_agents.delete(iid)
+        for a in (ag.get("agents") or []):
+            dpn = str(a.get("physical_dpn_id") or "")
+            if _dc_sel_phys and dpn != _dc_sel_phys:
+                continue
+            _dc_agents.insert("", "end", iid=str(a.get("agent_id")),
+                              text=str(a.get("agent_id")),
+                              values=(dpn, a.get("status"),
+                                      "yes" if a.get("authenticated") else "no",
+                                      a.get("latency_ms", 0), a.get("lan_ip", "")))
+    except Exception:
+        pass
+    if _dc_list.size() and not _dc_list.curselection():
+        _dc_list.selection_set(0)
+        try:
+            _dc_on_select()
+        except Exception:
+            pass
+    _dc_history_refresh()
+
+
+def _dc_selected():
+    sel = _dc_list.curselection()
+    if not sel:
+        return None
+    idx = int(sel[0])
+    for phys, row in _dc_unit_rows.items():
+        if row.get("index") == idx:
+            return phys, row
+    return None
+
+
+def _dc_on_select(_event=None):
+    global _dc_sel_phys, _dc_sel_group
+    got = _dc_selected()
+    if not got:
+        return
+    _dc_sel_phys, row = got
+    _dc_sel_group = row.get("gid", "")
+    g = row.get("group") or {}
+    agents = row.get("agents") or {}
+    _dc_header.config(text="%s  |  DPN f?sica: %s  |  Agentes: %d online / %d auth" % (
+        _dc_sel_group or "SEM GRUPO", _dc_sel_phys,
+        int(agents.get("online") or 0), int(agents.get("authenticated") or 0)))
+    _dc_title.config(text=_dc_sel_group or "DPN")
+    _dc_status.config(text=str(g.get("state") or "SEM GRUPO"))
+    _dc_conn.config(text="Gerenciamento: via Agent pool  |  IP: %s  |  Epoch: %s" % (
+        g.get("current_public_ip") or "?", g.get("current_epoch") or "?"))
+    _dc_identity.config(text="Physical DPN: %s" % _dc_sel_phys)
+    _dc_validation.config(text="Ativos: %s  |  Safe: %s  |  Erro: %s" % (
+        g.get("active_devices", "?"), g.get("safe_devices", "?"),
+        g.get("last_error") or "?"))
+    _dc_mode.config(text="Modo DPN: consultando...")
+    _dc_tunnel_label.config(text="T?nel: consultando...")
+    auth_count = int(agents.get("authenticated") or 0)
+    if auth_count <= 0:
+        _dc_prepare()
+    else:
+        _dc_refresh_detail()
+
+
+def _dc_prepare():
+    if not _dc_sel_phys:
+        return
+    ag = _dc_load_json(_dc_agents_path(), {})
+    ids = []
+    for a in (ag.get("agents") or []):
+        if (str(a.get("physical_dpn_id") or "") == _dc_sel_phys
+                and str(a.get("status") or "").upper() == "ONLINE"):
+            ids.append(str(a.get("agent_id") or ""))
+    ids = [x for x in ids if x][:8]
+    if not ids:
+        _dc_validation.config(text="Nenhum Agent ONLINE para esta DPN.")
+        return
+    _dc_validation.config(text="Preparando identidade (m?x. 8 Agents)...")
+    cid = _agent_command("refresh_identities", agent_ids=ids, max_agents=len(ids))
+    if not cid:
+        return
+    done = os.path.join(_dpn_state_dir(), "agent_commands_done", cid + ".json")
+    def wait():
+        for _ in range(100):
+            r = _dc_load_json(done, None)
+            if isinstance(r, dict):
+                janela.after(0, _dc_refresh_units)
+                janela.after(0, _dc_refresh_detail)
+                return
+            time.sleep(0.5)
+        janela.after(0, lambda: _dc_validation.config(
+            text="Identidade sem resposta; verifique auth/backoff."))
+    threading.Thread(target=wait, daemon=True).start()
+
+
+def _dc_refresh_detail():
+    if not _dc_sel_phys:
+        return
+    _dc_read("GET_DPN_MODE")
+    _dc_read("LIST_DPN_TUNNELS")
+    _dc_set_last("atualizar unidade")
+
+
+def _dc_show_tunnels(data):
+    for iid in _dc_tun.get_children(""):
+        _dc_tun.delete(iid)
+    ts = data.get("tunnels") if isinstance(data, dict) else data
+    for t in ts or []:
+        if isinstance(t, dict):
+            iid = "%s:%s" % (t.get("tunnelCode"), len(_dc_tun.get_children("")))
+            _dc_tun.insert("", "end", iid=iid,
+                           values=(region_label(t.get("regionCode")),
+                                   country_label(t.get("countryCode")),
+                                   t.get("activeNum", ""), t.get("activeIp", "")),
+                           tags=(str(t.get("tunnelCode") or ""),))
+    _dc_tun_status.config(text="t?neis=%d" % len(_dc_tun.get_children("")))
+
+
+def _dc_show_mode(data):
+    if isinstance(data, dict):
+        mode = data.get("dpnMode") or data.get("mode") or "?"
+        tunnel = data.get("fullTunnel") or data.get("smartTunnel") or "?"
+        _dc_mode.config(text="Modo DPN: %s" % mode)
+        _dc_tunnel_label.config(text="T?nel: %s" % tunnel)
+
+
+def _dc_show_access(data):
+    for iid in _dc_access.get_children(""):
+        _dc_access.delete(iid)
+    if not isinstance(data, dict):
+        return
+    for bucket in ("online", "offline"):
+        for x in data.get(bucket) or []:
+            if isinstance(x, dict):
+                _dc_access.insert("", "end", values=(
+                    bucket, x.get("mac", ""), x.get("name", ""),
+                    x.get("ip") or x.get("lan_ip", ""),
+                    x.get("routeMode") or x.get("mode", "")))
+
+
+def _dc_read(op):
+    if not _dc_sel_phys:
+        messagebox.showinfo("DPN Control", "Selecione uma unidade.")
+        return
+    if not _dc_controller_online():
+        _dc_controller_tick()
+        messagebox.showinfo("DPN Control", "Controller OFFLINE. Clique em Iniciar controller.")
+        return
+    cid = _agent_command("read", physical_dpn_id=_dc_sel_phys, op=op)
+    if not cid:
+        return
+    done = os.path.join(_dpn_state_dir(), "agent_commands_done", cid + ".json")
+    def wait():
+        for _ in range(60):
+            r = _dc_load_json(done, None)
+            if isinstance(r, dict):
+                if r.get("status") == "ok":
+                    data = r.get("data")
+                    if op == "LIST_DPN_TUNNELS":
+                        janela.after(0, lambda d=data: _dc_show_tunnels(d))
+                    elif op == "GET_DPN_MODE":
+                        janela.after(0, lambda d=data: _dc_show_mode(d))
+                    elif op == "LIST_DPN_ACCESS_CONTROL":
+                        janela.after(0, lambda d=data: _dc_show_access(d))
+                else:
+                    janela.after(0, lambda e=r.get("error"): messagebox.showerror(
+                        "DPN Control", "Falha na leitura: %s" % e))
+                return
+            time.sleep(0.5)
+        janela.after(0, lambda: messagebox.showwarning("DPN Control", "Controller sem resposta."))
+    threading.Thread(target=wait, daemon=True).start()
+
+
+def _dc_selected_tunnel():
+    sel = _dc_tun.selection()
+    if not sel:
+        return None, ""
+    vals = _dc_tun.item(sel[0], "values")
+    code = ""
+    for t in (_dc_tun.item(sel[0], "tags") or []):
+        code = str(t)
+    return code, (vals[3] if len(vals) > 3 else "")
+
+
+def _dc_mutation(action, code, ip=""):
+    if not code:
+        messagebox.showinfo("DPN Control", "Selecione um t?nel.")
+        return
+    if not messagebox.askyesno("DPN Control", "%s em %s?" % (action, _dc_sel_phys)):
+        return
+    fields = {"physical_dpn_id": _dc_sel_phys, "tunnel_code": code}
+    if action == "switch_node":
+        fields["current_ip"] = ip
+    cid = _agent_command(action, **fields)
+    if not cid:
+        return
+    _dc_set_last("%s %s" % (action, code))
+    done = os.path.join(_dpn_state_dir(), "agent_commands_done", cid + ".json")
+    def wait():
+        for _ in range(100):
+            r = _dc_load_json(done, None)
+            if isinstance(r, dict):
+                if r.get("status") == "ok":
+                    janela.after(0, lambda: _dc_tun_status.config(
+                        text="%s %s: OK" % (action, code)))
+                    janela.after(0, _dc_history_refresh)
+                else:
+                    janela.after(0, lambda e=r.get("error"): messagebox.showerror(
+                        "DPN Control", "%s: %s" % (action, e)))
+                return
+            time.sleep(0.5)
+    threading.Thread(target=wait, daemon=True).start()
+
+
+def _dc_switch_selected():
+    code, ip = _dc_selected_tunnel()
+    _dc_mutation("switch_node", code, ip)
+
+
+def _dc_refresh_selected():
+    code, _ip = _dc_selected_tunnel()
+    _dc_mutation("refresh_route_set", code)
+
+
+def _dc_history_refresh():
+    try:
+        base = os.path.join(_dpn_state_dir(), "agent_commands_done")
+        files = [os.path.join(base, n) for n in os.listdir(base) if n.endswith(".json")]
+        files.sort(key=os.path.getmtime, reverse=True)
+        for iid in _dc_history.get_children(""):
+            _dc_history.delete(iid)
+        for path in files[:20]:
+            r = _dc_load_json(path, {})
+            if not isinstance(r, dict):
+                continue
+            when = time.strftime("%d/%m %H:%M:%S", time.localtime(float(r.get("at") or 0)))
+            _dc_history.insert("", "end", values=(
+                when, str(r.get("physical_dpn_id") or _dc_sel_group),
+                str(r.get("action") or ""), str(r.get("status") or "")))
+    except Exception:
+        pass
+
+
+_dc_list.bind("<<ListboxSelect>>", _dc_on_select)
+
+
+def _dc_loop():
+    while True:
+        try:
+            janela.after(0, _dc_refresh_units)
+            janela.after(0, _dc_history_refresh)
+            janela.after(0, _dc_controller_tick)
+            _st = _dc_load_json(_dc_state_path(), {})
+            if isinstance(_st, dict):
+                janela.after(0, lambda st=_st: _dpn_apply_status(
+                    st, _dc_coord_tree, _dc_coord_label))
+        except Exception:
+            pass
+        time.sleep(2.0)
+
+
+threading.Thread(target=_dc_loop, daemon=True).start()
+
+_agent_autostart_attempted = False
+
+
+def _agent_bootstrap():
+    """Start the controller once on app startup when no controller is online."""
+    global _agent_autostart_attempted
+    if _agent_autostart_attempted:
+        return
+    _agent_autostart_attempted = True
+    try:
+        if _dc_controller_online():
+            _dc_controller_tick()
+            return
+        _agent_start_controller()
+    except Exception:
+        pass
+
+
+try:
+    janela.after(1800, _agent_bootstrap)
+except Exception:
+    pass
+
 # ============ SCAN INICIAL DE REDE (1-254) ============
+# ============ SCAN INICIAL DE REDE (1-254) ============
+
 def scan_inicial_rede():
     """Varre toda a faixa 192.168.1.1-254 (porta 5555) ao iniciar,
     conecta os devices encontrados via adb e atualiza a lista."""
@@ -1670,6 +2310,8 @@ def scan_inicial_rede():
 
     # último recurso: adb devices pega o que já está conectado
     devs = listar_dispositivos_safe()
+    if devs is None:
+        devs = list(last_devices_cache)
     print(f"[SCAN] {len(devs)} devices disponíveis na rede.")
 
     # ativa dispositivos que o scan conectou mas adb devices ainda não refletiu
