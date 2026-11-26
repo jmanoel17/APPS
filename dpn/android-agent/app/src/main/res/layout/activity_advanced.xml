@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Avançado" android:textSize="20sp" android:textStyle="bold" />
+
+        <EditText android:id="@+id/controllerUrl" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="wss://host:8765"
+            android:inputType="textUri" />
+        <EditText android:id="@+id/controllerFp" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="fingerprint do controlador (SHA-256)" />
+        <EditText android:id="@+id/pairingCode" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="código de pareamento" android:inputType="number" />
+        <EditText android:id="@+id/atomosUrl" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="https://34.34.34.34" android:inputType="textUri" />
+        <EditText android:id="@+id/atomosFp" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="fingerprint do AtomOS (opcional)" />
+        <EditText android:id="@+id/atomosPassword" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:hint="senha admin do AtomOS"
+            android:inputType="textPassword" />
+
+        <Button android:id="@+id/btnSave" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Salvar" />
+        <Button android:id="@+id/btnDiag" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Diagnóstico AtomOS" />
+        <Button android:id="@+id/btnReset" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Zerar pareamento" />
+
+        <TextView android:id="@+id/advStatus" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:paddingTop="12dp"
+            android:textIsSelectable="true" />
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+myenv/
+
+# Dados locais (contem DB e credenciais criptadas)
+*.db
+credentials.dat
+config.json
+endpoints.json
+
+# Build / dist
+build/
+dist/
+*.spec
+*.exe
+
+# IDE
+.idea/
+.vscode/
+*.iml

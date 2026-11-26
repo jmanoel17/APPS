@@ -1,0 +1,7 @@
+{
+  "request_timeout": 10.0,
+  "connect_timeout": 5.0,
+  "discovery_timeout": 1.2,
+  "discovery_max_hosts": 254,
+  "log_requests": false
+}
