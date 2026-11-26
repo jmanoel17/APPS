@@ -26,7 +26,7 @@
   "use_legacy_applovin": false,
   "fast_close_enabled": true,
   "fast_close_tick_ms": 300,
-  "fast_close_log_every_tick": true,
+  "fast_close_log_every_tick": false,
   "applovin_fast_close_timeout_seconds": 90,
   "applovin_rewarded_min_watch_seconds": 30,
   "fast_close_top_region_ratio": 0.15,
@@ -49,7 +49,7 @@
   "applovin_reward_safe_mode": true,
   "applovin_reward_safe_min_watch_seconds": 60,
   "applovin_reward_completion_required": true,
-  "rewarded_no_countdown_diag_timeout_s": 180,
+  "rewarded_no_countdown_diag_timeout_s": 0,
   "playable_diag_click_enabled": false,
   "recovery_close_enabled": true,
   "recovery_close_ai_last_enabled": true,
@@ -81,5 +81,12 @@
   "dpn_auto_register_enabled": true,
   "dpn_auto_groups_file": "dpn_groups_auto.json",
   "dpn_auto_catalog_file": "dpn_groups.json",
-  "dpn_coordinator_tick_s": 1.0
+  "dpn_coordinator_tick_s": 1.0,
+  "persistent_logcat_enabled": false,
+  "adaptive_tick_enabled": true,
+  "heartbeat_enabled": true,
+  "heartbeat_dir": "heartbeats",
+  "heartbeat_interval_s": 5.0,
+  "watchdog_stale_s": 120.0,
+  "watchdog_restart_max": 3
 }

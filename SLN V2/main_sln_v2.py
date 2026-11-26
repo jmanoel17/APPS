@@ -4937,14 +4937,20 @@ def check_and_close_errors():
 _CONSENT_ACCEPT = "YES, I AGREE"
 _CONSENT_DECLINE = "NO, THANK YOU"
 _CONSENT_TITLE = "IMPROVE YOUR AD EXPERIENCE"
+CAS_CONSENT_RESOURCE_NAME = "cas_consent_accept"
+CAS_CONSENT_ACCEPT_ID = f"{package}:id/{CAS_CONSENT_RESOURCE_NAME}"
+
+
+def _get_android_navigation_bar_top(d):
+    try:
+        _, h = d.window_size()
+        return int(h * 0.96)
+    except Exception:
+        return 2188
 
 
 def tratar_consentimento_cas(d):
-    """Diálogo de consentimento da CAS ('Improve Your Ad Experience'). Detecção FORTE: botão
-    'YES, I AGREE' + (título ou 'NO, THANK YOU') no mesmo dump. Clica pelos bounds do botão
-    'YES, I AGREE' (accept) e confirma que sumiu. Sem filtro de package: o diálogo pode ser
-    renderizado por outra package/overlay conforme a versão do SDK da CAS.
-    Retorna True se havia diálogo e ele foi tratado."""
+    """Trata o consentimento CAS apenas com bot?o exato e clique seguro."""
     acao = str(cfg.get("cas_consent_action", "accept")).lower()
     if acao == "off":
         return False
@@ -4952,7 +4958,9 @@ def tratar_consentimento_cas(d):
     if dump is None:
         return False
 
-    def _bounds_center(node):
+    esperado = _CONSENT_DECLINE if acao == "decline" else _CONSENT_ACCEPT
+
+    def _bounds(node):
         nums = list(map(int, re.findall(r"\d+", node.attrib.get("bounds", "") or "")))
         if len(nums) != 4:
             return None
@@ -4961,47 +4969,54 @@ def tratar_consentimento_cas(d):
             return None
         return (x1, y1, x2, y2, (x2 - x1) * (y2 - y1))
 
-    por_texto = []
-    por_desc = []
+    alvo = None
+    best = None
     tem_titulo = False
     for n in dump.iter("node"):
         txt = (n.attrib.get("text", "") or "").strip().upper()
         cd = (n.attrib.get("content-desc", "") or "").strip().upper()
+        rid = (n.attrib.get("resource-id", "") or "").strip()
         if _CONSENT_TITLE in txt or _CONSENT_TITLE in cd:
             tem_titulo = True
-        if acao == "decline":
-            if "NO, THANK YOU" in txt:
-                por_texto.append(n)
-            elif "NO, THANK YOU" in cd:
-                por_desc.append(n)
-        else:
-            if "I AGREE" in txt:
-                por_texto.append(n)
-            elif "I AGREE" in cd:
-                por_desc.append(n)
-    # prefere o TEXTO do botao; entre candidatos, o de MENOR area (botao, nao o container)
-    pool = por_texto or por_desc
-    alvo = None
-    best = None
-    for n in pool:
-        bc = _bounds_center(n)
+        if txt != esperado and cd != esperado:
+            continue
+        if acao == "accept" and rid and rid.split(":id/")[-1] != CAS_CONSENT_RESOURCE_NAME:
+            continue
+        bc = _bounds(n)
         if bc and (best is None or bc[4] < best[4]):
             alvo, best = n, bc
     if alvo is None:
         if tem_titulo:
-            log("[CONSENT][CAS] titulo visivel, botao nao encontrado no dump (WebView?)")
+            log("[CONSENT][CAS] titulo visivel, botao exato nao encontrado no dump")
         return False
+
+    nav_top = _get_android_navigation_bar_top(d)
+    if best[3] > nav_top or ((best[1] + best[3]) // 2) >= nav_top:
+        log(f"[CONSENT][CAS] botao recusado por proximidade da nav bar bounds={alvo.attrib.get('bounds')}")
+        return False
+
+    atual = (cur_app() or {}).get("package")
+    if atual != package:
+        log(f"[CONSENT][CAS] foreground inesperado {atual!r}; sem clique")
+        return False
+
     cx, cy = (best[0] + best[2]) // 2, (best[1] + best[3]) // 2
-    log(f"[CONSENT][CAS] detected action={acao} click=({cx},{cy}) "
+    log(f"[CONSENT][CAS] safe_click action={acao} click=({cx},{cy}) "
         f"text={alvo.attrib.get('text')!r} desc={alvo.attrib.get('content-desc')!r} "
         f"bounds={alvo.attrib.get('bounds')}")
     _backend_tap(cx, cy)
     time.sleep(1.5)
     dump2 = get_hierarchy_data()
-    ainda = dump2 is not None and any(
-        "I AGREE" in ((n.attrib.get("text", "") or n.attrib.get("content-desc", "") or "")
-                      .strip().upper())
-        for n in dump2.iter("node"))
+    ainda = False
+    if dump2 is not None:
+        for n in dump2.iter("node"):
+            txt = (n.attrib.get("text", "") or "").strip().upper()
+            cd = (n.attrib.get("content-desc", "") or "").strip().upper()
+            rid = (n.attrib.get("resource-id", "") or "").strip()
+            if txt == esperado or cd == esperado:
+                if acao != "accept" or not rid or rid.split(":id/")[-1] == CAS_CONSENT_RESOURCE_NAME:
+                    ainda = True
+                    break
     log(f"[CONSENT][CAS] result={'still_visible' if ainda else 'dismissed'}")
     return not ainda
 
@@ -5513,6 +5528,10 @@ if __name__ == '__main__':
                 try:
                     if not dpn_worker.gate(device, DPN_INSTANCE_ID):
                         _hb_write("RUNNING", "dpn_wait", force=True)
+                        try:
+                            tratar_consentimento_cas(d)
+                        except Exception as _ce:
+                            log(f"[CONSENT][CAS] erro_dpn_wait={type(_ce).__name__}: {_ce}")
                         time.sleep(2.0)
                         continue
                 except Exception as _dpn_e:
@@ -5577,6 +5596,10 @@ if __name__ == '__main__':
             else:
                 _backend_start_app(package)
                 time.sleep(1)
+                try:
+                    tratar_consentimento_cas(d)
+                except Exception as _ce:
+                    log(f"[CONSENT][CAS] erro_pos_start={type(_ce).__name__}: {_ce}")
                 cur = cur_app()
                 if cur.get('package') == package:
                     log("Aplicativo iniciado com sucesso.")

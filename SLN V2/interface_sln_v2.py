@@ -69,6 +69,7 @@ RUN_APPS_PATH = os.path.join(ROOT_DIR, "run_apps.py")
 GROUPS_FILE = os.path.join(SCRIPT_DIR, "groups.json")
 SCAN_CONFIG_FILE = os.path.join(SCRIPT_DIR, "ip_ranges.json")
 PAUSED_FILE = os.path.join(SCRIPT_DIR, "paused.json")
+LAST_APPS_FILE = os.path.join(SCRIPT_DIR, "last_apps.json")
 LOGS_DIR = os.path.join(SCRIPT_DIR, "logs")
 
 # Semáforo de ARRANQUE: limita quantos bots INICIAM ao mesmo tempo — não o total rodando.
@@ -86,6 +87,7 @@ if os.name == 'nt':
 os.makedirs(LOGS_DIR, exist_ok=True)
 processos_ativos = {}
 paused_devices = set()
+paused_processes = {}
 stopping_devices = set()
 last_groups_cache = {}
 last_devices_cache = []
@@ -228,13 +230,6 @@ load_paused_state()
 # Headless (padrão): bot sem janela. Desmarcado na tela inicial: abre também uma janela de
 # console por aparelho mostrando o log ao vivo (o bot e o log em arquivo continuam iguais).
 headless_flag = {"on": True}      # espelho thread-safe do checkbox (lido pelos workers)
-profile_flag = {"name": "dev"}    # espelho thread-safe do perfil (lido pelos workers)
-# Perfil -> overlay de config (SLN_CONFIG_OVERLAY). "dev" não passa overlay (usa config_sln_v2.json).
-PROFILE_OVERLAYS = {
-    "dev": None,
-    "benchmark": "config_benchmark_sln_v2.json",
-    "e38b": "config_e38b_hidden_controls.json",
-}
 console_viewers = {}              # device_id -> Popen da janela de console
 
 
@@ -263,10 +258,35 @@ def _fechar_console_log(device_id):
             pass
 
 
+def load_last_apps():
+    try:
+        with open(LAST_APPS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return set(str(x) for x in data if str(x) in APPS)
+    except Exception:
+        pass
+    return None
+
+
+def save_last_apps(keys):
+    try:
+        with open(LAST_APPS_FILE, "w", encoding="utf-8") as f:
+            json.dump(sorted(keys, key=lambda x: int(x)), f)
+    except Exception as e:
+        print(f"[AVISO] Falha ao salvar ultima selecao de apps: {e}")
+
+
 def run_script(device_id):
     if device_id in processos_ativos:
-        print(f"[AVISO] Bot já rodando para {device_id}. Ignorando.")
+        print(f"[AVISO] Bot ja rodando para {device_id}. Ignorando.")
         return
+    try:
+        if sln_proc.bot_processes_for_device(device_id):
+            print(f"[AVISO] Bot ja existe para {device_id}. Ignorando start duplicado.")
+            return
+    except Exception:
+        pass
     headless = headless_flag["on"]
     log_dir = LOGS_DIR
     safe_id = device_id.replace(":", "_").replace(".", "_")
@@ -276,6 +296,7 @@ def run_script(device_id):
     if not app_keys:
         print("[AVISO] Nenhum app selecionado. Marque ao menos um app em 'Apps a rodar'.")
         return
+    save_last_apps(app_keys)
     try:
         cmin = max(1, int(spin_cycles_min.get() or "5"))
         cmax = max(1, int(spin_cycles_max.get() or "15"))
@@ -317,6 +338,7 @@ def run_script(device_id):
             env.pop("SLN_APP_PACKAGE", None)
             env.pop("SLN_APP_LABEL", None)
             env.pop("SLN_CONFIG_OVERLAY", None)
+            env.pop("SLN_CONFIG_FILE", None)
             START_SEMAPHORE.acquire()
             try:
                 f_log = open(log_file, "a", encoding='utf-8')
@@ -353,7 +375,15 @@ def run_script(device_id):
 
 def stop_script(device_id):
     """Stop the whole device bot tree, including run_apps children and logcat."""
+    if device_id in stopping_devices:
+        return
     stopping_devices.add(device_id)
+    for p in paused_processes.pop(device_id, []):
+        try:
+            if p.is_running():
+                p.resume()
+        except Exception:
+            pass
     proc = processos_ativos.pop(device_id, None)
     try:
         import psutil
@@ -382,6 +412,7 @@ def stop_script(device_id):
         _fechar_console_log(device_id)
         last_running_cache.discard(device_id)
         paused_devices.discard(device_id)
+        paused_processes.pop(device_id, None)
         print(f"[INFO] Bot parado: {device_id} (ok={result.get('ok')})")
     except Exception as e:
         print(f"[ERRO] Falha ao parar {device_id}: {e}")
@@ -390,23 +421,75 @@ def stop_script(device_id):
     janela.after(0, lambda: atualizar_lista_ui(use_cache=True))
 
 
-def toggle_pause_script(device_id):
-    if device_id not in processos_ativos:
-        return
+def _collect_device_processes(device_id):
+    import psutil
+    out = {}
+    def add(p):
+        try:
+            out[p.pid] = p
+            for c in p.children(recursive=True):
+                out[c.pid] = c
+        except Exception:
+            pass
+    proc = processos_ativos.get(device_id)
+    if proc is not None:
+        try:
+            add(psutil_process(proc))
+        except Exception:
+            pass
     try:
-        p = psutil_process(processos_ativos[device_id])
+        for pid in sln_proc.bot_processes_for_device(device_id):
+            try:
+                add(psutil.Process(pid))
+            except Exception:
+                pass
+    except Exception:
+        pass
+    if not out:
+        try:
+            for p in psutil.process_iter(["pid", "cmdline"]):
+                cl = " ".join(p.info.get("cmdline") or [])
+                if "run_apps.py" in cl and device_id in cl:
+                    add(p)
+        except Exception:
+            pass
+    return list(out.values())
+
+
+def toggle_pause_script(device_id):
+    try:
         if device_id in paused_devices:
-            p.resume()
-            paused_devices.remove(device_id)
+            procs = paused_processes.pop(device_id, [])
+            for p in procs + _collect_device_processes(device_id):
+                try:
+                    if p.is_running():
+                        p.resume()
+                except Exception:
+                    pass
+            paused_devices.discard(device_id)
             print(f"[INFO] Bot RESUMIDO: {device_id}")
         else:
-            p.suspend()
+            procs = _collect_device_processes(device_id)
+            if not procs:
+                print(f"[AVISO] Nada para pausar em {device_id}")
+                return
+            ok = 0
+            for p in procs:
+                try:
+                    p.suspend()
+                    ok += 1
+                except Exception as e:
+                    print(f"[AVISO] Pausa {device_id}/{p.pid}: {e}")
+            if not ok:
+                return
+            paused_processes[device_id] = procs
             paused_devices.add(device_id)
-            print(f"[INFO] Bot PAUSADO: {device_id}")
+            print(f"[INFO] Bot PAUSADO: {device_id} ({ok} processo(s))")
         save_paused_state()
         janela.after(0, lambda: atualizar_lista_ui(use_cache=True))
     except Exception as e:
         print(f"[ERRO] Falha ao pausar/resumir {device_id}: {e}")
+
 
 def psutil_process(proc):
     import psutil
@@ -482,7 +565,8 @@ def monitor_devices_loop():
                 if dev_id not in processos_ativos:
                     try:
                         import psutil
-                        print(f"[INFO] Re-adotando {dev_id} (PID {pid})")
+                        if dev_id not in last_running_cache:
+                            print(f"[INFO] Re-adotando {dev_id} (PID {pid})")
                         processos_ativos[dev_id] = psutil.Process(pid)
                     except Exception:
                         pass
@@ -633,43 +717,43 @@ def iniciar_todos_os_bots():
         if refreshed:
             dispositivos = sorted(set(list(dispositivos) + list(refreshed)))
         if not dispositivos:
-            messagebox.showinfo("Aviso", "Nenhum dispositivo encontrado")
+            print("[AVISO] Nenhum dispositivo encontrado")
             return
     def worker():
         count = 0
+        try:
+            known = get_running_devices()
+        except Exception:
+            known = {}
         for dev_id in dispositivos:
-            if dev_id not in processos_ativos:
+            if dev_id not in processos_ativos and dev_id not in known:
                 run_script(dev_id)
                 count += 1
-                # stagger com jitter: nunca inicia todos exatamente no mesmo instante
                 time.sleep(random.uniform(1.5, 3.0))
-        if count > 0:
-            janela.after(0, lambda: messagebox.showinfo("Sucesso", f"{count} bot(s) iniciado(s)"))
-        else:
-            janela.after(0, lambda: messagebox.showinfo("Aviso", "Todos já rodando"))
+        print(f"[INFO] {count} bot(s) iniciado(s)")
     threading.Thread(target=worker, daemon=True).start()
 
 def iniciar_grupo():
     g = combo_grupos.get()
     if not g or g == "Todos os Dispositivos":
-        messagebox.showwarning("Aviso", "Selecione um grupo específico")
+        messagebox.showwarning("Aviso", "Selecione um grupo especifico")
         return
     groups = load_groups_cached()
     if g not in groups:
-        messagebox.showwarning("Aviso", "Grupo não encontrado")
+        messagebox.showwarning("Aviso", "Grupo nao encontrado")
         return
     def worker():
         count = 0
+        try:
+            known = get_running_devices()
+        except Exception:
+            known = {}
         for dev_id in groups[g]:
-            if dev_id in last_devices_cache and dev_id not in processos_ativos:
+            if dev_id in last_devices_cache and dev_id not in processos_ativos and dev_id not in known:
                 run_script(dev_id)
                 count += 1
-                # stagger com jitter: nunca inicia todos exatamente no mesmo instante
                 time.sleep(random.uniform(1.5, 3.0))
-        if count == 0:
-            janela.after(0, lambda: messagebox.showinfo("Aviso", "Nenhum dispositivo do grupo conectado ou já rodando"))
-        else:
-            janela.after(0, lambda: messagebox.showinfo("Sucesso", f"{count} dispositivo(s) iniciado(s) do grupo '{g}'"))
+        print(f"[INFO] {count} dispositivo(s) iniciado(s) do grupo '{g}'")
     threading.Thread(target=worker, daemon=True).start()
 
 def parar_selecao():
@@ -677,40 +761,48 @@ def parar_selecao():
     if not sel:
         messagebox.showinfo("Aviso", "Selecione ao menos um dispositivo")
         return
+    devices = []
     for i in sel:
         entry = lista_dispositivos.get(i)
         if "Nenhum" in entry:
             continue
         try:
             parts = entry.split(" ", 1)[1]
-            stop_script(parts.split(" [")[0])
+            devices.append(parts.split(" [")[0])
         except Exception:
             continue
+    if not devices:
+        return
+    print(f"[INFO] Parando selecao: {', '.join(devices)}")
+    def worker():
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=min(8, len(devices))) as ex:
+            list(ex.map(stop_script, devices))
+        print("[INFO] Parada da selecao concluida")
+    threading.Thread(target=worker, daemon=True).start()
 
 def parar_todos():
-    # Adota bots j? em execu??o que esta interface ainda n?o conhece.
-    try:
-        import psutil
-        for dev_id, pid in get_running_devices().items():
-            if dev_id not in processos_ativos:
-                processos_ativos[dev_id] = psutil.Process(pid)
-    except Exception as e:
-        print(f"[ERRO] parar_todos/adotar: {e}")
-    if not processos_ativos:
-        messagebox.showinfo("Aviso", "Nenhum bot rodando")
+    if not processos_ativos and not last_running_cache:
+        print("[AVISO] Nenhum bot rodando")
         return
-    if not messagebox.askyesno("Confirmar", f"Parar todos os {len(processos_ativos)} bots?"):
+    if not messagebox.askyesno("Confirmar", "Parar todos os bots?"):
         return
-    devices = list(processos_ativos.keys())
-    stopping_devices.update(devices)
-    janela.after(0, lambda: messagebox.showinfo(
-        "Parando", f"Parando {len(devices)} bot(s); aguarde a confirma??o final."))
-
     def worker():
-        for dev_id in devices:
-            stop_script(dev_id)
-            # stop_script clears stopping_devices for this device; keep it until done
-            stopping_devices.discard(dev_id)
+        try:
+            import psutil
+            for dev_id, pid in get_running_devices().items():
+                if dev_id not in processos_ativos:
+                    processos_ativos[dev_id] = psutil.Process(pid)
+        except Exception as e:
+            print(f"[ERRO] parar_todos/adotar: {e}")
+        devices = list(processos_ativos.keys())
+        if not devices:
+            print("[AVISO] Nenhum bot rodando")
+            return
+        print(f"[INFO] Parando {len(devices)} bot(s)...")
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=8) as ex:
+            list(ex.map(stop_script, devices))
         left = []
         try:
             left = list(get_running_devices().keys())
@@ -724,40 +816,54 @@ def parar_todos():
                 pass
             finally:
                 stopping_devices.discard(dev_id)
-        janela.after(0, lambda: messagebox.showinfo(
-            "Parar Todos",
-            "Todos parados." if not left else
-            "Solicita??o conclu?da; ainda h? %d worker(s) para verificar." % len(left)))
-
+        print("[INFO] Parar Todos concluido" if not left else
+              f"[AVISO] Ainda ha {len(left)} worker(s) para verificar")
     threading.Thread(target=worker, daemon=True).start()
 
 
 def toggle_pause_selection():
     sel = lista_dispositivos.curselection()
+    devices = []
     for i in sel:
         try:
             entry = lista_dispositivos.get(i)
             if "Nenhum" in entry:
                 continue
             parts = entry.split(" ", 1)[1]
-            toggle_pause_script(parts.split(" [")[0])
+            devices.append(parts.split(" [")[0])
         except Exception:
             pass
+    if not devices:
+        return
+    def worker():
+        for dev_id in devices:
+            toggle_pause_script(dev_id)
+    threading.Thread(target=worker, daemon=True).start()
 
 def stop_all_scripts():
     parar_todos()
 
 def toggle_pause_all():
-    if not processos_ativos:
-        return
-    total = len(processos_ativos)
-    pausados = len([d for d in processos_ativos if d in paused_devices])
-    should_pause = pausados < total / 2
-    for dev_id in list(processos_ativos.keys()):
-        if should_pause and dev_id not in paused_devices:
-            toggle_pause_script(dev_id)
-        elif not should_pause and dev_id in paused_devices:
-            toggle_pause_script(dev_id)
+    def worker():
+        try:
+            import psutil
+            for dev_id, pid in get_running_devices().items():
+                if dev_id not in processos_ativos:
+                    processos_ativos[dev_id] = psutil.Process(pid)
+        except Exception as e:
+            print(f"[ERRO] toggle_pause_all: {e}")
+        devices = list(processos_ativos.keys())
+        if not devices:
+            print("[AVISO] Nenhum bot rodando")
+            return
+        pausados = len([d for d in devices if d in paused_devices])
+        should_pause = pausados < len(devices) / 2
+        for dev_id in devices:
+            if should_pause and dev_id not in paused_devices:
+                toggle_pause_script(dev_id)
+            elif not should_pause and dev_id in paused_devices:
+                toggle_pause_script(dev_id)
+    threading.Thread(target=worker, daemon=True).start()
 
 def start_api_server():
     path = os.path.join(SCRIPT_DIR, "aiMain_sln_v2.py")
@@ -908,7 +1014,10 @@ def abrir_configuracoes():
     tk.Button(win, text="Cancelar", command=win.destroy).grid(row=row+1, column=1, padx=8, pady=10)
 
 def show_cmd_window():
-    messagebox.showinfo("Info", f"Bots rodando em modo headless.\nPara ver logs, veja a pasta 'logs/'.\n\nAtivos: {len(processos_ativos)}")
+    try:
+        os.startfile(LOGS_DIR)
+    except Exception:
+        print(f"[INFO] Logs: {LOGS_DIR} | ativos={len(processos_ativos)}")
 
 def hide_cmd_window():
     messagebox.showinfo("Info", f"Bots já rodam em modo headless.\nTotal ativos: {len(processos_ativos)}")
@@ -1098,13 +1207,6 @@ combo_scripts['values'] = list(SCRIPTS_MAP.keys())
 combo_scripts.set(DEFAULT_SCRIPT_NAME)
 combo_scripts.pack(side=tk.LEFT, padx=5)
 
-tk.Label(frame_script, text="  Perfil:").pack(side=tk.LEFT)
-combo_profile = ttk.Combobox(frame_script, state="readonly", width=14)
-combo_profile['values'] = list(PROFILE_OVERLAYS.keys())
-combo_profile.set("dev")
-combo_profile.pack(side=tk.LEFT, padx=5)
-combo_profile.bind("<<ComboboxSelected>>", lambda e: profile_flag.update(name=combo_profile.get()))
-
 # Grupos
 frame_grupos = tk.LabelFrame(tab_bots, text="📁 Grupos", padx=10, pady=5)
 frame_grupos.pack(pady=5, padx=10, fill="x")
@@ -1158,11 +1260,12 @@ ToolTip(chk_headless, "Marcado: bot roda sem janela (só log em logs/). Desmarca
 frame_apps = tk.LabelFrame(tab_bots, text="Apps a rodar (marque quais)", padx=8, pady=4)
 frame_apps.pack(pady=4, padx=10, fill="x")
 app_vars = {}
+_last_apps = load_last_apps()
 row = 0
 col = 0
 for key in sorted(APPS, key=int):
     package, label = APPS[key]
-    var = tk.BooleanVar(value=True)
+    var = tk.BooleanVar(value=True if _last_apps is None else (key in _last_apps))
     app_vars[key] = var
     chk = tk.Checkbutton(frame_apps, text=f"{key}. {label}", variable=var,
                          font=("Arial", 9))
@@ -1990,6 +2093,7 @@ def _dc_refresh_units():
         if isinstance(g, dict):
             by_phys[str(g.get("expected_dpn_id") or "")] = (gid, g)
     prev = _dc_sel_phys
+    prev_index = None
     _dc_list.delete(0, "end")
     _dc_unit_rows = {}
     for phys, d in (ag.get("dpns") or {}).items():
@@ -2000,10 +2104,16 @@ def _dc_refresh_units():
         online = g.get("state") or "SEM GRUPO"
         label = "%s  (%s)\n%s  |  auth=%d" % (name, phys[-12:], online, auth)
         _dc_list.insert("end", label)
+        index = _dc_list.size() - 1
         _dc_unit_rows[str(phys)] = {"gid": gid, "group": g, "agents": d,
-                                    "spec": spec, "index": _dc_list.size() - 1}
+                                    "spec": spec, "index": index}
         if str(phys) == prev:
-            _dc_list.selection_set(_dc_list.size() - 1)
+            prev_index = index
+    if prev_index is not None:
+        _dc_list.selection_clear(0, tk.END)
+        _dc_list.selection_set(prev_index)
+        _dc_list.activate(prev_index)
+        _dc_list.see(prev_index)
     try:
         for iid in _dc_agents.get_children(""):
             _dc_agents.delete(iid)
@@ -2343,11 +2453,6 @@ def _ui_autostart_e38b():
     req = os.environ.get("SLN_UI_AUTOSTART_DEVICE", "").strip()
     if not req:
         return
-    prof = os.environ.get("SLN_UI_AUTOSTART_PROFILE", "").strip()
-    if prof in PROFILE_OVERLAYS:
-        combo_profile.set(prof)
-        profile_flag.update(name=prof)
-        print(f"[UI][AUTOSTART] profile={prof}")
     apps_req = [x.strip() for x in os.environ.get("SLN_UI_AUTOSTART_APPS", "").split(",") if x.strip()]
     if apps_req:
         for k in app_vars:
